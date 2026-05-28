@@ -1,0 +1,16 @@
+# Compiled binary
+/crystal
+
+# Raw / unredacted extracts — NEVER commit these. Only testdata/corpus
+# (redacted, verified) is committed. See internal/redact.
+/raw-extract/
+*.raw.json
+*.unredacted.json
+
+# Go
+*.test
+*.out
+
+# Runtime / tooling artifacts (not project source)
+.claude/
+.plancheck-debug.json
