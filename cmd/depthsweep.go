@@ -71,12 +71,21 @@ func (c *DepthSweepCmd) Run() error {
 	return nil
 }
 
-func (c *DepthSweepCmd) sweepInstance(ctx context.Context, client *llm.Client, idx int, drift bool, text string, ex extract3) sweepRow {
-	diffs := make([]string, c.Depth)
-	diffs[0] = proseExtractDiff(ctx, client, text, ex) // depth-1 input (cache hit from uncover-hop)
-	for h := 1; h < c.Depth; h++ {
+// relayChain builds the prose up-channel relayed through `depth` hops:
+// diffs[0] is the original concrete diff (cache hit from uncover-hop), each
+// subsequent hop is a lossy paraphrase relay. Shared by depth-sweep and the
+// content-fidelity sweep so both score the SAME chains.
+func relayChain(ctx context.Context, client *llm.Client, text string, ex extract3, depth int) []string {
+	diffs := make([]string, depth)
+	diffs[0] = proseExtractDiff(ctx, client, text, ex)
+	for h := 1; h < depth; h++ {
 		diffs[h] = relaySummary(ctx, client, diffs[h-1])
 	}
+	return diffs
+}
+
+func (c *DepthSweepCmd) sweepInstance(ctx context.Context, client *llm.Client, idx int, drift bool, text string, ex extract3) sweepRow {
+	diffs := relayChain(ctx, client, text, ex, c.Depth)
 	verdict := make([]bool, c.Depth)
 	parsed := make([]bool, c.Depth)
 	for d := 0; d < c.Depth; d++ {
