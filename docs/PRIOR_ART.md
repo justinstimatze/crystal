@@ -174,3 +174,47 @@ for *popular*, not *best*, tools. The companion addon **weir** measured it: acro
 invocations, ~49.7% piped and **0** reached for a modern tool (`rg`/`fd`/`sd`/`bat`). So the harness
 must actively *de-bias* tool selection (capability manifest + antipattern lints) — correct-tool
 knowledge belongs in the cheap deterministic layer, not the model's popularity-weighted prior.
+
+## Current discourse + academic lineage — crystal's mechanisms are mostly ALREADY published
+
+A sourced positioning pass (2026-05-29). The leapfrog must be claimed honestly: crystal is **not
+first** to any single mechanism — the defensible claim is the *integration + framing*.
+
+- **Compound engineering** — Shipper & Klaassen, Every (every.to/chain-of-thought/compound-
+  engineering…, Dec 11 2025) ✅: *"each feature [makes] the next feature easier to build"* via a
+  Plan→Work→Review→Compound loop. *Same intuition* (recurring work compounds) but a *different
+  substrate*: Every makes the model **better-informed** (richer context/lessons fed back, model
+  stays in the driver's seat); crystal makes the model **less-needed** (crystallize to a
+  cheaper/deterministic tier) **and demotes on drift** — their loop only accretes. That's the
+  differentiator vs compound engineering specifically.
+- **Blueprint First, Model Second** (arXiv 2508.02721, Aug 2025) ✅ — *already* inverts control: a
+  deterministic blueprint governs; "models operate as controlled subordinate components, not the
+  primary decision-maker." **crystal is not first to the deterministic-default inversion.**
+- **Agentic Plan Caching** (2506.14852, NeurIPS 2025) ✅ — cache/reuse structured plan templates
+  across similar tasks, executed by lightweight models = crystal's "crystallize a chore to a cheaper
+  tier," already published. *But no drift/invalidation/demotion.*
+- **Agent Workflow Memory** (2409.07429, Sep 2024) ✅ — induce reusable workflows fed back to the
+  agent = crystal's accretion loop, predating the Every post by ~15 months.
+- **SSGM / Stability-&-Safety-Governed Memory** (2603.11768, Mar 2026, fresh/unsettled) ✅ — semantic
+  -drift measure + gated write validation + reversible reconciliation = closest analogue to
+  "demote on drift + verifier gate," though it *reconciles/rolls back* rather than *demotes a tier*.
+
+**Honest leapfrog:** the individual pieces are claimed (inversion, cheap-tier caching, accretion,
+drift-gating). What's unoccupied is (1) **the union in one practitioner harness**; (2) **demote a
+chore back UP a tier on drift** (Plan Caching has none; SSGM reconciles, doesn't demote); (3)
+**deterministic tools as the *default* substrate**, not just a callable tool (closest is Blueprint
+First). Claiming first-to-invert would be false and easily refuted — cite Blueprint First + Plan
+Caching as the lineage crystal *unifies and productizes*.
+
+**The bitter lesson is the threat to pre-empt.** Sutton's bitter lesson (scaled general compute beats
+hand-engineered structure) is the canonical argument *against* deterministic scaffolding. crystal's
+counter, stated plainly: the bitter lesson is about **learning methods**, not **runtime cost
+allocation** — using `rg` instead of a model token to grep a file isn't hand-engineered
+intelligence, it's declining to pay a frontier model to do `grep`. **crystal is cost/verification
+engineering, not capability engineering** — that's the framing that sidesteps the objection.
+
+**Vocabulary to adopt (current, load-bearing):** *harness* (Agent = Model + Harness — crystal is an
+opinionated, deterministic-default, verifier-gated harness); *evals / eval-driven* (crystal's gate
+under the mainstream name); *model routing* (crystal is routing taken to the extreme where the
+cheapest "tier" is deterministic code). *vibe coding* / *agentic engineering* / *spec-driven
+development* are the ambient register; *agents-over-chat* is too soft to lean on.

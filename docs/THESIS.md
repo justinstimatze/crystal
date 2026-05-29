@@ -107,6 +107,13 @@ flagged as a framing to test rather than a measured result:
    Spend frontier intelligence once to compile a fuzzy task into a verifiable, mostly-cheap pipeline
    (plan + tools + gate), amortized over cheap execution — not per call. (The AutoHarness / "loop
    that constructs loops" idea, grounded in shift-left economics instead of the trust framing.)
+   *Caveat (the caller problem):* invoking a tool — which tool, what args/flags, how to read the
+   result — is itself work. When that invocation is **fixed** across the chore, crystallize it to a
+   deterministic wrapper (no per-call model). When it's **dynamic/contextual** (the common case) the
+   per-call caller is usually a *cheap LLM*, and a cheap LLM fumbles arg construction (measured:
+   `DECOMPOSE_FINDINGS`) — so gate the caller's *invocation* with a cheap deterministic verifier
+   too. The producer-verifier logic recurses onto the glue: a cheap caller is safe to the extent its
+   invocation is cheaply checkable.
 4. **The boundary it predicts.** Tasks whose *value is the unverifiable judgment* — open-ended
    reasoning, taste, novel synthesis, "which entity is the subject" — have no cheap verifier, so
    they don't decompose and stay expensive. (Our `payoff` leak is exactly that residual.) Corollary:
@@ -152,6 +159,27 @@ enough that crystallizing isn't worth the engineering + drift risk; and keeping 
 loop preserves the flexibility that makes agents agents. crystal's bet is that for a *personal,
 recurring* workload those objections weaken — which is why it's a personal-first tool, not a general
 agent.
+
+### The honest leapfrog (integration, not invention) + the bitter-lesson objection
+
+A sourced positioning pass (PRIOR_ART) is humbling: crystal's *individual* mechanisms are each
+already published — the deterministic-default inversion (**Blueprint First, Model Second**,
+2508.02721), crystallizing a chore to a cheaper tier (**Agentic Plan Caching**, 2506.14852),
+the accretion loop (**Agent Workflow Memory**, 2409.07429; and **compound engineering**, Every 2025),
+drift-gating (**SSGM**, 2603.11768). **Claiming first-to-invert would be false.** The defensible
+leapfrog is the *union none of them ships*: inversion + per-recurring-chore crystallization +
+**demotion up a tier on drift** (Plan Caching has none; SSGM reconciles rather than demotes) + a
+**cheap deterministic verifier** gate + **deterministic tools as the default substrate** — packaged
+as one practitioner harness, personal-first.
+
+**Pre-empt the bitter lesson** (the strongest objection): Sutton says scaled general compute beats
+hand-engineered structure — the canonical case *against* deterministic scaffolding. The counter:
+the bitter lesson is about **learning methods, not runtime cost allocation.** Using `rg` instead of
+a model token to grep a file isn't hand-engineered *intelligence*; it's declining to pay a frontier
+model to do `grep`. **crystal is cost/verification engineering, not capability engineering** — it
+doesn't compete with scale, it routes around paying for it where a verifiable cheaper mechanism
+exists. (Adopt the current vocabulary too: crystal is a *harness* — Agent = Model + Harness — with an
+*eval*-gated, *model-routing* policy whose cheapest tier is deterministic code.)
 
 ## Training data ≠ best solutions (the tool-selection bias)
 

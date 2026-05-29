@@ -52,6 +52,40 @@ perfectly and faster. The cheap agent earns its keep only on **semantic** citati
 generation from verification (producer-verifier asymmetry, real); then push the verification to the
 *cheapest tier that covers it*, which for verbatim is deterministic, not a model.
 
+### "Use the tool alone" smuggles in a competent caller (the load-bearing caveat)
+
+`det-tool`'s 1.00 @ ~0ms is *not* a free lunch — the experiment handed `rg` the full quote as the
+pattern with the right flags (`-F -i`). Something has to *decide* the invocation: which tool, what
+pattern, fixed-vs-regex, case-sensitivity, how to interpret the hits. That arg/flag construction is
+itself the glue — and it's exactly what `haiku+tool` fumbled (it chose a fragment that dropped the
+distinguishing "43%"). So the honest reading of the three conditions:
+- **det-tool** = the *post-crystallization steady state*: it works because a correct invocation was
+  already authored. The authoring intelligence is real; it's just **spent once and amortized** over
+  the recurring chore (= `crystallize` / partial evaluation). Its ~0ms is the *runtime* cost, not
+  the total cost.
+- **haiku+tool** = paying that authoring intelligence *per call* with a cheap model — which fumbles
+  arg construction. Evidence you should author the invocation once, not re-derive it every call.
+- For a genuine **one-off** chore (no recurrence to amortize over), you can't skip the arg
+  intelligence — and a cheap model may get it wrong, so a one-off may justify the frontier tier.
+
+This *is* crystal's thesis sharpened: the expensive tier's durable job is **authoring the correct
+tool invocation** for a recurring chore; once authored, it runs deterministic and cheap. "Drop the
+model" means "drop it from the per-call loop," not "no intelligence was ever required."
+
+**But the invocation is usually dynamic + contextual — so the caller is usually a (cheap) LLM, not
+a static wrapper.** The fully-deterministic `det-tool` case holds *only when the invocation is fixed
+across the chore* (always "grep the full quote, literal, case-insensitive"). That's the minority —
+the constant case crystallizes to a wrapper with no per-call model. The common case: the right
+pattern/flags depend on *this* input, so the per-call caller has to be a cheap LLM. And a cheap LLM
+caller **fumbles arg construction** (measured: it dropped the "43%"). So the general architecture is
+three parts, not two: **cheap-LLM caller (dynamic invocation) → robust tool (execution) → cheap
+*deterministic* verifier on the caller's output** (e.g. "is the chosen fragment a verbatim substring
+of the claim, preserving its distinguishing tokens?" — which would have caught the dropped number).
+The producer-verifier logic recurses onto the glue: a cheap caller is safe *to the extent its
+invocation is cheaply checkable.* When it isn't, you need a smarter caller. So the real design
+question per chore is **fixed-vs-contextual invocation** (crystallize the fixed ones; gate the
+contextual cheap-LLM ones), and the verifiable-fraction is the master variable one level down too.
+
 ## Caveats (bound the claim)
 
 - **The dangerous case didn't trigger.** Short single-sentence sources, blunt fabrications — Haiku
