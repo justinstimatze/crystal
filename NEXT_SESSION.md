@@ -25,6 +25,10 @@ work committed; clean tree.
 ## What's built (8 experiments + the v1 slice + self-author)
 
 CLI: `crystal <cmd>` (kong). Experiments measure; `triage` ships; `author` self-authors.
+- `amortize` — **prices the artifact** (commit 9daf3b3): latency breakeven **43 covered hits** (one
+  ~23.5s Opus author call); **re-authoring more often than once per 43 hits nets negative** (so
+  demote-on-drift, not detection, is load-bearing); token breakeven ~2,944 (~70× slower → latency is
+  the axis, not tokens). `AMORTIZE_FINDINGS.md`.
 - `serve` — **measures the payoff** (commit eda98f5): det tier vs Haiku, ~90,000× on the covered
   fraction at zero quality cost, exact-repro, blended latency −77% (= g). Caching is the floor of
   shift-left (two regimes). `SERVE_FINDINGS.md`.
@@ -65,17 +69,19 @@ the lever; the residual is the binding constraint. Also added **caching as the f
 (THESIS "Memoization is the floor"): local memoization (`.crystal-cache`, replays a 710ms call in µs)
 AND prompt-cache input-structuring (stable bulk first, volatile last → re-bill only `cache_read`).
 
-## THE NEXT BUILD (recommended) — live hook + the amortization breakeven (ROADMAP A1 + A2-tail)
+## THE NEXT BUILD (recommended) — the live PreToolUse hook (ROADMAP A1, the last batch→live gap)
 
-`serve` is a batch microbenchmark; two honest gaps remain:
-1. **Live hook**: install a promoted artifact as an actual PreToolUse hook answering in place of a
-   frontier call; demote live on a deliberately introduced drift. Proves the loop closes on live use.
-2. **Amortization breakeven**: how many served hits repay `author`'s one-time Opus authoring latency
-   (in cache: the author `Complete` call's `LatencyMS`), and the re-author frequency that erases the
-   win. `serve` + `author` have the latency data; the breakeven is `T_author / per-hit-saved`.
+The amortization breakeven is DONE (`amortize`). The remaining honest gap is that EVERYTHING is a
+batch over a corpus, never a hook in a real loop. Next:
+- **Live hook**: emit a promoted artifact (`triage`/`author` rules, or a `crystallize` artifact) as
+  an actual Claude Code **PreToolUse hook** that answers a recurring chore in place of a frontier
+  call, and demote live on a deliberately introduced drift. *Proves:* the loop closes on live use,
+  not just in a benchmark. *Watch:* host capability — the deterministic tier leans on installed tools
+  (`weir`'s manifest); detect-and-fallback or declare the dependency.
 
 The far rung (A5): swap the cheap tier to a local small model (+LoRA) on owned hardware — the
-sovereignty end of the gradient.
+sovereignty end of the gradient. Reuse candidates: sibling projects **cupel**/**lexicon** (verify
+what's actually there first).
 
 ## House rules / cautions (earned this session)
 
