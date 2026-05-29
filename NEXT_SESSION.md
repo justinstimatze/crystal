@@ -1,7 +1,11 @@
 # NEXT SESSION — crystal handoff (2026-05-29)
 
-Resume cleanly from here. HEAD `365c3b0` (or later); `go build ./...` + `go test ./...` green; all
-work committed; clean tree.
+Resume cleanly from here. HEAD `60163a3` (or later); `go build ./...` + `go test ./...` + `go vet
+./...` all green; all work committed; clean tree.
+
+This session added three rungs on top of `triage`: `author` (self-authors the verifier),
+`serve` (measures the latency payoff), `amortize` (prices it). The only remaining batch→live gap is
+the live PreToolUse hook (see THE NEXT BUILD below).
 
 ## The thesis, current (read `docs/THESIS.md` for the full version)
 
