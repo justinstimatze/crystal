@@ -25,6 +25,9 @@ work committed; clean tree.
 ## What's built (8 experiments + the v1 slice + self-author)
 
 CLI: `crystal <cmd>` (kong). Experiments measure; `triage` ships; `author` self-authors.
+- `serve` — **measures the payoff** (commit eda98f5): det tier vs Haiku, ~90,000× on the covered
+  fraction at zero quality cost, exact-repro, blended latency −77% (= g). Caching is the floor of
+  shift-left (two regimes). `SERVE_FINDINGS.md`.
 - `author` — **self-authors the verifier** (commit c6b5946): Opus writes triage's rule table, gated
   (0.93→promote, corrupted 0.01→reject), re-authored on injected drift (8/8 recovered).
   `AUTHOR_FINDINGS.md`.
@@ -53,15 +56,23 @@ fidelity scaled with sample size (200→0.87, 400→0.89, 800→0.93) at a fixed
 came from more data, never a lowered threshold. *Caveat:* fidelity-to-reference (hand-rules), not
 ground-truth; still a batch, not a served hook.
 
-## THE NEXT BUILD (recommended) — serve the hook live + measure the payoff (ROADMAP A1→A2)
+## Measure the payoff — FIRST RESULT DONE (`serve`, `SERVE_FINDINGS.md`, commit eda98f5)
 
-Everything so far is a batch over a corpus. The unmeasured claim is the value prop itself. Next:
-1. **Serve** a promoted artifact (`triage`'s rules or an `author`-promoted table) as a live
-   PreToolUse hook answering in place of a frontier call; demote live on a deliberately introduced
-   drift.
-2. **Measure** p50/p99 latency before vs after, determinism (exact-repro rate), and the amortization
-   point (hits to repay authoring cost; re-author frequency that erases the win). `payoff` has the
-   latency-measurement scaffolding to reuse.
+`crystal serve` served the deterministic tier in place of the Haiku call on the covered fraction:
+**~7µs/call vs Haiku p50 640ms (~90,000×) at zero quality cost** (the rule IS the reference on what
+it covers), **exact-repro** determinism, blended pipeline latency down **77% (= g)**. Coverage g is
+the lever; the residual is the binding constraint. Also added **caching as the floor of shift-left**
+(THESIS "Memoization is the floor"): local memoization (`.crystal-cache`, replays a 710ms call in µs)
+AND prompt-cache input-structuring (stable bulk first, volatile last → re-bill only `cache_read`).
+
+## THE NEXT BUILD (recommended) — live hook + the amortization breakeven (ROADMAP A1 + A2-tail)
+
+`serve` is a batch microbenchmark; two honest gaps remain:
+1. **Live hook**: install a promoted artifact as an actual PreToolUse hook answering in place of a
+   frontier call; demote live on a deliberately introduced drift. Proves the loop closes on live use.
+2. **Amortization breakeven**: how many served hits repay `author`'s one-time Opus authoring latency
+   (in cache: the author `Complete` call's `LatencyMS`), and the re-author frequency that erases the
+   win. `serve` + `author` have the latency data; the breakeven is `T_author / per-hit-saved`.
 
 The far rung (A5): swap the cheap tier to a local small model (+LoRA) on owned hardware — the
 sovereignty end of the gradient.
