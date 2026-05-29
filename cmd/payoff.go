@@ -38,13 +38,13 @@ type PayoffCmd struct {
 }
 
 type payoffRow struct {
-	idx                       int
-	opusCorrect, haikuCorrect bool
-	gateAccept                bool
-	servedCorrect             bool
-	leaked                    bool // gate accepted a wrong Haiku answer → served wrong
-	opusLat, haikuLat         int64
-	gold, opusEx, haikuEx     string // for verifying real-error vs exact-match-gold artifact
+	idx                                      int
+	opusCorrect, sonnetCorrect, haikuCorrect bool
+	gateAccept                               bool
+	servedCorrect                            bool
+	leaked                                   bool // gate accepted a wrong Haiku answer → served wrong
+	opusLat, sonnetLat, haikuLat             int64
+	gold, opusEx, sonnetEx, haikuEx          string // for verifying real-error vs exact-match-gold artifact
 }
 
 func (c *PayoffCmd) Run() error {
@@ -58,9 +58,11 @@ func (c *PayoffCmd) Run() error {
 	var rows []payoffRow
 	for i, it := range items {
 		opusEx, opusLat := extractTimed(ctx, client, llm.ModelOpus, it.Text)
+		sonnetEx, sonnetLat := extractTimed(ctx, client, llm.ModelSonnet, it.Text)
 		haikuEx, haikuLat := extractTimed(ctx, client, llm.ModelHaiku, it.Text)
 
 		opusCorrect := goldMatch(opusEx, it)
+		sonnetCorrect := goldMatch(sonnetEx, it)
 		haikuCorrect := goldMatch(haikuEx, it)
 		hk := extract3{haikuEx.Name, haikuEx.Role, haikuEx.Org}
 		// Deterministic gate = schema (non-empty) AND substring-grounding. The
@@ -74,13 +76,14 @@ func (c *PayoffCmd) Run() error {
 			servedCorrect = haikuCorrect
 		}
 		rows = append(rows, payoffRow{
-			idx: i, opusCorrect: opusCorrect, haikuCorrect: haikuCorrect,
+			idx: i, opusCorrect: opusCorrect, sonnetCorrect: sonnetCorrect, haikuCorrect: haikuCorrect,
 			gateAccept: gateAccept, servedCorrect: servedCorrect,
 			leaked:  gateAccept && !haikuCorrect,
-			opusLat: opusLat, haikuLat: haikuLat,
-			gold:    fmt.Sprintf("%q/%q/%q", it.Name, it.Role, it.Org),
-			opusEx:  fmt.Sprintf("%q/%q/%q", opusEx.Name, opusEx.Role, opusEx.Org),
-			haikuEx: fmt.Sprintf("%q/%q/%q", haikuEx.Name, haikuEx.Role, haikuEx.Org),
+			opusLat: opusLat, sonnetLat: sonnetLat, haikuLat: haikuLat,
+			gold:     fmt.Sprintf("%q/%q/%q", it.Name, it.Role, it.Org),
+			opusEx:   fmt.Sprintf("%q/%q/%q", opusEx.Name, opusEx.Role, opusEx.Org),
+			sonnetEx: fmt.Sprintf("%q/%q/%q", sonnetEx.Name, sonnetEx.Role, sonnetEx.Org),
+			haikuEx:  fmt.Sprintf("%q/%q/%q", haikuEx.Name, haikuEx.Role, haikuEx.Org),
 		})
 	}
 
@@ -117,11 +120,14 @@ func fieldEq(got, gold string) bool {
 
 func payoffReport(rows []payoffRow, verbose bool) {
 	n := len(rows)
-	opusAcc, haikuAcc, served, accepted, escalated, leaked := 0, 0, 0, 0, 0, 0
-	var opusLats, haikuLats, gatedLats []int64
+	opusAcc, sonnetAcc, haikuAcc, served, accepted, escalated, leaked := 0, 0, 0, 0, 0, 0, 0
+	var opusLats, sonnetLats, haikuLats, gatedLats []int64
 	for _, r := range rows {
 		if r.opusCorrect {
 			opusAcc++
+		}
+		if r.sonnetCorrect {
+			sonnetAcc++
 		}
 		if r.haikuCorrect {
 			haikuAcc++
@@ -138,6 +144,7 @@ func payoffReport(rows []payoffRow, verbose bool) {
 			leaked++
 		}
 		opusLats = append(opusLats, r.opusLat)
+		sonnetLats = append(sonnetLats, r.sonnetLat)
 		haikuLats = append(haikuLats, r.haikuLat)
 		// gated cost: Haiku for accepted; Haiku + Opus for escalated.
 		g := r.haikuLat
@@ -158,10 +165,10 @@ func payoffReport(rows []payoffRow, verbose bool) {
 			if r.leaked {
 				leak = "  ⚠ LEAKED (served wrong)"
 			}
-			fmt.Printf("  %2d opus=%-5v haiku=%-5v gate=%s served=%-5v  opusLat=%4d haikuLat=%4d%s\n",
-				r.idx, r.opusCorrect, r.haikuCorrect, tag, r.servedCorrect, r.opusLat, r.haikuLat, leak)
-			if !r.opusCorrect || !r.haikuCorrect {
-				fmt.Printf("       gold =%s\n       opus =%s\n       haiku=%s\n", r.gold, r.opusEx, r.haikuEx)
+			fmt.Printf("  %2d opus=%-5v sonnet=%-5v haiku=%-5v gate=%s served=%-5v  lat o/s/h=%d/%d/%d%s\n",
+				r.idx, r.opusCorrect, r.sonnetCorrect, r.haikuCorrect, tag, r.servedCorrect, r.opusLat, r.sonnetLat, r.haikuLat, leak)
+			if !r.opusCorrect || !r.sonnetCorrect || !r.haikuCorrect {
+				fmt.Printf("       gold  =%s\n       opus  =%s\n       sonnet=%s\n       haiku =%s\n", r.gold, r.opusEx, r.sonnetEx, r.haikuEx)
 			}
 		}
 		fmt.Println()
@@ -169,10 +176,14 @@ func payoffReport(rows []payoffRow, verbose bool) {
 
 	fmt.Printf("population: N=%d  (mechanical chore: extract {name,role,org})\n\n", n)
 
-	fmt.Println("=== raw tiers ===")
-	fmt.Printf("  opus    accuracy %d/%d = %.2f   median latency %d ms\n", opusAcc, n, frac(opusAcc, n), median(opusLats))
-	fmt.Printf("  haiku   accuracy %d/%d = %.2f   median latency %d ms   (%.0f%% of opus latency)\n",
-		haikuAcc, n, frac(haikuAcc, n), median(haikuLats), 100*float64(median(haikuLats))/float64(max64(median(opusLats), 1)))
+	fmt.Println("=== the cost gradient (shift-left is not binary — pick the cheapest tier that holds) ===")
+	op := float64(max64(median(opusLats), 1))
+	fmt.Printf("  opus    accuracy %d/%d = %.2f   median latency %5d ms   (100%% of opus)\n", opusAcc, n, frac(opusAcc, n), median(opusLats))
+	fmt.Printf("  sonnet  accuracy %d/%d = %.2f   median latency %5d ms   (%.0f%% of opus)\n",
+		sonnetAcc, n, frac(sonnetAcc, n), median(sonnetLats), 100*float64(median(sonnetLats))/op)
+	fmt.Printf("  haiku   accuracy %d/%d = %.2f   median latency %5d ms   (%.0f%% of opus)\n",
+		haikuAcc, n, frac(haikuAcc, n), median(haikuLats), 100*float64(median(haikuLats))/op)
+	fmt.Printf("  → cheapest tier holding opus-quality on this chore: %s\n", cheapestHolding(opusAcc, sonnetAcc, haikuAcc))
 
 	fmt.Println("\n=== haiku behind a DETERMINISTIC gate (substring-grounding, no API) ===")
 	fmt.Printf("  gate accepted %d/%d, escalated to opus %d/%d\n", accepted, n, escalated, n)
@@ -185,9 +196,11 @@ func payoffReport(rows []payoffRow, verbose bool) {
 	saved := 100 * (1 - float64(median(gatedLats))/float64(max64(median(opusLats), 1)))
 	fmt.Printf("  latency saved ≈ %.0f%%   (bought at the cost of %d leaked error(s) the deterministic gate can't see)\n", saved, leaked)
 
-	fmt.Println("\nThe breakeven the value prop hinges on: a DETERMINISTIC gate keeps the latency win but")
-	fmt.Println("leaks its g<1 residual; an LLM verifier would hold quality but re-add an opus round-trip")
-	fmt.Println("per item, erasing the win. Verify per-item --verbose (esp. leaked rows) before trusting this.")
+	fmt.Println("\nTwo knobs, not one: (a) WHICH TIER (gradient above — you needn't shift all the way to")
+	fmt.Println("haiku if sonnet holds quality at lower latency), and (b) the GATE — deterministic keeps the")
+	fmt.Println("latency win but leaks its g<1 residual; an LLM verifier holds quality but re-adds an opus")
+	fmt.Println("round-trip, erasing it. Local models are the gradient's far end (unmeasured). Verify")
+	fmt.Println("per-item --verbose (esp. leaked rows) before trusting any of this.")
 }
 
 func median(xs []int64) int64 {
@@ -211,4 +224,17 @@ func max64(a, b int64) int64 {
 		return a
 	}
 	return b
+}
+
+// cheapestHolding names the cheapest tier whose accuracy still matches Opus on
+// this chore — the brief's actual selection rule ("cheapest tier that
+// realistically succeeds"), not a binary jump to the bottom.
+func cheapestHolding(opus, sonnet, haiku int) string {
+	if haiku >= opus {
+		return "haiku"
+	}
+	if sonnet >= opus {
+		return "sonnet (haiku drops quality)"
+	}
+	return "opus (both cheaper tiers drop quality here)"
 }

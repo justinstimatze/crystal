@@ -41,9 +41,12 @@ The goal is to turn the value prop from a hypothesis into a measured result, che
    correct + no latency win. *Still to do:* run on *real* (non-synthetic) chores and a real
    agentic-loop baseline; multi-sample latency; an honest LLM-gate latency measurement (not just the
    qualitative claim).
-4. **Close the sovereignty gap.** Swap the cheap tier to a local small model (+ LoRA) on owned
-   hardware; re-measure latency and held quality. *Proves:* the sovereignty/determinism pitch is
-   real, not aspirational. *Done when:* a chore is served from local hardware with the gate intact.
+4. **Close the sovereignty gap (the gradient's far end).** Swap the cheap tier to a local small
+   model (+ LoRA) on owned hardware; re-measure latency and held quality. The cost gradient is
+   `frontier → … → local+LoRA → deterministic hook`; `payoff` currently stops at cloud Haiku. Reuse
+   candidate: the local-hybrid work in sibling projects **cupel** and **lexicon** (verify what's
+   actually there before assuming). *Proves:* the sovereignty/determinism pitch is real, not
+   aspirational. *Done when:* a chore is served from local hardware with the gate intact.
 
 ## Track B — trust substrate (secondary, ambitious)
 

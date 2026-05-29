@@ -6,13 +6,12 @@ showed shift-left *bought* anything. This one times real API calls.
 
 ## Method
 
-Chore: extract `{name, role, org}` from a sentence (known gold), N=14. Both tiers use
+Chore: extract `{name, role, org}` from a sentence (known gold), N=14. All tiers use
 thinking-disabled completion (a clean mechanical-chore size comparison, not a thinking-budget
 confound). Latency is real wall-clock per live call (`llm.Result.LatencyMS`), persisted in cache so
 reruns report the originally-measured times.
 
-- **Opus** baseline (the frontier cost we're avoiding).
-- **Haiku** raw (the cheap tier).
+- **Opus / Sonnet / Haiku** across the cost gradient (Opus = the frontier cost we're avoiding).
 - **Haiku behind a deterministic gate** = schema (all fields non-empty) AND substring-grounding (each
   field appears in the source). Accept → serve Haiku; reject → escalate to Opus. The gate is
   deliberately deterministic (no API), because an LLM verifier would re-add an Opus round-trip per
@@ -20,11 +19,27 @@ reruns report the originally-measured times.
 
 ## Results (verified against per-item extractions)
 
-```
-raw tiers:
-  opus    accuracy 13/14 = 0.93   median latency 1684 ms
-  haiku   accuracy 12/14 = 0.86   median latency  902 ms   (54% of opus)
+**The cost gradient — shift-left isn't binary** (the brief's rule is "cheapest tier that
+*realistically succeeds*," not "jump to the bottom"):
 
+```
+  opus    accuracy 13/14 = 0.93   median latency 1684 ms   (100% of opus)
+  sonnet  accuracy 12/14 = 0.86   median latency 1369 ms   ( 81% of opus)
+  haiku   accuracy 12/14 = 0.86   median latency  902 ms   ( 54% of opus)
+```
+
+On *this* chore the gradient is effectively **bimodal**, not smooth: Opus at 0.93, or 0.86 at
+*either* cheaper tier — and **Sonnet is dominated by Haiku** (identical 0.86, but slower). The
+per-item dump shows why: the cheaper tiers fail on the same **distractor** items, the same way.
+Item 10 ("…junior engineer Tom Bradley assists principal engineer Anna Cole…") — both Sonnet and
+Haiku extract `Tom Bradley` (the distractor); only Opus gets `Anna Cole`. Item 12 ("…his deputy Ines
+Roca runs day-to-day operations as COO") — Opus *and* Sonnet both grab `Diego Ramos` (the chair);
+nobody gets it. So the quality cliff is **Opus vs everything-cheaper, driven by distractor
+robustness** — not a tier-capability ladder you can step down gently. *The useful knee is
+chore-dependent;* on an easy chore there may be no beneficial middle stop, which is exactly why you
+measure per-chore instead of assuming a gradient.
+
+```
 haiku behind the deterministic gate:
   accepted 13/14, escalated 1/14 (the empty output)
   served accuracy 12/14 = 0.86      leaked 1 (in-source distractor the gate can't see)
@@ -76,8 +91,10 @@ experiment re-introduced an already-retracted artifact is the point, not an emba
 - **Quality scoring is a containment heuristic, not an LLM judge** — kept out of the headline number
   deliberately (the fallible-judge problem). It removes the terse-gold artifact but isn't semantic
   equivalence.
-- **Same 14-item synthetic corpus** as the uncover/depth arc; one tool/chore type; cloud Haiku as
-  the cheap tier (the local-model tier is still unmeasured — `ROADMAP.md` Track A4).
+- **Same 14-item synthetic corpus** as the uncover/depth arc; one tool/chore type. The gradient's
+  far end — **local models** (the brief's `frontier → local+LoRA → deterministic hook`) — is
+  unmeasured; cloud Sonnet/Haiku are the cheap-tier stand-ins for now. Local-hybrid work in sibling
+  projects (cupel, lexicon) is the likely reuse path when that rung is built (`ROADMAP.md` Track A4).
 
 ## Bottom line
 

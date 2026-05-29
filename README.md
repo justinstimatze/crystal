@@ -81,11 +81,14 @@ property. See the findings docs for the confound and the wide-CI caveats — *do
 λ≈0 as constants.*
 
 **The payoff itself** (`payoff`, the first value-prop measurement, not just the safety discipline):
-shifting a chore Opus→Haiku behind a deterministic gate saved **~46% median latency** at
-*mostly*-held quality (0.86 vs Opus 0.93) — the latency win is real and large, but the deterministic
-gate leaks the cheap tier's in-source semantic errors, so "held quality" is conditional on a gate
-that covers the error mode (an LLM gate would, but erases the latency win). The honest shift-left is
-a tradeoff, not a free lunch. See [`PAYOFF_FINDINGS.md`](docs/PAYOFF_FINDINGS.md).
+shifting a chore down the cost gradient (Opus→Sonnet→Haiku) behind a deterministic gate. Haiku saved
+**~46% median latency** at *mostly*-held quality (0.86 vs Opus 0.93) — the latency win is real and
+large, but the deterministic gate leaks the cheap tier's in-source semantic errors, so "held
+quality" is conditional on a gate that covers the error mode (an LLM gate would, but erases the
+latency win). And shift-left isn't binary: on this chore the gradient was *bimodal* (Opus 0.93, or
+0.86 at either cheaper tier — Sonnet bought nothing over Haiku), so the useful knee is
+chore-dependent. The honest shift-left is a tradeoff, not a free lunch. See
+[`PAYOFF_FINDINGS.md`](docs/PAYOFF_FINDINGS.md).
 
 ## The safety discipline (secondary)
 
