@@ -62,7 +62,25 @@ func New(cacheDir string) (*Client, error) {
 // Complete runs one message request, caching the result to disk by content
 // hash. A cache hit returns immediately with Cached=true and zero spend.
 func (c *Client) Complete(ctx context.Context, model, system, prompt string, maxTokens int64) (Result, error) {
-	key := hashKey(model, system, prompt, maxTokens)
+	return c.complete(ctx, model, system, prompt, maxTokens, false)
+}
+
+// Classify is Complete with thinking DISABLED. It exists because adaptive
+// thinking tokens count against MaxTokens: a tiny one-word classification
+// (e.g. "FAITHFUL"/"DRIFT") under a small MaxTokens can return EMPTY visible
+// text when thinking eats the budget — silently defaulting every verdict to
+// the same class. Disabling thinking guarantees the budget is spent on the
+// answer. (This was the bug that invalidated the first ground-hop run.)
+func (c *Client) Classify(ctx context.Context, model, system, prompt string, maxTokens int64) (Result, error) {
+	return c.complete(ctx, model, system, prompt, maxTokens, true)
+}
+
+func (c *Client) complete(ctx context.Context, model, system, prompt string, maxTokens int64, noThink bool) (Result, error) {
+	mode := ""
+	if noThink {
+		mode = "nothink"
+	}
+	key := hashKey(model, system, prompt, maxTokens, mode)
 	if r, ok := c.readCache(key); ok {
 		r.Cached = true
 		return r, nil
@@ -71,6 +89,10 @@ func (c *Client) Complete(ctx context.Context, model, system, prompt string, max
 		Model:     anthropic.Model(model),
 		MaxTokens: maxTokens,
 		Messages:  []anthropic.MessageParam{anthropic.NewUserMessage(anthropic.NewTextBlock(prompt))},
+	}
+	if noThink {
+		d := anthropic.NewThinkingConfigDisabledParam()
+		params.Thinking = anthropic.ThinkingConfigParamUnion{OfDisabled: &d}
 	}
 	if system != "" {
 		params.System = []anthropic.TextBlockParam{{Text: system}}
@@ -96,13 +118,17 @@ func (c *Client) Complete(ctx context.Context, model, system, prompt string, max
 	return r, nil
 }
 
-func hashKey(model, system, prompt string, maxTokens int64) string {
+// hashKey keys the disk cache. Mode is omitempty so existing thinking-on
+// (mode="") cache entries keep their original keys; only thinking-disabled
+// calls add the marker.
+func hashKey(model, system, prompt string, maxTokens int64, mode string) string {
 	b, _ := json.Marshal(struct {
-		M  string `json:"m"`
-		S  string `json:"s"`
-		P  string `json:"p"`
-		MT int64  `json:"mt"`
-	}{model, system, prompt, maxTokens})
+		M    string `json:"m"`
+		S    string `json:"s"`
+		P    string `json:"p"`
+		MT   int64  `json:"mt"`
+		Mode string `json:"mode,omitempty"`
+	}{model, system, prompt, maxTokens, mode})
 	sum := sha256.Sum256(b)
 	return hex.EncodeToString(sum[:])
 }
