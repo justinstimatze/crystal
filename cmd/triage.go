@@ -177,7 +177,7 @@ func (c *TriageCmd) Run() error {
 	fmt.Printf("  verifier (deterministic rules):  covered %d/%d = g %.2f  (free, no model)\n", covered, n, frac(covered, n))
 	fmt.Printf("  map (cheap model on residual):   %d/%d = %.2f\n", residual, n, frac(residual, n))
 	fmt.Printf("  gate caught: %d cheap-model divergences (rule fired, model disagreed → rule won); %d schema violations\n", disagree, schemaViol)
-	fmt.Println("  reduce (deterministic tally): below — a model was never asked to count\n")
+	fmt.Print("  reduce (deterministic tally): below — a model was never asked to count\n\n")
 
 	fmt.Println("=== your Bash usage, categorized ===")
 	type kv struct {
