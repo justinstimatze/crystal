@@ -40,9 +40,14 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    (paraphrase) — the chore a string tool *can't* cover. det-tool recall on paraphrase = 0/4
    (residual confirmed real); **haiku-whole 1.00 = opus-whole 1.00 @ ~2.6× lower latency** → a cheap
    model covers *easy* semantic support as well as the frontier (shift-left reaches the residual,
-   not just the mechanical fraction). Retrieval was a no-op on short sources. *Open (the easy set
-   couldn't answer it):* where does the cheap model stop sufficing and the frontier/retrieval earn
-   its keep? Needs harder/longer/subtler items.
+   not just the mechanical fraction). Retrieval was a no-op on short sources. **Hard set
+   (`support --hard`):** tried to separate cheap from frontier with long buried-needle docs + subtle
+   reasoning (quant traps, scope/negation, multi-hop, temporal) — and **couldn't**: haiku 1.00 = opus
+   1.00 again (frontier-necessary boundary still unfound; cheap-model reach is larger than expected).
+   What DID separate: **retrieval HURT** (0.85 < 1.00) — lexical keyword retrieval from a paraphrased
+   claim can't find paraphrased source, so naive RAG can be worse than whole-doc. *Open:* a set that
+   actually induces cheap-model errors (longer-than-context docs, denser ambiguity) to find the
+   frontier boundary; semantic (not lexical) retrieval.
 
 3. **The LLM-tier slice — FIRST RESULT LANDED** (`payoff`, `PAYOFF_FINDINGS.md`). Shifted a
    mechanical chore Opus→Haiku behind a deterministic gate: **~46% median latency saved**, but

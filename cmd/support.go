@@ -25,6 +25,7 @@ import (
 // Hard labels: supported (often via paraphrase) vs not (contradicted / unsupported).
 type SupportCmd struct {
 	CacheDir string `help:"Disk cache dir for LLM calls." default:".crystal-cache"`
+	Hard     bool   `help:"Use the HARD corpus: long buried-needle docs + subtle reasoning (quant traps, scope/negation, multi-hop, temporal) designed to separate cheap from frontier and give retrieval a needle."`
 	Verbose  bool   `help:"Dump per-item kind, ground truth, each condition's verdict, retrieved evidence."`
 }
 
@@ -62,6 +63,32 @@ func sClaims() []sClaim {
 	}
 }
 
+func sSourcesHard() map[string]string {
+	return map[string]string{
+		"northwind":  "Northwind Logistics released its annual review on Monday. The company opened two new distribution centers in the Pacific Northwest during the first half of the year. Revenue from the freight division rose 8 percent, though the warehousing division saw margins compress under rising lease costs. Management noted that the new centers are not yet operating at full capacity. The board approved a share buyback of up to 200 million dollars. Chief Executive Mara Vance, who joined from a rival carrier in 2023, said the firm would prioritize automation over headcount growth. The report cautioned that a planned rail strike could disrupt deliveries in the third quarter. No dividend was declared.",
+		"trial":      "The trial enrolled 1,200 adults with moderate hypertension across twelve clinical sites. Participants were randomized to receive either the experimental compound or a matching placebo for twenty-four weeks. The primary endpoint, a reduction in systolic blood pressure of at least 10 mmHg, was met in 58 percent of the treatment group versus 41 percent of controls. Adverse events were mostly mild, with headache reported more often in the treatment arm. The authors note the effect was smaller in participants over 65. A larger phase-three study is planned for next year. Funding was provided by the compound's manufacturer.",
+		"succession": "Elena Ruiz served as the company's chief financial officer until March, when she was named chief executive. Her predecessor as CEO, Tom Park, retired after fifteen years.",
+	}
+}
+
+func sClaimsHard() []sClaim {
+	return []sClaim{
+		{"northwind", "Northwind opened new facilities in the northwestern United States.", true, "buried-para"},
+		{"northwind", "Northwind's CEO previously worked for a competitor.", true, "multihop-buried"},
+		{"northwind", "Northwind's freight revenue grew by more than 10 percent.", false, "quant-trap(8<10)"},
+		{"northwind", "Northwind plans to grow its workforce.", false, "scope/negation"},
+		{"northwind", "Northwind declared a dividend and approved a buyback.", false, "partial-conjunction"},
+		{"trial", "The drug lowered blood pressure more than placebo did.", true, "compare-nums"},
+		{"trial", "A majority of the placebo group met the primary endpoint.", false, "quant-trap(41<50)"},
+		{"trial", "The drug worked equally well in older participants.", false, "contradicted-buried"},
+		{"trial", "The study was funded by the drug's maker.", true, "buried-para"},
+		{"trial", "The drug cured hypertension in most patients.", false, "overclaim"},
+		{"succession", "Elena Ruiz is the current CEO.", true, "temporal-multihop"},
+		{"succession", "Tom Park is the current CFO.", false, "role-trap"},
+		{"succession", "Elena Ruiz was the CFO before becoming CEO.", true, "temporal"},
+	}
+}
+
 type supRow struct {
 	idx                       int
 	kind                      string
@@ -82,10 +109,13 @@ func (c *SupportCmd) Run() error {
 		return usageError{err}
 	}
 	ctx := context.Background()
-	srcs := sSources()
+	srcs, claims := sSources(), sClaims()
+	if c.Hard {
+		srcs, claims = sSourcesHard(), sClaimsHard()
+	}
 
 	var rows []supRow
-	for i, cl := range sClaims() {
+	for i, cl := range claims {
 		src := srcs[cl.src]
 		opus, opusP, opusLat := judgeSupport(ctx, client, llm.ModelOpus, src, cl.claim)
 		haiku, haikuP, haikuLat := judgeSupport(ctx, client, llm.ModelHaiku, src, cl.claim)
@@ -212,7 +242,7 @@ func supReport(rows []supRow, tool string, verbose bool) {
 	var opus, haiku, det, rtv confusion // positive = supported
 	var opusLats, haikuLats, rtvLats []int64
 	opusPF, haikuPF, rtvPF := 0, 0, 0 // parse-fails — EXCLUDED from accuracy, never defaulted
-	// recall on paraphrase-supported (the residual a string tool can't see)
+	// recall on SUPPORTED items (the residual a string tool can't paraphrase-match)
 	paraTotal, opusPara, haikuPara, detPara, rtvPara := 0, 0, 0, 0, 0
 	for _, r := range rows {
 		// Only score PARSED verdicts — a parse-fail must never default to a class
@@ -236,7 +266,7 @@ func supReport(rows []supRow, tool string, verbose bool) {
 		opusLats = append(opusLats, r.opusLat)
 		haikuLats = append(haikuLats, r.haikuLat)
 		rtvLats = append(rtvLats, r.rtvLat)
-		if r.kind == "paraphrase" {
+		if r.supported {
 			paraTotal++
 			if r.opus {
 				opusPara++
@@ -266,14 +296,14 @@ func supReport(rows []supRow, tool string, verbose bool) {
 		fmt.Println()
 	}
 
-	fmt.Printf("population: N=%d · tool=%s · paraphrase-supported items=%d\n\n", n, tool, paraTotal)
+	fmt.Printf("population: N=%d · tool=%s · supported items=%d\n\n", n, tool, paraTotal)
 	fmt.Println("=== semantic support — the uncovered residual (a string tool can't paraphrase-match) ===")
 	fmt.Println("  (accuracy over PARSED verdicts only; parse-fails are excluded, never defaulted)")
 	fmt.Printf("  opus-whole   acc=%.2f (n=%d)  median %d ms  parse-fail %d\n", opus.accuracy(), opus.n(), median(opusLats), opusPF)
 	fmt.Printf("  haiku-whole  acc=%.2f (n=%d)  median %d ms  parse-fail %d\n", haiku.accuracy(), haiku.n(), median(haikuLats), haikuPF)
 	fmt.Printf("  det-tool     acc=%.2f (n=%d)  ~0 ms\n", det.accuracy(), det.n())
 	fmt.Printf("  haiku+rtv    acc=%.2f (n=%d)  median %d ms  parse-fail %d  (tool-retrieved grounded evidence)\n", rtv.accuracy(), rtv.n(), median(rtvLats), rtvPF)
-	fmt.Printf("\n  recall on PARAPHRASE-supported (%d items — the residual):  opus %d  haiku %d  det %d  haiku+rtv %d\n",
+	fmt.Printf("\n  recall on SUPPORTED (%d items — the residual):  opus %d  haiku %d  det %d  haiku+rtv %d\n",
 		paraTotal, opusPara, haikuPara, detPara, rtvPara)
 
 	fmt.Println("\nThe residual is real if det-tool misses the paraphrase items while the models catch")

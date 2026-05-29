@@ -67,10 +67,65 @@ the same discipline as the prior six.
 - `haiku+rtv` retrieval was a no-op on short sources; its real test (long-doc needle-finding) is the
   follow-up.
 
-## Bottom line
+## Bottom line (easy set)
 
 The deterministic tool can't cover semantic support (residual confirmed real), but a **cheap model
 covers easy semantic support as well as the frontier at ~2.6× lower latency** — so shift-left reaches
 into the residual, not just the mechanical fraction. The open question the easy set couldn't answer:
 *where does the cheap model stop sufficing and the frontier (or retrieval) start earning its keep?*
 That needs harder, longer, subtler items — the next experiment.
+
+---
+
+## Hard set (`support --hard`, 2026-05-29) — tried to separate cheap from frontier; couldn't
+
+Long buried-needle documents (6–9 sentences) + subtle reasoning designed to break the cheap model:
+quantitative traps (8% is not ">10%"; 41% is not "a majority"), scope/negation ("prioritize
+automation *over* headcount growth" → not growing the workforce), partial-conjunction ("No dividend
+was declared" → "declared a dividend and approved a buyback" is false), multi-hop, temporal
+(former-vs-current role), overclaim ("cured"). N=13, 6 supported.
+
+```
+condition     accuracy    latency    recall on supported (6)
+opus-whole    1.00 (13)   1231 ms    6/6
+haiku-whole   1.00 (13)    770 ms    6/6
+det-tool      0.54 (13)    ~0 ms     0/6
+haiku+rtv     0.85 (13)   1470 ms    4/6   ← retrieval HURT
+```
+
+**Two honest findings, neither the one I went looking for:**
+
+1. **The hard set did NOT separate cheap from frontier.** `haiku-whole` = `opus-whole` = 1.00 again —
+   Haiku correctly handled every trap (the arithmetic comparisons, the negation/scope, the
+   false conjunct, multi-hop, temporal, overclaim). So the **frontier-necessary boundary remains
+   unfound**: the cheap model's reach into subtle semantic support is larger than expected. I
+   designed this set to break Haiku and it didn't — either it still isn't hard enough, or this whole
+   class of semantic judgment is within a cheap model's competence. Honest null result; do not claim
+   "Haiku ≈ Opus everywhere" — claim "across verbatim + easy + these subtle classes, the cheap model
+   matched the frontier, and I have not yet found where it doesn't."
+2. **Retrieval *hurt* (0.85 < 1.00).** `haiku+rtv` missed the two buried-paraphrase items because
+   lexical keyword retrieval from the *paraphrased claim* can't match the *paraphrased source*
+   ("facilities" ≠ "distribution centers"; "competitor" ≠ "rival carrier"). It fed the cheap model
+   *incomplete* evidence and converted right answers to wrong. **Naive lexical RAG inherits the same
+   paraphrase gap that defeats `det-tool`, so decomposition-via-retrieval can be *worse* than just
+   letting the cheap model read the whole document** — same family as the A4 glue-fumble (the
+   retrieval/arg step is itself error-prone). Retrieval needs *semantic* matching (embeddings) or an
+   anchor-entity keyword strategy to help, and only earns its keep when the doc exceeds context.
+
+**Caveats:** the "long" docs still fit comfortably in context, so there's no lost-in-the-middle
+pressure and whole-doc reading is fine for both models — retrieval's actual needle-value needs docs
+that *exceed* a comfortable context window (untested). N=13. The set produced zero Haiku errors, so
+it failed as a separator; finding the frontier boundary needs items that actually induce cheap-model
+errors (genuinely ambiguous support, dense distractors, or reasoning chains longer than a sentence
+or two).
+
+## Combined bottom line
+
+Across verbatim (`decompose`), easy semantic, and these subtle-reasoning classes, **a cheap model
+matched the frontier** — shift-left reaches much further into the residual than expected, and the
+point where the frontier becomes *necessary* is still unfound. Meanwhile both experiments show the
+**decomposition glue (fragment selection in A4, lexical retrieval here) is the fragile part** — it
+can degrade a cheap model that would have been right on the whole task. So: prefer whole-task cheap
+model over naive decomposition when the input fits in context; reserve tool-decomposition for the
+verbatim-coverable fraction (where it's exact) and for inputs too big to read whole (where retrieval
+must be *semantic*, not lexical).
