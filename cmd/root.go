@@ -25,6 +25,7 @@ type CLI struct {
 	ContentSweep ContentSweepCmd `cmd:"" help:"Loop-closer for depth-sweep: recover the proposed correction from each depth-d report and score its fidelity (gold/inverted/other) vs hard labels — the measured content-erosion curve."`
 	Payoff       PayoffCmd       `cmd:"" help:"Measure the value prop: shift a mechanical chore Opus→Haiku behind a deterministic gate; report latency saved vs quality held (and leaked) vs always-Opus."`
 	Decompose    DecomposeCmd    `cmd:"" help:"A4: does a cheap model + a robust tool (rg) beat shifting the whole chore to the cheap model? Quote-verification, whole-haiku vs det-tool vs haiku+tool."`
+	Support      SupportCmd      `cmd:"" help:"The residual experiment: semantic support (does the source back the claim, often via paraphrase) — where a string tool can't win. opus/haiku/det/haiku+retrieval."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.

@@ -36,6 +36,14 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    amortization point — how many hits before authoring cost is repaid, and the re-author frequency
    that erases the win. *Proves:* shift-left nets positive on its claimed axes, or finds where it
    doesn't. *Done when:* a before/after table exists for ≥1 real chore.
+3b. **The residual slice — RESULT LANDED** (`support`, `SUPPORT_FINDINGS.md`). Semantic support
+   (paraphrase) — the chore a string tool *can't* cover. det-tool recall on paraphrase = 0/4
+   (residual confirmed real); **haiku-whole 1.00 = opus-whole 1.00 @ ~2.6× lower latency** → a cheap
+   model covers *easy* semantic support as well as the frontier (shift-left reaches the residual,
+   not just the mechanical fraction). Retrieval was a no-op on short sources. *Open (the easy set
+   couldn't answer it):* where does the cheap model stop sufficing and the frontier/retrieval earn
+   its keep? Needs harder/longer/subtler items.
+
 3. **The LLM-tier slice — FIRST RESULT LANDED** (`payoff`, `PAYOFF_FINDINGS.md`). Shifted a
    mechanical chore Opus→Haiku behind a deterministic gate: **~46% median latency saved**, but
    quality only *mostly* held (0.86 vs 0.93; the deterministic gate leaks in-source semantic errors
