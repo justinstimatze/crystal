@@ -43,16 +43,15 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    correct + no latency win. *Still to do:* run on *real* (non-synthetic) chores and a real
    agentic-loop baseline; multi-sample latency; an honest LLM-gate latency measurement (not just the
    qualitative claim).
-4. **Decomposed shift-left — cheap model + robust tool (the architecture the `payoff` leak pointed
-   at).** Instead of shifting a *whole* chore to Haiku (which leaked on the semantic judgment), hand
-   Haiku a robust deterministic tool for the mechanical, high-g fraction and only the fuzzy gap to
-   the model — e.g. Haiku driving `grep` to verify a quote (a claim-verification pattern), or a
-   parser/typechecker for structured work. *Proves:* the cost-optimal unit is the sub-step, not the
-   task; the tool-coverable fraction is where cheap+tool beats frontier-from-scratch. *Done when:* a
-   decomposed chore (cheap model + real CLI tool, gated) beats whole-task Haiku on the same chore in
-   served accuracy at comparable latency. Reuse: existing private agents that already use this
-   pattern (claim sourcing/verification; auditing/playtesting) — adapt the pattern, not the code.
-   This is likely the highest-leverage next build.
+4. **Decomposed shift-left — cheap model + robust tool — FIRST RESULT LANDED** (`decompose`,
+   `DECOMPOSE_FINDINGS.md`). Quote/citation verification, three conditions: **det-tool (rg) 1.00 @
+   ~0ms > whole-haiku 1.00 @ 612ms > haiku+tool 0.92 @ 745ms.** Lesson, partly *against* the naive
+   thesis: when a deterministic tool fully covers the chore, **drop the model** — adding it (whole or
+   as driver) is overhead, and the driver role introduced a new failure (its fragment choice dropped
+   the distinguishing token → false-present). Decomposition pays only on the residual the tool
+   *can't* cover (fuzzy/paraphrase). *Still to do:* a chore with a real uncovered residual
+   (paraphrase/semantic-support citation checking), longer/harder inputs (the predicted whole-task
+   hallucination didn't surface on the easy set), and the tool-de-biasing angle (weir).
 5. **Close the sovereignty gap (the gradient's far end).** Swap the cheap tier to a local small
    model (+ LoRA) on owned hardware; re-measure latency and held quality. The cost gradient is
    `frontier → … → local+LoRA → deterministic hook`; `payoff` currently stops at cloud Haiku. Reuse
