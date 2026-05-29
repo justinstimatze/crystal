@@ -51,7 +51,13 @@ seams are narrow:
    self-authoring is single-hop.
 2. **Explicit per-hop up-signal loss λ** in a live stack — the closest formal cousin
    (decision-theoretic cascades) *assumes scores don't degrade with depth*; crystal
-   lives in the regime it assumes away.
+   lives in the regime it assumes away. **Partially measured now** (`GROUNDHOP`/
+   `UNCOVERHOP`/`DEPTHSWEEP`/`CONTENTSWEEP`): at hop 1, λ ≈ 0 for a content-bearing
+   channel (the real axis is *content-vs-verdict*, not prose-vs-typed), and neither
+   detection nor content fidelity compounds-loses through 6 relays — the loss sits at
+   **hop 1**, not in depth. This *tensions with* the lattice's depth-pessimism below
+   and narrows the open question to: does that hold for non-cooperative relays, larger
+   N, and greater depth?
 3. **Tamper-proof recursive guardrails** — a verifier the supervised tier
    structurally **cannot rewrite**. This is the durable, under-served contribution.
 
@@ -64,12 +70,16 @@ self-improving tier will corrupt a verifier it can reach* — and the entire rea
 hard rule #4 (stable, hand-written kernel; the supervised tier cannot modify the gate
 above it) is the differentiator, not a footnote.
 
-## The riskiest assumption (still unproven)
+## The riskiest assumption (partly tested)
 
 Can the upper tier detect a lower tier's drift from a signal degraded by propagation,
 and correctly re-author the lower harness — **no human, no silent degradation, with a
-guardrail the lower tier can't corrupt**? Everything is contingent on the live
-experiment producing a non-trivial result here.
+guardrail the lower tier can't corrupt**? The *detection-through-a-degraded-signal* half
+is now grounded: through 6 relay hops, a content-bearing up-channel preserved detection
+(recall 1.00) and content fidelity (~0.70 flat); the loss is at hop 1, not depth (see
+the grounding-arc docs). Still unproven — and now the clear headline — is the
+**tamper-proof re-authoring** half: a guardrail the lower tier structurally can't corrupt
+(the DGM antidote), demonstrated live.
 
 ## Reusable assets & what's proven vs. assumed
 
@@ -82,11 +92,14 @@ experiment producing a non-trivial result here.
   demote/recover`, and guardrail coverage is a **cliff at `g = demote/recover`, not a
   dial** (a manufactured "depth 30" was a search-cap artifact; see correction in
   `LATTICE_FINDINGS.md`). For drift in the un-checkable residual, `g` does not help.
-- **Two manufactured-confidence catches** (the 219 count; the depth-2 / depth-30
-  numbers) were caught only by verifier-against-ground-truth and adversarial
-  reimplementation. That the project keeps catching *its own* fluent-but-wrong output
-  is the strongest live evidence that the trust discipline is necessary — it's the
-  thesis demonstrated on itself.
+- **Five manufactured-confidence catches** (the 219 count; the depth-2 / depth-30
+  numbers; `experiment`'s "Haiku beats Opus / λ=0.90"; `ground-hop` run-1's "λ_prose=0";
+  `depth-sweep`'s "content erodes with depth", overturned by `content-sweep`) were
+  caught only by verifier-against-ground-truth, adversarial reimplementation, and
+  `--verbose` per-item inspection — the fifth corrected a *prior crystal finding*. That
+  the project keeps catching *its own* fluent-but-wrong output is the strongest live
+  evidence that the trust discipline is necessary — it's the thesis demonstrated on
+  itself.
 
 ## The leapfrog (where to get ahead, not behind)
 
@@ -111,8 +124,12 @@ the trust floor and make degradation *loud*," never "guarantee safety."
 
 1. **Deterministic topology sim** (`internal/lattice`) — done; it's algebra + a
    characterization of where the loop goes blind, corrected twice.
-2. **Live 2-boundary** (`cmd/experiment`, built, not yet run) — measure real
-   substitution fidelity, channel λ, and guardrail coverage g on a verifiable chore.
-3. **Tamper-proof recursion demo** (the headline) — a self-improving stack that tries
-   to game its own evaluation (the DGM behavior) and is structurally blocked + demoted
-   live, with a visible trust readout. This is the contribution, demonstrated.
+2. **Live grounding of g and λ** — done across four experiments. `cmd/experiment` was
+   instrument-invalid (diagnosed, not reported); `ground-hop`/`uncover-hop`/`depth-sweep`/
+   `content-sweep` then grounded g (1.00 byte-exact; 0.50 substring on semantic drift)
+   and λ (≈0 at hop 1; flat to depth 6). Net: the loss is at **hop 1, not depth or
+   format** — which tensions with the lattice's depth-pessimism and is the live
+   correction to the assumption above.
+3. **Tamper-proof recursion demo** (the headline, still unbuilt) — a self-improving stack
+   that tries to game its own evaluation (the DGM behavior) and is structurally blocked +
+   demoted live, with a visible trust readout. This is the contribution, demonstrated.
