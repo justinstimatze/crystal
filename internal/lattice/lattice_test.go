@@ -6,6 +6,10 @@ import (
 	"github.com/justinstimatze/crystal/internal/lattice"
 )
 
+// base holds ILLUSTRATIVE constants. The adversarial panel established that the
+// frontier integer is contingent on gain and demote/recover, NOT just λ — so
+// these values are not "the answer", they are one corner. The sensitivity
+// tests below exist precisely to show the result moves when they move.
 func base() lattice.Params {
 	return lattice.Params{
 		DriftErr:         0.5,
@@ -29,30 +33,85 @@ func TestLosslessAlwaysConverges(t *testing.T) {
 	}
 }
 
-// THE riskiest-assumption result: with realistic per-hop loss, the loop
-// stops converging beyond some depth — silent degradation emerges from the
-// topology alone, before any model is involved.
-func TestLossyPropagationHasAConvergenceFrontier(t *testing.T) {
+// The frontier MUST shallow as loss rises — the one robust qualitative claim.
+// (Not "a frontier exists at all" — the panel showed that's a tautology, since
+// the silent floor demote/(1-λ)^(d-1) → ∞ while recover is finite, so a failing
+// depth always exists for any λ>0.)
+func TestFrontierShallowsAsLossRises(t *testing.T) {
+	prev := 1 << 30
+	for _, l := range []float64{0.1, 0.2, 0.3, 0.4} {
+		d := lattice.MaxSafeDepth(base(), l, 12)
+		if d > prev {
+			t.Errorf("max safe depth should not increase with loss: λ=%.1f depth=%d prev=%d", l, d, prev)
+		}
+		prev = d
+	}
+}
+
+// PANEL FINDING #1: the headline integer is GAIN-contingent, not a property of
+// the topology. At depth 3 / λ=0.2 the result flips on the (unmeasured) gain.
+func TestGainFlipsTheFrontier(t *testing.T) {
+	low := lattice.Simulate(lattice.Params{Depth: 3, HopLoss: 0.2, DriftErr: 0.5, CorrectionGain: 0.5, DemoteThreshold: 0.08, RecoverThreshold: 0.10, InjectStep: 5, MaxSteps: 200})
+	high := lattice.Simulate(lattice.Params{Depth: 3, HopLoss: 0.2, DriftErr: 0.5, CorrectionGain: 0.9, DemoteThreshold: 0.08, RecoverThreshold: 0.10, InjectStep: 5, MaxSteps: 200})
+	if low.Converged {
+		t.Errorf("expected gain 0.5 to FAIL at depth 3 / λ0.2 (the pessimistic corner)")
+	}
+	if !high.Converged {
+		t.Errorf("expected gain 0.9 to CONVERGE at depth 3 / λ0.2 — gain flips the headline")
+	}
+	t.Logf("GAIN-CONTINGENT: depth3/λ0.2 — gain 0.5 final=%.3f (%s), gain 0.9 final=%.3f (%s)",
+		low.FinalErr, low.Regime, high.FinalErr, high.Regime)
+}
+
+// PANEL FINDING #2: demote/recover is co-equally load-bearing — so "λ is THE
+// variable" is false. A small demote nudge moves the integer.
+func TestDemoteFlipsTheFrontier(t *testing.T) {
+	mk := func(demote float64) lattice.Params {
+		p := base()
+		p.DemoteThreshold = demote
+		return p
+	}
+	d05 := lattice.MaxSafeDepth(mk(0.05), 0.2, 12)
+	d08 := lattice.MaxSafeDepth(mk(0.08), 0.2, 12)
+	d09 := lattice.MaxSafeDepth(mk(0.09), 0.2, 12)
+	if !(d05 > d08 && d08 >= d09) {
+		t.Errorf("demote should move the frontier: d(0.05)=%d d(0.08)=%d d(0.09)=%d", d05, d08, d09)
+	}
+	t.Logf("DEMOTE-CONTINGENT: λ0.2 max safe depth — demote 0.05→%d, 0.08→%d, 0.09→%d", d05, d08, d09)
+}
+
+// PANEL FINDING #3 (now expressible): high gain over-corrects and destabilizes
+// — the over-eager-re-author-breaks-a-working-harness failure, impossible to
+// see under the old err>=0 clamp.
+func TestOverCorrectionIsUnstable(t *testing.T) {
 	p := base()
-	p.HopLoss = 0.2
+	p.Depth, p.HopLoss, p.CorrectionGain = 1, 0.0, 5.0 // fidelity 1, wildly over-eager
+	r := lattice.Simulate(p)
+	if r.Converged {
+		t.Error("gain 5 at fidelity 1 should NOT converge — it over-corrects")
+	}
+	if r.Regime != "unstable" {
+		t.Errorf("regime=%s, want unstable (over-correction amplifies error)", r.Regime)
+	}
+	t.Logf("OVER-CORRECTION: gain 5 → regime=%s finalErr=%.2f (oscillating divergence, now expressible)", r.Regime, r.FinalErr)
+}
 
-	// depth 1 (top supervises bottom directly, fidelity=1) must converge.
-	p.Depth = 1
-	if !lattice.Simulate(p).Converged {
-		t.Fatal("depth 1 must converge at any loss (fidelity=1)")
+// The frontier IS the algebra: at the published grid's gain (0.5), the
+// closed-form ratio demote/recover predicts the simulated frontier within the
+// ±1 discrete-overshoot the panel found (34/36 cells). This is the point — the
+// "frontier" is the inequality (1-λ)^(d-1) >= demote/recover restated, not an
+// emergent topological property. (Higher gain overshoots the floor and
+// converges deeper, which is exactly the gain-contingency TestGainFlips shows.)
+func TestClosedFormTracksFrontier(t *testing.T) {
+	p := base() // gain 0.5 — the grid's gain
+	for _, l := range []float64{0.1, 0.2, 0.3} {
+		sim := lattice.MaxSafeDepth(p, l, 20)
+		cf := lattice.ClosedFormDepth(l, p.DemoteThreshold, p.RecoverThreshold)
+		if diff := sim - cf; diff < -1 || diff > 1 {
+			t.Errorf("λ=%.1f: sim depth %d vs closed form %d (off by >1 — frontier isn't the ratio?)", l, sim, cf)
+		}
+		t.Logf("λ=%.1f: sim=%d closed-form=%d (frontier = algebra, ±1 discretization)", l, sim, cf)
 	}
-
-	// There must exist a depth at which it fails — otherwise the sim is rigged.
-	maxSafe := lattice.MaxSafeDepth(base(), 0.2, 12)
-	if maxSafe >= 12 {
-		t.Fatalf("no convergence frontier found up to depth 12 — sim is not testing the risk")
-	}
-	deepFail := lattice.Simulate(withDepthLoss(base(), maxSafe+1, 0.2))
-	if deepFail.Converged {
-		t.Errorf("depth %d should NOT converge at loss 0.2", maxSafe+1)
-	}
-	t.Logf("FRONTIER: at per-hop loss 0.2, max safe stack depth = %d (depth %d fails: regime=%s, finalErr=%.3f)",
-		maxSafe, maxSafe+1, deepFail.Regime, deepFail.FinalErr)
 }
 
 // Deeper or lossier strictly weakens the signal reaching the top (monotone),

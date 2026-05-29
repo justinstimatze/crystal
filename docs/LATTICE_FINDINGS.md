@@ -29,37 +29,61 @@ max safe depth:  λ0.0→6   λ0.1→4   λ0.2→2   λ0.3→2   λ0.4→1   λ0
 `ok` = recovers · `res` = alarms but stalls at a silent floor it can't see below ·
 `SIL` = top never even alarms (fully silent degradation).
 
+> **CORRECTION (post adversarial-panel, 9 surviving findings).** An earlier version
+> of this section claimed "**max safe depth is 2**" as a result. That number is
+> **manufactured, not discovered** — it is contingent on three hand-set, unmeasured
+> constants (`gain=0.5`, `demote=0.08`, `recover=0.10`), the same fluent-but-ungrounded
+> failure class as the retracted 219-heartbeat count. The grid above is the `gain=0.5`
+> corner. What survives is the *direction*, not the integer. Corrected below.
+
 ## What it says about the thesis
 
-1. **The recursion is viable but SHALLOW, and the depth collapses fast with loss.**
-   Lossless, you can stack arbitrarily deep — but that's fantasy. At a *modest* 20%
-   per-hop signal loss, **max safe depth is 2.** The deep "Opus→Sonnet→Haiku→…" dream
-   silently degrades unless up-propagation is near-lossless.
+1. **The frontier is the algebra, not an emergent property.** The simulated frontier
+   is the inequality `(1−λ)^(depth−1) ≥ demote/recover` restated (closed form
+   `ClosedFormDepth` predicts 34/36 grid cells; the ±1 misses are discrete-overshoot
+   at the boundary). The robust qualitative claim — **rising per-hop loss collapses
+   the safe depth** — holds for every parameter setting tested. The specific integer
+   does not.
 
-2. **Two distinct failure modes, both bad, emerge from topology alone** — before any
-   model is involved: `res` (the top alarms but the signal is too attenuated to drive
-   a full fix, leaving a residual error floor ≈ `demote/fidelity` it can't perceive)
-   and `SIL` (fidelity so low the top never alarms — the pure undercity failure).
+2. **The integer is contingent on gain AND demote/recover, not just λ** (panel,
+   verified in `lattice_test.go`):
+   - **Gain flips it:** depth 3 / λ=0.2 *fails* at gain 0.5 but *converges* at 0.9 →
+     max safe depth 2→3→4.
+   - **Demote flips it:** at λ=0.2, demote 0.05→depth 4, 0.08→2, 0.09→1.
+   So the earlier "**λ is THE load-bearing variable**" was **false**: gain and
+   demote/recover are co-equal. Report the frontier as a **band** over the
+   ungrounded knobs, never a single number.
 
-3. **publicrecord sits right at the viable frontier — and the human is the
-   low-loss channel.** Its ~2–3 hand-authored tiers work *because* a person reads
-   rich signals and edits scripts (near-λ0). Crystal's bet — removing that human —
-   only survives if the up-channel is engineered for very low loss.
+3. **Three failure modes, all expressible now** (the over-correction one was hidden by
+   an `err≥0` clamp the panel flagged; the clamp is removed):
+   `residual` (alarms but stalls at a silent floor), `silent` (fidelity so low the top
+   never alarms — pure undercity), and `unstable` (an over-eager re-author over-corrects
+   and oscillates/diverges — the over-eager-fixes-a-working-harness failure).
+
+4. **publicrecord's human is plausibly a low-loss up-channel** — but this is a
+   *hypothesis the sim cannot confirm*, because **λ is never measured**; it is a swept
+   knob. Every depth claim is therefore **conditional**: *IF λ≈X and the knobs sit at
+   Y THEN depth≤Z.*
 
 ## The concrete design constraint this hands the next phase
 
-The load-bearing variable is **λ, the per-hop information loss of the up-signal.**
-So the live experiment shouldn't chase depth; it should attack λ: propagate
-*structured, machine-checkable drift evidence* up the stack (the eval-gate's typed
-divergences — `tool_use_id`, reason, fidelity), **not** natural-language summaries,
-which is exactly where loss creeps in. Measure the real λ between two live tiers
-before stacking a third. If live λ is high, stay at depth 2 (publicrecord's proven
-regime) and invest in the signal channel, not more layers.
+The recommendation survives, restated honestly: **measure the real λ between two live
+tiers before stacking a third**, and attack λ rather than chasing depth — propagate the
+eval-gate's *structured typed divergences* (`tool_use_id`, reason, fidelity) up the
+stack, not natural-language summaries. But λ is one of three unmeasured knobs, not the
+sole lever; the live experiment must also pin the effective correction-gain and
+detection threshold of a real re-author before any depth number means anything.
 
-## Caveat (don't oversell)
+## Caveat (don't oversell — expanded per panel)
 
-This is a *necessary-condition* test of one structural property — that a lossy
-control loop can stabilize. It does **not** show real models can author or re-author
-correct harnesses (that's the live test). A pass here doesn't validate crystal; a
-fail would have *invalidated* the deep version cheaply. It did: deep is out unless λ
-is driven down.
+- This is a *necessary-condition* test of one structural property and is now known to be
+  **the closed-form inequality `(1−λ)^(d−1) ≥ demote/recover`** plus a small discrete
+  correction — useful for collapsing a vague fear into a falsifiable form, not for
+  producing a real max-safe-depth.
+- It **cannot** produce a grounded depth (λ unmeasured), cannot claim any depth is
+  structural (it's gain/demote-contingent), and — even with the clamp removed — models
+  drift as a single monotone scalar, a strawman for real multi-dimensional or
+  false-alarm-injecting drift.
+- It does **not** show real models can author/re-author correct harnesses (that's the
+  live test). A pass does not validate crystal. The honest takeaway: *loss collapses
+  safe depth — go measure λ, gain, and threshold on a real 2-tier boundary.*

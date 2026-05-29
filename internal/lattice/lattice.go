@@ -60,18 +60,19 @@ func Simulate(p Params) Result {
 		if t == p.InjectStep {
 			err = p.DriftErr
 		}
-		if err > peak {
-			peak = err
+		if mag := math.Abs(err); mag > peak {
+			peak = mag
 		}
 		observed := err * fidelity
-		if observed > p.DemoteThreshold {
+		// NO clamp at 0: over-correction can overshoot past zero into the
+		// opposite-sign error. This makes the canonical control-loop failure
+		// (high-gain oscillation/divergence — an over-eager re-author breaking
+		// a working harness) expressible, not just under-actuation.
+		if math.Abs(observed) > p.DemoteThreshold {
 			detected = true
 			err -= p.CorrectionGain * observed
-			if err < 0 {
-				err = 0
-			}
 		}
-		if t >= p.InjectStep && stepsToRecover < 0 && err <= p.RecoverThreshold {
+		if t >= p.InjectStep && stepsToRecover < 0 && math.Abs(err) <= p.RecoverThreshold {
 			stepsToRecover = t - p.InjectStep
 		}
 	}
@@ -79,7 +80,7 @@ func Simulate(p Params) Result {
 	res := Result{
 		Fidelity:       fidelity,
 		Detected:       detected,
-		Converged:      err <= p.RecoverThreshold,
+		Converged:      math.Abs(err) <= p.RecoverThreshold,
 		StepsToRecover: stepsToRecover,
 		PeakErr:        peak,
 		FinalErr:       err,
@@ -89,10 +90,33 @@ func Simulate(p Params) Result {
 		res.Regime = "silent" // top never even alarmed — fully silent degradation
 	case res.Converged:
 		res.Regime = "ok"
+	case math.Abs(err) > p.DriftErr:
+		res.Regime = "unstable" // over-correction amplified error past the injected shift
 	default:
 		res.Regime = "residual" // alarmed but signal too weak to fix fully
 	}
 	return res
+}
+
+// ClosedFormDepth returns the analytic under-actuation frontier: the largest
+// depth d with (1-λ)^(d-1) >= demote/recover. The adversarial panel confirmed
+// the sim IS essentially this inequality (closed form predicts 34/36 grid
+// cells) plus a small, GAIN-DEPENDENT discrete-overshoot correction near the
+// boundary. Report this as algebra, not as an emergent property. Returns -1
+// for λ<=0 (converges at all depths).
+func ClosedFormDepth(lambda, demote, recover float64) int {
+	if lambda <= 0 {
+		return -1
+	}
+	ratio := demote / recover
+	if ratio >= 1 {
+		return 1
+	}
+	d := 1 + int(math.Floor(math.Log(ratio)/math.Log(1-lambda)))
+	if d < 1 {
+		d = 1
+	}
+	return d
 }
 
 // Cell is one (depth, loss) point in a sweep.
