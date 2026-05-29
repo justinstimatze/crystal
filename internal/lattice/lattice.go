@@ -28,13 +28,31 @@ import "math"
 // Params configures one simulation run.
 type Params struct {
 	Depth            int     // number of stacked tiers (≥1; 1 = top supervises bottom directly)
-	HopLoss          float64 // per-boundary signal loss λ ∈ [0,1)
+	HopLoss          float64 // per-boundary signal loss λ ∈ [0,1) on the FUZZY (NL-summary) channel
+	GuardrailCov     float64 // g ∈ [0,1): fraction of drift carried by a LOSSLESS deterministic guardrail
 	DriftErr         float64 // bottom-tier error rate after the injected shift
 	CorrectionGain   float64 // how much of the perceived error the re-author removes per step
 	DemoteThreshold  float64 // observed error that triggers re-authoring
 	RecoverThreshold float64 // bottom error considered "recovered"
 	InjectStep       int
 	MaxSteps         int
+}
+
+// perceivedFactor is the fraction of the true error the top actually perceives.
+// The up-signal is two channels: a deterministic guardrail (coverage g) that is
+// LOSSLESS for what it checks, and a fuzzy NL-summary channel that decays as
+// (1-λ)^(depth-1). So perceived = err·[ g + (1-g)·fidelity ].
+//
+// This is the correction to the original over-pessimistic model, which assumed
+// g=0 (pure fuzzy channel). At g=1 the supervisor sees true error regardless of
+// depth or λ — deterministic guardrails defeat propagation loss. The catch
+// (hard rule #2): g is bounded by what is deterministically checkable; the
+// residual (1-g) is the irreducible fuzzy loss, and keeping g high as drift
+// mutates requires the upper tier to keep AUTHORING new guardrails — a dynamic
+// this static model does not capture (it's the live experiment's job to
+// measure real g and whether it keeps pace).
+func perceivedFactor(g, fidelity float64) float64 {
+	return g + (1-g)*fidelity
 }
 
 // Result is the outcome of a run.
@@ -63,7 +81,7 @@ func Simulate(p Params) Result {
 		if mag := math.Abs(err); mag > peak {
 			peak = mag
 		}
-		observed := err * fidelity
+		observed := err * perceivedFactor(p.GuardrailCov, fidelity)
 		// NO clamp at 0: over-correction can overshoot past zero into the
 		// opposite-sign error. This makes the canonical control-loop failure
 		// (high-gain oscillation/divergence — an over-eager re-author breaking

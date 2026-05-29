@@ -65,6 +65,31 @@ max safe depth:  λ0.0→6   λ0.1→4   λ0.2→2   λ0.3→2   λ0.4→1   λ0
    knob. Every depth claim is therefore **conditional**: *IF λ≈X and the knobs sit at
    Y THEN depth≤Z.*
 
+## It is NOT all loss — guardrail coverage `g` (model correction)
+
+The original sim modeled the up-channel as pure fuzzy NL-summary loss (`g=0`), which
+is the *worst* channel and made the recursion look doomed. But a hybrid loop's boundary
+can be a **deterministic verifier emitting a lossless structured signal** (the eval-gate's
+typed divergences) — and a tier can **author its own guardrails** to convert fuzzy
+"did it drift?" judgments into mechanical ones. So the up-signal is two channels:
+
+```
+perceived_error = err · [ g + (1−g)·(1−λ)^(depth−1) ]
+                          └─lossless guardrail─┘ └──fuzzy NL channel──┘
+```
+
+`g` = fraction of drift a deterministic guardrail covers losslessly. Measured in-model
+(`TestFrontierDeepensWithGuardrailCoverage`, λ=0.3): **g=0→depth 2, g=0.6→depth 6,
+g=0.9→depth 30.** Even partial coverage defeats the geometric loss; at `g=1` the
+supervisor sees true error at any depth.
+
+**The honest boundary (hard rule #2):** `g` is capped by what is *deterministically
+checkable*. The residual `1−g` is irreducible fuzzy loss, and keeping `g` high as drift
+*mutates into new modes* requires the upper tier to keep authoring fresh guardrails —
+a dynamic this static model does NOT capture. So the corrected thesis: the recursion is
+viable to the depth your self-authored deterministic coverage reaches, and the live
+question is whether a real upper tier can keep `g` high as the lower tier drifts.
+
 ## The concrete design constraint this hands the next phase
 
 The recommendation survives, restated honestly: **measure the real λ between two live

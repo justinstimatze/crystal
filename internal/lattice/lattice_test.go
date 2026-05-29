@@ -144,3 +144,43 @@ func withDepthLoss(p lattice.Params, d int, l float64) lattice.Params {
 	p.Depth, p.HopLoss = d, l
 	return p
 }
+
+// IT IS NOT ALL LOSS (the user's point): a deterministic guardrail emits a
+// LOSSLESS structured signal for what it covers. At full coverage (g=1) the
+// supervisor perceives true error regardless of depth or λ — so a stack that
+// silently fails on the fuzzy NL channel converges fine on the guardrail
+// channel. This is the correction to the original over-pessimistic g=0 model.
+func TestGuardrailCoverageDefeatsLoss(t *testing.T) {
+	// A configuration that FAILS on the pure fuzzy channel (g=0):
+	fail := withDepthLoss(base(), 6, 0.5) // fidelity ≈ 0.03 → silent
+	if r := lattice.Simulate(fail); r.Converged {
+		t.Fatal("precondition: depth 6 / λ0.5 should fail at g=0")
+	}
+	// Same depth/λ, but a deterministic guardrail carries the signal losslessly:
+	full := fail
+	full.GuardrailCov = 1.0
+	if r := lattice.Simulate(full); !r.Converged {
+		t.Errorf("g=1 (lossless deterministic guardrail) should converge even at depth 6 / λ0.5, got %s finalErr=%.3f", r.Regime, r.FinalErr)
+	}
+}
+
+// The frontier deepens monotonically with guardrail coverage g — quantifying
+// "not all loss": more deterministic coverage → more safe depth. (The residual
+// 1-g is the irreducible fuzzy loss; raising g as drift mutates is the dynamic
+// the live experiment must measure, not this static model.)
+func TestFrontierDeepensWithGuardrailCoverage(t *testing.T) {
+	mk := func(g float64) lattice.Params {
+		p := base()
+		p.GuardrailCov = g
+		return p
+	}
+	var prev int
+	for i, g := range []float64{0.0, 0.3, 0.6, 0.9} {
+		d := lattice.MaxSafeDepth(mk(g), 0.3, 30)
+		if i > 0 && d < prev {
+			t.Errorf("safe depth should not shrink as coverage rises: g=%.1f depth=%d prev=%d", g, d, prev)
+		}
+		t.Logf("guardrail coverage g=%.1f → max safe depth %d (λ=0.3)", g, d)
+		prev = d
+	}
+}
