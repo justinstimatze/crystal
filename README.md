@@ -35,9 +35,26 @@ speed. Two mechanisms hold the line:
 - **Self-authoring** (the adaptive part) — the frontier tier writes the cheap tier's harness and
   re-writes it on drift, so a migration doesn't rot the way a hand-written static replacement does.
 
+**The sharper move is to decompose, not just downshift.** Don't hand a cheap model the *whole*
+task; hand it the small fuzzy gap and let it drive a robust deterministic tool for the rest. A
+cheap model + `grep` to verify a quote beats a frontier model doing it from scratch — cheaper,
+faster, and the tool's output is trivially checkable (so it gate-able). Your cost is set by the
+fraction you *can't* hand to a tool: offload the mechanical, high-coverage sub-steps (g≈1) to the
+ecosystem's battle-tested wheels, and pay model intelligence only for the irreducible
+judgment residual (1−g). The honest limit, proven by our own measured leak below: **semantic
+judgment doesn't offload** — a tool helps where the hard part is mechanical, not where it's "which
+entity is the subject."
+
+This is deliberately a **cheap lunch, not a free one**: perfect isn't the goal; scrappy, organic,
+and *evolving* is — reuse robust tools instead of reinventing them, accept the residual leak, and
+let the system accrete which decompositions hold (and demote the ones that drift). Unlike per-request
+model routers (Copilot/Cursor "Auto", RouteLLM — see [`docs/PRIOR_ART.md`](docs/PRIOR_ART.md)), which
+re-decide cold every prompt, crystal's policy is **per-recurring-chore and stateful** — that's the
+niche, and the evolution, that nobody else occupies.
+
 So the honest claim is **automatic, drift-surviving shift-left with loud degradation** — *held
-quality* on the verifier-covered fraction, *detection + demotion* (not guaranteed reproduction) on
-the uncovered residual.
+quality* on the verifier-covered (and tool-covered) fraction, *detection + demotion* (not guaranteed
+reproduction) on the uncovered residual.
 
 ## Try it (on your own data)
 

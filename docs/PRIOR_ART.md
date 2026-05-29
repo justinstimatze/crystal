@@ -77,3 +77,42 @@ value is the humble shift-left itself — crystallize mechanical work down to a 
 tier behind a gate, and keep it there as patterns drift (`crystallize`, built). The trust substrate
 is the scaffolding that keeps shift-left from rotting, not the headline. All trust claims remain
 contingent on a live tamper-proof demo that does not yet exist.
+
+## Adjacent: how real harnesses & routers pick cheaper models (2026-05-29 research)
+
+Sourced via web search; ✅ = primary doc/repo fetched, 🔶 = secondary/community source, ⚠ = could
+not confirm. Directly relevant because "which model per task" is crystal's neighbor problem.
+
+**Harnesses — almost all manual or stateless-auto, none per-chore-stateful:**
+
+| Harness | Model selection | Source |
+|---|---|---|
+| Claude Code | Haiku backs "background functionality"; `opusplan` = Opus-in-plan → auto-Sonnet-for-exec (closest documented auto tier-switch); per-subagent `model` override; effort levels (within-model) | ✅ code.claude.com/docs/.../model-config |
+| GitHub Copilot "Auto" | task-complexity + system-health → route among GPT-5.x/Sonnet/Haiku; 10% cost discount | ✅ docs.github.com (concept); 🔶 model list via changelog |
+| Cursor "Auto" | picks "premium model best fit"; switches on quality/availability — among *premium*, not a cheap downshift | 🔶 docs phrasing firm, internals community-sourced |
+| Aider | architect/editor split + a separate `--weak-model` for commit msgs & summaries | ✅ aider.chat docs |
+| pi (pi.dev, Earendil) / pi-mono (M. Zechner) / Cline / Roo / Continue | **manual** model switch (`/model`); Continue assigns models to roles | ✅ pi.dev MIT (earendil-works/pi); 🔶 others |
+
+Takeaway: the field does **predict-then-route** (per-prompt classifier, no verification — Copilot/Cursor Auto, RouteLLM/Hybrid-LLM) or **manual/role** assignment. **Per-recurring-chore, stateful, evolving tier assignment with demotion hysteresis is unoccupied** — that's crystal's niche, not the routing mechanism itself.
+
+**OSS routers (permissive — borrow ideas, not Python deps into Go):**
+
+| Project | Mechanism | License |
+|---|---|---|
+| RouteLLM (LMSYS) | learned strong/weak route at a cost threshold (mf / bert / causal-llm routers) + eval harness | Apache-2.0 ✅ |
+| RoRF (Not-Diamond) | random-forest binary pairwise route over embeddings | MIT ✅ |
+| semantic-router (aurelio) | embedding-similarity to route *paths/tools* (not tiers natively) | MIT ✅ |
+| OpenRouter "Auto" / NotDiamond / Martian | hosted routers (NotDiamond powers OpenRouter Auto; Martian closed) | service ✅ |
+
+**Literature (arXiv ids fetched ✅):** FrugalGPT (2305.05176, cascade-verify-escalate), RouteLLM
+(2406.18665, learned route), Hybrid-LLM (2404.14618, difficulty classifier), AutoMix (2310.12963,
+few-shot self-verify + POMDP because the verifier signal is *noisy*). The two families: cascade-with-
+deferral (FrugalGPT/AutoMix — has a gate) vs predict-then-route (RouteLLM/Hybrid-LLM — no gate).
+
+**Tool-augmentation angle (the intra-task-decomposition refinement):** the strongest cheap-tier
+pattern isn't routing the *model* — it's shrinking the *task*. A cheap model driving a robust
+deterministic tool (Haiku+grep) collapses the mechanical fraction (g≈1) to something checkable,
+leaving only the judgment residual for intelligence. AutoHarness (2603.03329) is the synthesize-the-
+tool form; `publicrecord`/`stope` are the use-existing-tool form. This is the lineage crystal should
+borrow from (verifier-gated cascade + noisy-signal hysteresis → validates the windowed M-in-W
+demotion), without building a learned router.

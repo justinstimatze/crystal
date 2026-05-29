@@ -52,6 +52,38 @@ trust substrate (verifier gate + drift demotion + the still-unbuilt tamper-proof
 *enabler that keeps shift-left from rotting* — necessary, but not the headline. Read the rest of
 this doc with that ordering: trust claims are the supporting cast, not the lead.
 
+## Shift-left is intra-task decomposition, not just whole-task downshift (2026-05-29)
+
+The sharper mechanism — and the one the `payoff` leak pointed at. Don't swap the *whole* task to a
+cheaper model (that leaks on the hard bits, as measured). Decompose it: a task is a mix of
+**mechanical, high-coverage sub-steps** (find this string, parse this, typecheck this — g≈1, a
+robust deterministic tool already does it perfectly) and an **irreducible judgment residual** (which
+entity is the subject, is this argument sound — 1−g). The cost-optimal architecture hands the
+mechanical fraction to the ecosystem's battle-tested wheels (grep, parsers, linters) that the cheap
+model merely *drives*, and pays model intelligence only for the residual. An Amdahl's-law view of
+LLM cost: your bill is set by the fraction you can't offload to a tool.
+
+- **Worked instances (the user's own):** `publicrecord` verifies a quote with Haiku driving `grep`
+  — Haiku fills the smallest gap (what to search, is this a match) while grep does the robust
+  matching; `stope` (lamina/poc/dense, not public) builds agents that are "almost formal oracles"
+  because their output language is a tool-menu whose outputs are checkable. (Described by the user;
+  not yet code-verified inside crystal.)
+- **Why it works:** a tool-constrained output has a tiny, *checkable* output space — which is
+  exactly crystal's gate from the other end. AutoHarness (PRIOR_ART) is the *synthesize-the-tool*
+  version; this is the cheaper *use-the-tool-that-exists* version.
+- **The honest limit (our own evidence):** the `payoff` leak (Haiku grabbed the distractor
+  `Tom Bradley`) was a **semantic judgment** error a grep tool would not fix. Tools collapse
+  *mechanical* difficulty, not *semantic* difficulty. So "cheap model + good CLI tool > frontier
+  from scratch" holds **on the tool-coverable fraction**; the optimization problem *is* maximizing
+  that fraction and shrinking the judgment residual the cheap tier must cover. Error also migrates
+  to tool/arg selection, output interpretation, and multi-step orchestration — shallow,
+  checkable-output tool use is the sweet spot.
+
+Ethos: a **cheap lunch, not a free one.** Perfect isn't the goal; scrappy, organic, evolving is —
+reuse robust modules, accept the residual leak, let crystallize/demote accrete which decompositions
+hold. (See `PRIOR_ART.md` for why per-recurring-chore stateful tiering is an unoccupied niche vs
+per-request routers.)
+
 ## Why "trust substrate" — and why it's partly what hybrid always meant
 
 The hybrid-loops framework names the disciplines an LLM block requires beyond the
