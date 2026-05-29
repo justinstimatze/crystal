@@ -26,6 +26,7 @@ import (
 type ExperimentCmd struct {
 	CacheDir  string  `help:"Disk cache dir." default:".crystal-cache"`
 	Threshold float64 `help:"Substitution fidelity needed to call a tier 'sufficient'." default:"0.95"`
+	Verbose   bool    `help:"Dump per-item extractions/verdicts (to diagnose scoring artifacts)."`
 }
 
 type item struct{ Text, Name, Role, Org string }
@@ -80,6 +81,9 @@ func (c *ExperimentCmd) Run() error {
 			}
 			if scoreExact(ex, it) {
 				correct++
+			} else if c.Verbose {
+				fmt.Printf("    [%s MISS] gold{%q,%q,%q} got{%q,%q,%q}\n",
+					t.name, it.Name, it.Role, it.Org, ex.Name, ex.Role, ex.Org)
 			}
 		}
 		fid := float64(correct) / float64(len(its))
@@ -116,6 +120,9 @@ func (c *ExperimentCmd) Run() error {
 		lossy := verdictSummary(ctx, client, summary)
 		if full != lossy {
 			disagree++
+		}
+		if c.Verbose {
+			fmt.Printf("    item %d: full=%v summary=%v  | summary=%q\n", i, full, lossy, summary)
 		}
 	}
 	lambda := float64(disagree) / float64(len(its))
