@@ -27,10 +27,16 @@ The goal is to turn the value prop from a hypothesis into a measured result, che
 Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-verifiable fraction*
 — place work as cheaply as you can verify it; crystallize = partial-evaluate a recurring chore.
 
-1. **Serve the deterministic hook for real.** Install a `crystallize`-emitted artifact as a live
-   PreToolUse hook so the static tier actually answers in place of the frontier call. *Proves:* the
-   loop closes end to end on real use. *Done when:* a real repetitive command is served locally and
-   the gate demotes it on a deliberately introduced drift, live.
+0. **v1 slice SHIPPED** (`triage`, `SLICE_FINDINGS.md`). The full stack end to end on a real chore
+   (categorize real Bash usage): deterministic verifier rules cover **g=0.77** and gate the cheap
+   model, Haiku does only the 23% residual, deterministic reduce tallies — **0 frontier calls**.
+   Shipping on real data found+fixed a verifier bug (compound `cd && action` mislabeled nav) the
+   synthetic experiments missed. The stack composes; value-prop no longer only hypothesis. *Caveat:*
+   batch-over-corpus, not a live served hook; rules hand-authored, not tier-authored/demoted-on-drift.
+1. **Serve the deterministic hook for real.** Install a `crystallize`-emitted artifact (or `triage`'s
+   rule set) as a live PreToolUse hook so the static tier actually answers in place of the frontier
+   call. *Proves:* the loop closes end to end on live use. *Done when:* a real repetitive command is
+   served locally and the gate demotes it on a deliberately introduced drift, live.
 2. **Measure the payoff (the breakeven the value prop asserts but never shows).** For a served
    deterministic hook: p50/p99 latency before vs after, determinism (exact-repro rate), and the
    amortization point — how many hits before authoring cost is repaid, and the re-author frequency

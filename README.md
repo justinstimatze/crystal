@@ -147,6 +147,7 @@ in `.env` (or the environment); every LLM call is disk-cached by content hash, s
 go build ./...        # or: go run . <subcommand>
 go test ./...         # internal/eval/eval_test.go is the Phase-1 go/no-go gate
 
+go run . triage --verbose                            # v1 slice: map-reduce + verifier on a real chore (your Bash usage), 0 frontier calls
 go run . crystallize --home ~ --match "git status"   # the shift-left lifecycle on your own data
 go run . payoff       --verbose    # the value prop: latency saved vs quality held, Opus→Haiku behind a gate
 go run . ground-hop   --verbose    # g and per-hop λ on real byte-exact drift

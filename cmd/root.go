@@ -27,6 +27,7 @@ type CLI struct {
 	Decompose    DecomposeCmd    `cmd:"" help:"A4: does a cheap model + a robust tool (rg) beat shifting the whole chore to the cheap model? Quote-verification, whole-haiku vs det-tool vs haiku+tool."`
 	Support      SupportCmd      `cmd:"" help:"The residual experiment: semantic support (does the source back the claim, often via paraphrase) — where a string tool can't win. opus/haiku/det/haiku+retrieval."`
 	Aggregate    AggregateCmd    `cmd:"" help:"Hunt the cheap-model limit: semantic aggregation (count how many of N items match a criterion). whole-task vs map-reduce (cheap per-item classify + deterministic count)."`
+	Triage       TriageCmd       `cmd:"" help:"v1 SLICE: map-reduce + verifier on a real chore — categorize your actual Bash usage. Deterministic rules cover+gate; cheap model does the residual; deterministic tally. No frontier."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.
