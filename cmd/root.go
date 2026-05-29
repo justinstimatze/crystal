@@ -26,6 +26,7 @@ type CLI struct {
 	Payoff       PayoffCmd       `cmd:"" help:"Measure the value prop: shift a mechanical chore Opus→Haiku behind a deterministic gate; report latency saved vs quality held (and leaked) vs always-Opus."`
 	Decompose    DecomposeCmd    `cmd:"" help:"A4: does a cheap model + a robust tool (rg) beat shifting the whole chore to the cheap model? Quote-verification, whole-haiku vs det-tool vs haiku+tool."`
 	Support      SupportCmd      `cmd:"" help:"The residual experiment: semantic support (does the source back the claim, often via paraphrase) — where a string tool can't win. opus/haiku/det/haiku+retrieval."`
+	Aggregate    AggregateCmd    `cmd:"" help:"Hunt the cheap-model limit: semantic aggregation (count how many of N items match a criterion). whole-task vs map-reduce (cheap per-item classify + deterministic count)."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.
