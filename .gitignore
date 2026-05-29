@@ -11,6 +11,13 @@
 *.test
 *.out
 
+# Secrets — NEVER commit. Live-tier API key lives here.
+.env
+.env.*
+
+# Local LLM response cache (may contain prompt/response content)
+/.crystal-cache/
+
 # Runtime / tooling artifacts (not project source)
 .claude/
 .plancheck-debug.json

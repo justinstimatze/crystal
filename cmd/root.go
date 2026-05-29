@@ -17,6 +17,7 @@ type CLI struct {
 	Drift       DriftCmd       `cmd:"" help:"Temporal-replay drift experiment: promote a modal hook on a pattern's early occurrences, stream the rest, report demotion and silent-wrong leakage."`
 	Crystallize CrystallizeCmd `cmd:"" help:"Full lifecycle on one pattern: discover → propose → promote-gate → serve → drift-monitor → demote; emits a redacted deployable artifact."`
 	Lattice     LatticeCmd     `cmd:"" help:"Deterministic feedback-topology sim: depth × per-hop-loss convergence grid for the self-reauthoring tier stack (the riskiest-assumption test, no API cost)."`
+	Probe       ProbeCmd       `cmd:"" help:"One cheap live API call to confirm the tier plumbing (key from .env, SDK, disk cache) works."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.
