@@ -168,3 +168,9 @@ exception), assigned per-recurring-chore and demoted on drift** — inverting "a
 tools" into "tools, with a model only for the residual," made stateful. That this aligns with
 Anthropic's own engineering direction is a *credibility tailwind*, not a threat: crystal isn't
 fringe, it's the deterministic-default corner of a direction the lab is already publishing.
+
+**Training-data bias (measured):** "give agents good tools" understates the problem — models reach
+for *popular*, not *best*, tools. The companion addon **weir** measured it: across 25,216 real Bash
+invocations, ~49.7% piped and **0** reached for a modern tool (`rg`/`fd`/`sd`/`bat`). So the harness
+must actively *de-bias* tool selection (capability manifest + antipattern lints) — correct-tool
+knowledge belongs in the cheap deterministic layer, not the model's popularity-weighted prior.

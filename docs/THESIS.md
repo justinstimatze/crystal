@@ -126,6 +126,45 @@ Effective Tools*, Sept 2025; see PRIOR_ART) — so the novel part isn't offload,
 verifiability-as-master-variable + partial-evaluation + deterministic-default framing on top. It's
 the altitude to test next, not a claim of priority.
 
+## Where this goes past Anthropic's published direction (open question for them)
+
+Agree with the Anthropic posts (PRIOR_ART) — they validate decomposition, cheap-model routing,
+offload-to-tools, cheapest-adequate, and producer-verifier loops. The disagreement is *how far*:
+their framing keeps the model in the **driver's seat on every request** (the agent calls the tools;
+verification is often another model pass; multi-agent uses ~15× more tokens). crystal pushes four
+steps further:
+
+1. **Deterministic as the DEFAULT, model as the exception** — not "a model that uses tools" but
+   "tools, with a model only for the irreducible residual." The frontier model *recedes* from
+   per-request execution rather than orchestrating it.
+2. **Stateful per-recurring-chore crystallization + demotion** — Anthropic's patterns are
+   per-request/amnesiac; crystal accretes a policy over chore-identities and demotes on drift.
+3. **Cheap deterministic verification over model self-review** — push the gate toward checks that
+   cost no model tokens (and eventually can't be gamed), vs evaluator-optimizer loops that re-spend
+   frontier intelligence.
+4. **Actively de-bias tool selection** (next section) — "give agents good tools" isn't enough; the
+   model still reaches for the popular-not-best one.
+
+*Steelman of why they may be right not to (a genuine open question — if an Anthropic engineer reads
+this, I'd like the answer):* a general product agent can't assume your chores recur, so per-request
+generality may dominate per-chore specialization; the frontier model may already be cheap/fast
+enough that crystallizing isn't worth the engineering + drift risk; and keeping the model in the
+loop preserves the flexibility that makes agents agents. crystal's bet is that for a *personal,
+recurring* workload those objections weaken — which is why it's a personal-first tool, not a general
+agent.
+
+## Training data ≠ best solutions (the tool-selection bias)
+
+A caution on decompose-and-offload: "a cheap model driving a robust tool" is only as good as *which*
+tool it drives, and a model's prior is **popularity-weighted, not quality-weighted** — it reaches
+for the training-frequent solution, not the best one. Measured concretely by the companion addon
+**weir**: across **25,216 real Bash invocations, ~49.7% used a pipe and 0 reached for a modern tool**
+(`rg`, `fd`, `sd`, `bat`, …) — fluent pipelines out of a 1995 toolbox. So part of "author the
+decomposition" is **de-biasing**: the harness deterministically supplies better-than-default
+capability knowledge (a "prefer `rg` over `grep`" manifest, antipattern lints) the cheap model won't
+supply itself. This both improves the offloaded sub-step and reinforces the deterministic-default
+thesis — the cheap, robust, *non-model* layer is where correct-tool knowledge lives.
+
 ## Why "trust substrate" — and why it's partly what hybrid always meant
 
 The hybrid-loops framework names the disciplines an LLM block requires beyond the
