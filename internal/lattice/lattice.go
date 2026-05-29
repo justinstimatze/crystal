@@ -27,9 +27,14 @@ import "math"
 
 // Params configures one simulation run.
 type Params struct {
-	Depth            int     // number of stacked tiers (≥1; 1 = top supervises bottom directly)
-	HopLoss          float64 // per-boundary signal loss λ ∈ [0,1) on the FUZZY (NL-summary) channel
-	GuardrailCov     float64 // g ∈ [0,1): fraction of drift carried by a LOSSLESS deterministic guardrail
+	Depth          int     // number of stacked tiers (≥1; 1 = top supervises bottom directly)
+	HopLoss        float64 // per-boundary signal loss λ ∈ [0,1) on the FUZZY (NL-summary) channel
+	GuardrailCov   float64 // g ∈ [0,1): fraction of drift carried by a LOSSLESS deterministic guardrail
+	DriftUncovered bool    // if true, the injected drift sits in the un-guardrailed residual:
+	//                         a novel / well-formed-but-wrong failure mode the deterministic
+	//                         check was never written for, so the guardrail is BLIND to it (g
+	//                         does not help). This is the realistic dangerous case per hard
+	//                         rule #2 — the high-value fuzzy drift is exactly the un-checkable part.
 	DriftErr         float64 // bottom-tier error rate after the injected shift
 	CorrectionGain   float64 // how much of the perceived error the re-author removes per step
 	DemoteThreshold  float64 // observed error that triggers re-authoring
@@ -54,6 +59,17 @@ type Params struct {
 func perceivedFactor(g, fidelity float64) float64 {
 	return g + (1-g)*fidelity
 }
+
+// GuardrailThreshold is the coverage g above which a stack converges at
+// UNBOUNDED depth (the silent floor demote/g stays ≤ recover). It is just the
+// ratio demote/recover. Below it the safe depth is finite and geometric.
+//
+// Honest framing (panel-mandated): coverage is a CLIFF at this threshold, not a
+// smooth dial — and the "uniform g" model assumes the guardrail catches a
+// severity-representative slice of error. For drift in the un-checkable
+// residual (DriftUncovered), g does not help at all. Report a band over the
+// (unmeasured) demote/recover knobs, never a single depth integer.
+func GuardrailThreshold(demote, recover float64) float64 { return demote / recover }
 
 // Result is the outcome of a run.
 type Result struct {
@@ -81,7 +97,16 @@ func Simulate(p Params) Result {
 		if mag := math.Abs(err); mag > peak {
 			peak = mag
 		}
-		observed := err * perceivedFactor(p.GuardrailCov, fidelity)
+		// Perceived signal. If the drift is in the un-guardrailed residual (a
+		// novel/well-formed-but-wrong mode the deterministic check was never
+		// written for), the guardrail is BLIND to it — only the fuzzy channel
+		// carries it, so g does not help. This is the realistic dangerous case
+		// (hard rule #2): the high-value drift is exactly the un-checkable part.
+		factor := perceivedFactor(p.GuardrailCov, fidelity)
+		if p.DriftUncovered {
+			factor = (1 - p.GuardrailCov) * fidelity
+		}
+		observed := err * factor
 		// NO clamp at 0: over-correction can overshoot past zero into the
 		// opposite-sign error. This makes the canonical control-loop failure
 		// (high-gain oscillation/divergence — an over-eager re-author breaking

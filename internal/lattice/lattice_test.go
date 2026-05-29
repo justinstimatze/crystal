@@ -164,23 +164,37 @@ func TestGuardrailCoverageDefeatsLoss(t *testing.T) {
 	}
 }
 
-// The frontier deepens monotonically with guardrail coverage g — quantifying
-// "not all loss": more deterministic coverage → more safe depth. (The residual
-// 1-g is the irreducible fuzzy loss; raising g as drift mutates is the dynamic
-// the live experiment must measure, not this static model.)
-func TestFrontierDeepensWithGuardrailCoverage(t *testing.T) {
-	mk := func(g float64) lattice.Params {
-		p := base()
-		p.GuardrailCov = g
-		return p
+// PANEL CORRECTION: guardrail coverage is a CLIFF at g = demote/recover, NOT a
+// smooth dial — and a MaxSafeDepth result equal to the search cap means
+// "unbounded", not a frontier. Below the threshold the depth is finite and
+// cap-INVARIANT; above it the result saturates the cap at every cap. The old
+// "g=0.6→6, g=0.9→30" series was a search-cap artifact (30 = the maxDepth arg).
+func TestGuardrailCoverageIsAThresholdNotADial(t *testing.T) {
+	mk := func(g float64) lattice.Params { p := base(); p.GuardrailCov = g; return p }
+	thr := lattice.GuardrailThreshold(base().DemoteThreshold, base().RecoverThreshold) // 0.8
+	// Below threshold: finite and cap-invariant (same answer at cap 50 and 500).
+	below := mk(thr - 0.2)
+	d50, d500 := lattice.MaxSafeDepth(below, 0.3, 50), lattice.MaxSafeDepth(below, 0.3, 500)
+	if d50 != d500 || d50 >= 50 {
+		t.Errorf("below threshold should be finite + cap-invariant, got cap50=%d cap500=%d", d50, d500)
 	}
-	var prev int
-	for i, g := range []float64{0.0, 0.3, 0.6, 0.9} {
-		d := lattice.MaxSafeDepth(mk(g), 0.3, 30)
-		if i > 0 && d < prev {
-			t.Errorf("safe depth should not shrink as coverage rises: g=%.1f depth=%d prev=%d", g, d, prev)
-		}
-		t.Logf("guardrail coverage g=%.1f → max safe depth %d (λ=0.3)", g, d)
-		prev = d
+	// Above threshold: unbounded — saturates whatever cap you pass.
+	above := mk(thr + 0.15)
+	if lattice.MaxSafeDepth(above, 0.3, 100) != 100 || lattice.MaxSafeDepth(above, 0.3, 1000) != 1000 {
+		t.Errorf("above threshold should saturate the cap (unbounded), not return a frontier")
+	}
+	t.Logf("threshold g=%.2f: below→finite depth %d (cap-invariant); above→unbounded (cap-saturated)", thr, d50)
+}
+
+// PANEL DEFECT #2: if the dangerous drift sits in the un-checkable residual,
+// the guardrail is blind to it — high g does NOT save you. This is the
+// realistic case (hard rule #2: the valuable fuzzy drift is the un-checkable
+// part). The optimistic "uniform g" result is an upper bound, not the truth.
+func TestUncoveredDriftDefeatsHighCoverage(t *testing.T) {
+	p := withDepthLoss(base(), 6, 0.5) // fidelity ≈ 0.03
+	p.GuardrailCov = 0.9               // would "converge" under the uniform-blend model
+	p.DriftUncovered = true            // ...but this drift mode is in the un-guardrailed tail
+	if r := lattice.Simulate(p); r.Converged {
+		t.Errorf("uncovered drift at depth6/λ0.5 must NOT converge despite g=0.9 (guardrail is blind to it), got %s", r.Regime)
 	}
 }

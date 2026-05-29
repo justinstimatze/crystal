@@ -78,10 +78,18 @@ perceived_error = err · [ g + (1−g)·(1−λ)^(depth−1) ]
                           └─lossless guardrail─┘ └──fuzzy NL channel──┘
 ```
 
-`g` = fraction of drift a deterministic guardrail covers losslessly. Measured in-model
-(`TestFrontierDeepensWithGuardrailCoverage`, λ=0.3): **g=0→depth 2, g=0.6→depth 6,
-g=0.9→depth 30.** Even partial coverage defeats the geometric loss; at `g=1` the
-supervisor sees true error at any depth.
+`g` = fraction of drift a deterministic guardrail covers losslessly.
+
+> **CORRECTION (2nd panel).** An earlier version reported "g=0.6→depth 6, g=0.9→depth 30"
+> as a smooth series. That was the manufactured-number sin again, optimistic edition: the
+> "30" was literally the test's `maxDepth` search-cap argument, not a frontier. Coverage is
+> a **cliff, not a dial.** Convergence at *unbounded* depth happens iff `g ≥ demote/recover`
+> (`GuardrailThreshold`); below that the safe depth is finite and geometric. Two further
+> caveats: (a) the uniform-`g` blend assumes the guardrail catches a severity-representative
+> slice of error — for drift in the **un-checkable residual** (`DriftUncovered`, the realistic
+> high-value case per rule #2), `g` does **not** help at all and the stack fails at any
+> coverage; (b) the threshold rides the same unmeasured demote/recover knobs the rest of this
+> doc already disowns. Report a band, never an integer.
 
 **The honest boundary (hard rule #2):** `g` is capped by what is *deterministically
 checkable*. The residual `1−g` is irreducible fuzzy loss, and keeping `g` high as drift
