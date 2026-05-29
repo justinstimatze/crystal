@@ -20,6 +20,7 @@ type CLI struct {
 	Probe       ProbeCmd       `cmd:"" help:"One cheap live API call to confirm the tier plumbing (key from .env, SDK, disk cache) works."`
 	Experiment  ExperimentCmd  `cmd:"" help:"Live grounding: per-tier substitution fidelity, fuzzy-channel λ, and deterministic guardrail coverage g on a verifiable chore."`
 	GroundHop   GroundHopCmd   `cmd:"" help:"Minimal grounding hop: contrast a deterministic typed up-channel vs a prose up-channel on real records with ground-truth-by-construction drift labels; measures λ and g validly."`
+	UncoverHop  UncoverHopCmd  `cmd:"" help:"Uncovered-drift hop: inject semantic errors a deterministic check can't catch (g<1), then measure how much of the residual a fuzzy channel recovers and how lossy one prose hop is."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.
