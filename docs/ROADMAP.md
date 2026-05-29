@@ -34,9 +34,13 @@ The goal is to turn the value prop from a hypothesis into a measured result, che
    amortization point — how many hits before authoring cost is repaid, and the re-author frequency
    that erases the win. *Proves:* shift-left nets positive on its claimed axes, or finds where it
    doesn't. *Done when:* a before/after table exists for ≥1 real chore.
-3. **The LLM-tier slice.** Shift one *non*-deterministic chore to a cheap LLM behind the gate;
-   measure held quality (covered fraction) and detection+demotion on the uncovered residual on
-   *real* data, not the synthetic corpus. *Proves:* shift-left works past byte-exact tasks.
+3. **The LLM-tier slice — FIRST RESULT LANDED** (`payoff`, `PAYOFF_FINDINGS.md`). Shifted a
+   mechanical chore Opus→Haiku behind a deterministic gate: **~46% median latency saved**, but
+   quality only *mostly* held (0.86 vs 0.93; the deterministic gate leaks in-source semantic errors
+   it can't see). The breakeven is demonstrated: deterministic gate = fast + leaky; LLM gate =
+   correct + no latency win. *Still to do:* run on *real* (non-synthetic) chores and a real
+   agentic-loop baseline; multi-sample latency; an honest LLM-gate latency measurement (not just the
+   qualitative claim).
 4. **Close the sovereignty gap.** Swap the cheap tier to a local small model (+ LoRA) on owned
    hardware; re-measure latency and held quality. *Proves:* the sovereignty/determinism pitch is
    real, not aspirational. *Done when:* a chore is served from local hardware with the gate intact.

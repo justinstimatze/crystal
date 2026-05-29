@@ -80,6 +80,13 @@ wrong span even when the channel carried the right answer) and is **not** cleanl
 property. See the findings docs for the confound and the wide-CI caveats — *do not quote ~0.70 or
 λ≈0 as constants.*
 
+**The payoff itself** (`payoff`, the first value-prop measurement, not just the safety discipline):
+shifting a chore Opus→Haiku behind a deterministic gate saved **~46% median latency** at
+*mostly*-held quality (0.86 vs Opus 0.93) — the latency win is real and large, but the deterministic
+gate leaks the cheap tier's in-source semantic errors, so "held quality" is conditional on a gate
+that covers the error mode (an LLM gate would, but erases the latency win). The honest shift-left is
+a tradeoff, not a free lunch. See [`PAYOFF_FINDINGS.md`](docs/PAYOFF_FINDINGS.md).
+
 ## The safety discipline (secondary)
 
 Shift-left is the point; this is what keeps it from rotting once loops stack. The verifier gate and
@@ -104,7 +111,7 @@ honest positioning in [`docs/THESIS.md`](docs/THESIS.md); original charter in
 3. [`docs/PRIOR_ART.md`](docs/PRIOR_ART.md) — citation map: which primitives are prior art, which seams survive.
 4. [`docs/SUBSTRATE_SURVEY.md`](docs/SUBSTRATE_SURVEY.md) — the real transcript schema the gate replays against.
 5. **Phase-1 gate:** [`MEASURE_FINDINGS.md`](docs/MEASURE_FINDINGS.md), [`DRIFT_FINDINGS.md`](docs/DRIFT_FINDINGS.md), [`LATTICE_FINDINGS.md`](docs/LATTICE_FINDINGS.md).
-6. **The grounding arc, in order:** [`EXPERIMENT_FINDINGS.md`](docs/EXPERIMENT_FINDINGS.md) → [`GROUNDHOP_FINDINGS.md`](docs/GROUNDHOP_FINDINGS.md) → [`UNCOVERHOP_FINDINGS.md`](docs/UNCOVERHOP_FINDINGS.md) → [`DEPTHSWEEP_FINDINGS.md`](docs/DEPTHSWEEP_FINDINGS.md) → [`CONTENTSWEEP_FINDINGS.md`](docs/CONTENTSWEEP_FINDINGS.md).
+6. **The grounding arc, in order:** [`EXPERIMENT_FINDINGS.md`](docs/EXPERIMENT_FINDINGS.md) → [`GROUNDHOP_FINDINGS.md`](docs/GROUNDHOP_FINDINGS.md) → [`UNCOVERHOP_FINDINGS.md`](docs/UNCOVERHOP_FINDINGS.md) → [`DEPTHSWEEP_FINDINGS.md`](docs/DEPTHSWEEP_FINDINGS.md) → [`CONTENTSWEEP_FINDINGS.md`](docs/CONTENTSWEEP_FINDINGS.md) → [`PAYOFF_FINDINGS.md`](docs/PAYOFF_FINDINGS.md) (the value-prop measurement).
 
 ## Building and running
 
@@ -116,6 +123,7 @@ go build ./...        # or: go run . <subcommand>
 go test ./...         # internal/eval/eval_test.go is the Phase-1 go/no-go gate
 
 go run . crystallize --home ~ --match "git status"   # the shift-left lifecycle on your own data
+go run . payoff       --verbose    # the value prop: latency saved vs quality held, Opus→Haiku behind a gate
 go run . ground-hop   --verbose    # g and per-hop λ on real byte-exact drift
 go run . uncover-hop  --verbose    # the g<1 regime + fuzzy recovery of the residual
 go run . depth-sweep  --verbose    # detection recall vs relay depth

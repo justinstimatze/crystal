@@ -19,6 +19,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/anthropics/anthropic-sdk-go"
 )
@@ -37,7 +38,8 @@ type Result struct {
 	InputTokens  int64  `json:"input_tokens"`
 	OutputTokens int64  `json:"output_tokens"`
 	CacheRead    int64  `json:"cache_read_tokens"`
-	Cached       bool   `json:"-"` // true when served from local disk cache (no spend)
+	LatencyMS    int64  `json:"latency_ms"` // wall-clock of the live API call; persisted so reruns report the real measured latency
+	Cached       bool   `json:"-"`          // true when served from local disk cache (no spend)
 }
 
 // Client wraps the SDK with a disk cache.
@@ -97,10 +99,12 @@ func (c *Client) complete(ctx context.Context, model, system, prompt string, max
 	if system != "" {
 		params.System = []anthropic.TextBlockParam{{Text: system}}
 	}
+	start := time.Now()
 	resp, err := c.api.Messages.New(ctx, params)
 	if err != nil {
 		return Result{}, err
 	}
+	latency := time.Since(start).Milliseconds()
 	var sb strings.Builder
 	for _, block := range resp.Content {
 		if t, ok := block.AsAny().(anthropic.TextBlock); ok {
@@ -113,6 +117,7 @@ func (c *Client) complete(ctx context.Context, model, system, prompt string, max
 		InputTokens:  resp.Usage.InputTokens,
 		OutputTokens: resp.Usage.OutputTokens,
 		CacheRead:    resp.Usage.CacheReadInputTokens,
+		LatencyMS:    latency,
 	}
 	c.writeCache(key, r)
 	return r, nil
