@@ -6,6 +6,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/alecthomas/kong"
@@ -19,5 +20,8 @@ func main() {
 		kong.Description("Hybrid Loop Crystallization Engine — Phase 1 eval harness."),
 	)
 	err := ctx.Run()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "crystal:", err)
+	}
 	os.Exit(cmd.ExitCode(err))
 }

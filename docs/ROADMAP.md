@@ -33,6 +33,16 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    Shipping on real data found+fixed a verifier bug (compound `cd && action` mislabeled nav) the
    synthetic experiments missed. The stack composes; value-prop no longer only hypothesis. *Caveat:*
    batch-over-corpus, not a live served hook; rules hand-authored, not tier-authored/demoted-on-drift.
+0b. **Self-author the verifier — RESULT LANDED** (`author`, `AUTHOR_FINDINGS.md`). The actual crystal
+   mechanism, not the hand-written shape: the expensive tier (Opus) authors `triage`'s deterministic
+   rule table from labeled examples → a deterministic gate promotes only at ≥0.90 holdout fidelity
+   vs the reference → a windowed-M-in-W drift trigger forces a verified re-author. On the live corpus
+   (8,589 holdout): authored **0.93 → PROMOTE**, corrupted negative control **0.01 → REJECT** (gate is
+   load-bearing, not a rubber stamp), injected container class **DEMOTE at index 2 → re-author →
+   8/8 = 1.00 RECOVERED**. Author fidelity scaled with sample size (200→0.87, 400→0.89, 800→0.93) at
+   a *fixed* 0.90 bar — every green came from more data, never a lowered threshold; the gate rejected
+   plausible-but-imperfect tables (0.87–0.89) rather than serving them. *Caveat:* fidelity-to-reference,
+   not ground-truth (the reference is the hand-rules); still a batch, not a live served hook.
 1. **Serve the deterministic hook for real.** Install a `crystallize`-emitted artifact (or `triage`'s
    rule set) as a live PreToolUse hook so the static tier actually answers in place of the frontier
    call. *Proves:* the loop closes end to end on live use. *Done when:* a real repetitive command is

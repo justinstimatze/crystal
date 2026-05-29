@@ -28,6 +28,7 @@ type CLI struct {
 	Support      SupportCmd      `cmd:"" help:"The residual experiment: semantic support (does the source back the claim, often via paraphrase) — where a string tool can't win. opus/haiku/det/haiku+retrieval."`
 	Aggregate    AggregateCmd    `cmd:"" help:"Hunt the cheap-model limit: semantic aggregation (count how many of N items match a criterion). whole-task vs map-reduce (cheap per-item classify + deterministic count)."`
 	Triage       TriageCmd       `cmd:"" help:"v1 SLICE: map-reduce + verifier on a real chore — categorize your actual Bash usage. Deterministic rules cover+gate; cheap model does the residual; deterministic tally. No frontier."`
+	Author       AuthorCmd       `cmd:"" help:"Self-author the verifier: the expensive tier writes triage's deterministic rule table from labeled examples, gated on a holdout (corrupted rules rejected), re-authored when a new command class drifts in."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.

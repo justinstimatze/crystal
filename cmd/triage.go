@@ -199,11 +199,18 @@ func (c *TriageCmd) Run() error {
 }
 
 func (c *TriageCmd) loadCommands() ([]string, string, error) {
+	return loadBashCommands(c.Corpus, c.Home)
+}
+
+// loadBashCommands returns the unique Bash command strings from a corpus dir
+// (default) or from live transcripts under the given home dirs. Shared by
+// `triage` and `author`.
+func loadBashCommands(corpusDir string, homes []string) ([]string, string, error) {
 	var recs []record.Record
 	src := ""
-	if len(c.Home) > 0 {
+	if len(homes) > 0 {
 		var files []string
-		for _, home := range c.Home {
+		for _, home := range homes {
 			m, _ := filepath.Glob(filepath.Join(home, ".claude", "projects", "*", "*.jsonl"))
 			files = append(files, m...)
 		}
@@ -214,12 +221,12 @@ func (c *TriageCmd) loadCommands() ([]string, string, error) {
 		}
 		src = fmt.Sprintf("%d live transcript file(s)", len(files))
 	} else {
-		rs, err := corpus.Load(c.Corpus)
+		rs, err := corpus.Load(corpusDir)
 		if err != nil {
-			return nil, "", fmt.Errorf("loading corpus %q: %w", c.Corpus, err)
+			return nil, "", fmt.Errorf("loading corpus %q: %w", corpusDir, err)
 		}
 		recs = rs
-		src = c.Corpus
+		src = corpusDir
 	}
 	var cmds []string
 	seen := map[string]bool{}
