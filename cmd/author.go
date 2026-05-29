@@ -148,13 +148,13 @@ func (c *AuthorCmd) Run() error {
 	if len(authorSet) < len(train) {
 		fmt.Printf("(authoring from a %d-command sample of the %d-command train set)\n\n", len(authorSet), len(train))
 	}
-	table, raw, err := authorRules(ctx, client, c.Model, triageCategories, authorSet)
+	table, ares, err := authorRules(ctx, client, c.Model, triageCategories, authorSet)
 	if err != nil {
 		return usageError{fmt.Errorf("authoring rules: %w", err)}
 	}
 	fmt.Printf("=== authored rule table (%d rules, by %s) ===\n", len(table.Rules), c.Model)
 	if c.Verbose {
-		fmt.Printf("  raw model output:\n%s\n\n", indentLines(raw, "    "))
+		fmt.Printf("  raw model output:\n%s\n\n", indentLines(ares.Text, "    "))
 	}
 	for _, r := range table.Rules {
 		fmt.Printf("  %-9s %-14s → %s\n", r.Match, r.Token, r.Category)
@@ -274,7 +274,7 @@ func rotateCategory(cat string) string {
 // thinking) since the model benefits from reasoning over the examples;
 // fail-loud on unparseable JSON (never default to an empty table that would
 // silently fail the gate).
-func authorRules(ctx context.Context, client *llm.Client, model string, cats []string, train []labeledCmd) (ruleTable, string, error) {
+func authorRules(ctx context.Context, client *llm.Client, model string, cats []string, train []labeledCmd) (ruleTable, llm.Result, error) {
 	var b strings.Builder
 	b.WriteString("Here are shell commands and their correct category:\n\n")
 	for _, l := range train {
@@ -288,13 +288,13 @@ func authorRules(ctx context.Context, client *llm.Client, model string, cats []s
 		"a real action beats a leading cd. Write general rules (by leading binary), not one rule per command. No prose."
 	r, err := client.Complete(ctx, model, sys, b.String(), 8192)
 	if err != nil {
-		return ruleTable{}, "", err
+		return ruleTable{}, r, err
 	}
 	t, err := parseRuleTable(r.Text, cats)
 	if err != nil {
-		return ruleTable{}, r.Text, err
+		return ruleTable{}, r, err
 	}
-	return t, r.Text, nil
+	return t, r, nil
 }
 
 // parseRuleTable extracts the JSON object from the model's reply (tolerating a

@@ -53,9 +53,13 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    on what it covers), **exact-repro** determinism, blended pipeline latency down **77% (= g)**.
    Coverage g is the lever; the residual is the binding constraint. Also surfaced **caching as the
    floor of shift-left** — `.crystal-cache` replays a 710ms model call in µs (THESIS "Memoization is
-   the floor"). *Still to do:* the breakeven/amortization point (hits to repay `author`'s one-time
-   Opus authoring cost; the re-author frequency that erases the win) and a live hook (rung 1), not a
-   batch microbenchmark.
+   the floor"). The breakeven is now also DONE (`amortize`, `AMORTIZE_FINDINGS.md`): latency breakeven
+   = **43 covered hits** (one ~23.5s Opus authoring call repaid after 43 served commands; corpus has
+   17,402 covered → ~405× past). The load-bearing half: **re-authoring more often than once per 43
+   hits nets negative** (R=10 → −330%), so *demote-on-drift* (re-author only on sustained drift), not
+   detection alone, is what makes it pay. Token breakeven is ~2,944 hits (~70× slower) — the thesis as
+   a number: the win is on the latency axis, not the collapsing token axis. *Still to do:* a live
+   PreToolUse hook (rung 1), not a batch microbenchmark.
 3b. **The residual slice — RESULT LANDED** (`support`, `SUPPORT_FINDINGS.md`). Semantic support
    (paraphrase) — the chore a string tool *can't* cover. det-tool recall on paraphrase = 0/4
    (residual confirmed real); **haiku-whole 1.00 = opus-whole 1.00 @ ~2.6× lower latency** → a cheap
