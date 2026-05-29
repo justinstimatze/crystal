@@ -54,6 +54,31 @@ it bounds leakage regardless of drift cadence.
 consecutive-K let leak 30 → windowed rule (3-in-10) **demoted at index 5,
 leaked only 3.** Available via `crystal drift --k 3 --window 10`.
 
+### Real-data corroboration (honest, and tempering)
+
+`crystal drift --window 10` on the real patterns:
+
+```
+pattern              rule      leaked  demoted@  maxConsecutive
+gt deacon heartbeat  3-in-10     7       52          2
+  (vs consecutive-3) 3-in-3      8       54          3
+go build -o gemot    3-in-10     3        8          3
+```
+
+The windowed rule **strictly dominates** on real data (fires ≤ as early, leaks
+≤ as many: 7 ≤ 8). But the improvement here is **marginal — one fewer leak.**
+Why: `maxConsecutive=2` shows the real heartbeat drift came *close* to 3-in-a-
+row, so the two rules fire at almost the same point. The dramatic win (3 vs 30)
+requires *pathologically* intermittent (alternating) drift, which the unit test
+exercises but this near-stable pattern doesn't exhibit.
+
+Honest read: the windowed rule is the right default (strictly safer, no
+downside, and it bounds the pathological case) — but its real-world advantage
+depends on drift *morphology*, which we can't characterize from one near-stable
+pattern. Quantifying how often intermittent-vs-clustered drift occurs needs more
+crystallizable patterns than the substrate currently offers (see
+docs/MEASURE_FINDINGS.md — the target is small).
+
 ## Takeaways
 
 1. The eval/promote gate correctly refuses to deploy non-deterministic patterns
@@ -61,6 +86,8 @@ leaked only 3.** Available via `crystal drift --k 3 --window 10`.
 2. The brief's "demote on 3 consecutive divergences" is **insufficient**:
    intermittent drift evades it and leaks unbounded silent-wrong output.
    Replace with an M-in-W sliding-window rule.
-3. Recommended next: re-run `crystal drift --window 10` on the real heartbeat
-   pattern to confirm the real-data leak drops from 8; tune M/W against the
-   acceptable silent-wrong budget (the "<24h" bound, expressed in calls).
+3. The windowed rule was corroborated on real data (above): strictly safer, but
+   only marginally better on the near-stable pattern available. Adopt it as the
+   default and tune M/W against the acceptable silent-wrong budget (the "<24h"
+   bound, expressed in calls); its real advantage over consecutive-K can't be
+   quantified until the substrate yields more crystallizable patterns.
