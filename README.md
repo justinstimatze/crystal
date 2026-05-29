@@ -1,26 +1,50 @@
 # crystal
 
-**A trust substrate for recursive self-authoring loops.**
+**Shift mechanical work off the frontier model onto faster, cheaper, eventually-deterministic
+tiers — and keep it there as patterns drift, without silent quality loss.**
 
-When one model authors the harness another model runs inside — its prompts, schema, gate, verifier —
-and that composes recursively, you get a self-authoring loop system, with feedback flowing up
-(drift, escalation) and down (spec, verifier). The simplest shape is a *vertical stack* of tiers,
-each authoring the cheaper one below; the same composition also gives **trees** (one supervisor
-authoring many parallel sub-harnesses), **dev-time cycles** (a critic loop wrapping a runtime loop),
-and **meshes** (co-equal loops generating each other's working surface). The mechanism — a model
-writing the cage another runs in — is now commoditizing (AutoHarness, STOP, SICA, Gödel Agent — see
-[`docs/PRIOR_ART.md`](docs/PRIOR_ART.md)). What is **not** solved is making any of these **safe to
-run unattended**: catching one loop's drift through a degraded feedback signal and re-authoring the
-loop it feeds, without a human, without silent degradation, behind a verifier the authored loop
-**cannot rewrite**.
+## Why bother
 
-Crystal is the discipline for that: verifier-gated promotion, drift-triggered demotion, a
-tamper-proof kernel, and **instrumented per-hop signal loss**. Its primitives are *edge-local and
-node-local* — a verifier gates a promotion **edge**, λ is per-**edge** loss, the tamper-proof kernel
-is a **node** property — so the discipline composes over an arbitrary graph of loops, not just a
-path. (The vertical stack is the simplest topology and the one the experiments below measure;
-trees, cycles, and meshes are in scope but not yet exercised.) Full framing in
-[`docs/THESIS.md`](docs/THESIS.md); original charter in [`PROJECT_BRIEF.md`](PROJECT_BRIEF.md).
+The frontier model is the bottleneck on axes that *don't* go away as prices fall: **latency**
+(round-trip + big-model decode, compounding across call-hungry agentic loops), **throughput and
+ratelimit headroom** (finite frontier budget; mechanical work crowds out the cognitive core), and
+**determinism / dependency** (sampling variance, API dependency, data egress). Moving the
+mechanical, repetitive work *left* — onto a smaller/local, ultimately deterministic tier — wins all
+of those, and runs on hardware you own. (The win is **not** token cost: frontier prices are
+collapsing, so "save tokens" is the wrong frame — it's latency, determinism, sovereignty, and
+throughput.)
+
+But cheap tiers are *worse*, so shifting left naively trades a quality collapse you won't notice for
+the speed. Two things make it actually bankable:
+
+- **A verifier gate** turns "cheap tier, risky" into "cheap tier, gated" — the work only migrates
+  down if a check confirms it reproduces the frontier outcome, and it's **demoted the moment it
+  drifts**. This is the difference between a real win and silent rot.
+- **Self-authoring** makes it scale and *survive*: the frontier tier writes the cheaper tier's
+  harness (prompt, schema, gate, verifier) and **re-writes it on drift**, so you don't hand-engineer
+  a bespoke migration per task and watch it decay. A static crystallized hook rots; a self-authored
+  one adapts.
+
+So the useful claim is **automatic, drift-surviving shift-left at held quality.** The hard part —
+and crystal's actual contribution — is the discipline that keeps it safe when the loops stack and
+run unattended.
+
+## What crystal is
+
+A **trust substrate for recursive self-authoring loops**: verifier-gated promotion,
+drift-triggered demotion, a tamper-proof kernel (a verifier the authored tier structurally cannot
+rewrite — the [DGM](docs/THESIS.md) antidote), and **instrumented per-hop signal loss (λ)**. These
+primitives are *edge-local and node-local* — a verifier gates a promotion **edge**, λ is
+per-**edge** loss, the kernel is a **node** property — so the discipline composes over an arbitrary
+graph of loops, not just a line: a vertical **stack** of tiers (the simplest case), but also
+**trees** (one supervisor authoring many parallel sub-harnesses), **dev-time cycles** (a critic loop
+wrapping a runtime loop), and **meshes** (co-equal loops generating each other's surface). The
+self-authoring *mechanism* is now commoditizing (AutoHarness, STOP, SICA, Gödel Agent — see
+[`docs/PRIOR_ART.md`](docs/PRIOR_ART.md)); making it *safe to run unattended* is the open problem.
+
+(The experiments below exercise only the vertical/linear case; trees, cycles, and meshes are in
+scope but not yet measured.) Full framing in [`docs/THESIS.md`](docs/THESIS.md); original charter in
+[`PROJECT_BRIEF.md`](PROJECT_BRIEF.md).
 
 > Status: research-stage personal project. The eval/promote/demote gate, the drift detector, the
 > topology sim, and four live grounding experiments are built and run. The headline contribution —
@@ -29,8 +53,10 @@ trees, cycles, and meshes are in scope but not yet exercised.) Full framing in
 
 ## What's been measured
 
-Four live experiments grounded the lattice's two assumed knobs — guardrail coverage **g** and
-per-hop signal loss **λ** — on real and constructed substrates with hard, by-construction labels.
+The two knobs that decide whether shift-left is safe are **g** (does a verifier catch the cheap
+tier's errors — *which work is safe to migrate down*) and **λ** (does the supervisory signal survive
+relay — *how deep the supervision reaches before it goes blind*). Four live experiments grounded
+both on real and constructed substrates with hard, by-construction labels.
 
 | experiment | question | result |
 |---|---|---|
