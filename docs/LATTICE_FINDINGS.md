@@ -3,8 +3,8 @@
 **Riskiest assumption:** a stacked, self-reauthoring tier lattice (Opus authors
 Sonnet's harness authors Haiku's…, drift escalates up, the upper tier re-authors)
 stays *convergent* — failures get corrected, not silently absorbed. This is the
-part publicrecord leaves to a human; it's the undercity nightmare multiplied per
-layer.
+part a human-in-the-loop verification step would normally own; it's the
+silent-degradation nightmare multiplied per layer.
 
 **Cheapest honest test (no API):** model the feedback *topology* deterministically.
 The only thing that varies is structure — there are no model-quality effects at all.
@@ -60,7 +60,7 @@ max safe depth:  λ0.0→6   λ0.1→4   λ0.2→2   λ0.3→2   λ0.4→1   λ0
    never alarms — pure undercity), and `unstable` (an over-eager re-author over-corrects
    and oscillates/diverges — the over-eager-fixes-a-working-harness failure).
 
-4. **publicrecord's human is plausibly a low-loss up-channel** — but this is a
+4. **A human-in-the-loop verifier is plausibly a low-loss up-channel** — but this is a
    *hypothesis the sim cannot confirm*, because **λ is never measured**; it is a swept
    knob. Every depth claim is therefore **conditional**: *IF λ≈X and the knobs sit at
    Y THEN depth≤Z.*

@@ -63,11 +63,12 @@ mechanical fraction to the ecosystem's battle-tested wheels (grep, parsers, lint
 model merely *drives*, and pays model intelligence only for the residual. An Amdahl's-law view of
 LLM cost: your bill is set by the fraction you can't offload to a tool.
 
-- **Worked instances (the user's own):** `publicrecord` verifies a quote with Haiku driving `grep`
-  — Haiku fills the smallest gap (what to search, is this a match) while grep does the robust
-  matching; `stope` (lamina/poc/dense, not public) builds agents that are "almost formal oracles"
-  because their output language is a tool-menu whose outputs are checkable. (Described by the user;
-  not yet code-verified inside crystal.)
+- **Worked patterns (from private projects — not named here):** a claim-sourcing/verification agent
+  has a cheap model drive `grep` to verify a quote — the model fills the smallest gap (what to
+  search, is this a real match) while grep does the robust matching; an auditing/playtesting agent
+  gives the model a tool-menu output language whose outputs are checkable ("almost a formal
+  oracle"). Both are *verification-shaped* tasks — which is exactly why they decompose so well (see
+  the general principle below).
 - **Why it works:** a tool-constrained output has a tiny, *checkable* output space — which is
   exactly crystal's gate from the other end. AutoHarness (PRIOR_ART) is the *synthesize-the-tool*
   version; this is the cheaper *use-the-tool-that-exists* version.
@@ -83,6 +84,43 @@ Ethos: a **cheap lunch, not a free one.** Perfect isn't the goal; scrappy, organ
 reuse robust modules, accept the residual leak, let crystallize/demote accrete which decompositions
 hold. (See `PRIOR_ART.md` for why per-recurring-chore stateful tiering is an unoccupied niche vs
 per-request routers.)
+
+## The general principle this is circling (hypothesis — reasoning, not yet grounded)
+
+"Shift-left a substep" is the local, cost-projection of something more general. Stated plainly, and
+flagged as a framing to test rather than a measured result:
+
+1. **The master variable is the cheaply-verifiable fraction, not the model tier.** You can place
+   work on a cheaper/deterministic mechanism exactly to the extent you can *cheaply verify* its
+   output. **Producer-verifier asymmetry** (checking < generating) is the economic engine. So the
+   move isn't "pick a cheaper model" — it's *restructure the task so more of it has a cheap
+   verifier*, which then licenses cheap or deterministic production. Tools, constrained menus,
+   schemas, types, and retrieval are all the same technique: enlarge the verifiable fraction, shrink
+   the irreducible free-generation residual.
+2. **The operation is specialization / partial evaluation.** The expensive model is a slow general
+   interpreter of intent; crystallizing a recurring chore to a hook is *partial evaluation* —
+   specialize the general capability against the actually-recurring input to get a fast residual
+   program. The mechanism gradient (expensive model → cheap model → tool → deterministic hook) is a
+   hierarchy of increasingly specialized, increasingly verifiable residual programs; the verifier
+   guards the specialization and drift demotes it when it stops holding.
+3. **The expensive tier's durable role becomes *authoring the decomposition*, not doing the work.**
+   Spend frontier intelligence once to compile a fuzzy task into a verifiable, mostly-cheap pipeline
+   (plan + tools + gate), amortized over cheap execution — not per call. (The AutoHarness / "loop
+   that constructs loops" idea, grounded in shift-left economics instead of the trust framing.)
+4. **The boundary it predicts.** Tasks whose *value is the unverifiable judgment* — open-ended
+   reasoning, taste, novel synthesis, "which entity is the subject" — have no cheap verifier, so
+   they don't decompose and stay expensive. (Our `payoff` leak is exactly that residual.) Corollary:
+   **verification-shaped tasks decompose best** (their outputs are checkable by construction — why
+   sourcing/verification and auditing are such clean fits); generation-shaped tasks decompose worst.
+
+So the more-general thing: *spend intelligence to lower fuzzy work onto verifiable primitives, run
+cheap, and accept the unverifiable residual as the irreducible cost floor.* This connects to the
+AI-safety "oracle / bounded / provably-beneficial" lineage (PRIOR_ART) by analogy only — that field
+constrains a *dangerous* optimizer's output; here we constrain a *weak* model's output to be
+checkable. **Honesty flag:** this is a hypothesis. It's grounded where it touches measured ground
+(the leak; producer-verifier asymmetry and partial evaluation are established CS) but is *not*
+validated as "the law" for LLM systems — and is deliberately not inflated into a new grand thesis
+(the trust-substrate over-reach is the cautionary tale). It's the altitude to test next.
 
 ## Why "trust substrate" — and why it's partly what hybrid always meant
 

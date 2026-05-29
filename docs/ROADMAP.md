@@ -44,13 +44,13 @@ The goal is to turn the value prop from a hypothesis into a measured result, che
 4. **Decomposed shift-left — cheap model + robust tool (the architecture the `payoff` leak pointed
    at).** Instead of shifting a *whole* chore to Haiku (which leaked on the semantic judgment), hand
    Haiku a robust deterministic tool for the mechanical, high-g fraction and only the fuzzy gap to
-   the model — e.g. Haiku driving `grep` to verify a quote (the `publicrecord` pattern), or a
+   the model — e.g. Haiku driving `grep` to verify a quote (a claim-verification pattern), or a
    parser/typechecker for structured work. *Proves:* the cost-optimal unit is the sub-step, not the
    task; the tool-coverable fraction is where cheap+tool beats frontier-from-scratch. *Done when:* a
    decomposed chore (cheap model + real CLI tool, gated) beats whole-task Haiku on the same chore in
-   served accuracy at comparable latency. Reuse candidates: `publicrecord`, `stope`
-   (lamina/poc/dense) — verify what's actually there before assuming. This is likely the highest-
-   leverage next build.
+   served accuracy at comparable latency. Reuse: existing private agents that already use this
+   pattern (claim sourcing/verification; auditing/playtesting) — adapt the pattern, not the code.
+   This is likely the highest-leverage next build.
 5. **Close the sovereignty gap (the gradient's far end).** Swap the cheap tier to a local small
    model (+ LoRA) on owned hardware; re-measure latency and held quality. The cost gradient is
    `frontier → … → local+LoRA → deterministic hook`; `payoff` currently stops at cloud Haiku. Reuse

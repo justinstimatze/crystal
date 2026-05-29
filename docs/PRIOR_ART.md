@@ -113,6 +113,21 @@ deferral (FrugalGPT/AutoMix — has a gate) vs predict-then-route (RouteLLM/Hybr
 pattern isn't routing the *model* — it's shrinking the *task*. A cheap model driving a robust
 deterministic tool (Haiku+grep) collapses the mechanical fraction (g≈1) to something checkable,
 leaving only the judgment residual for intelligence. AutoHarness (2603.03329) is the synthesize-the-
-tool form; `publicrecord`/`stope` are the use-existing-tool form. This is the lineage crystal should
-borrow from (verifier-gated cascade + noisy-signal hysteresis → validates the windowed M-in-W
-demotion), without building a learned router.
+tool form; private verification- and auditing-agents are the use-existing-tool form. This is the
+lineage crystal should borrow from (verifier-gated cascade + noisy-signal hysteresis → validates the
+windowed M-in-W demotion), without building a learned router.
+
+**Bounded / "oracle" / provably-beneficial AI — adjacent, but a *different problem*.** The "formal
+oracle" framing (an AI restricted to answering questions, not acting) is the AI-safety **Oracle AI**
+idea — Armstrong, Sandberg & Bostrom, *Thinking Inside the Box: Controlling and Using an Oracle AI*,
+Minds & Machines 22 (2012) ✅ — and Stuart Russell's **provably-beneficial AI** program (decomposable
+logical/probabilistic substrates + formal verification; people.eecs.berkeley.edu/~russell) ✅. But
+that literature is about *containing a superintelligent optimizer so it can't manipulate*; crystal's
+"oracle-ness" is the opposite end — making a *weak* model's output cheaply **checkable**. Related
+only by "constrain the output space"; the threat model and motive differ, so it's analogy, not
+foundation. *Provenance caveat:* the Superintelligence/longtermist strand is the "TESCREAL" bundle
+critiqued by Torres & Gebru, and Bostrom has a documented 2023 apology for a racist email — cite the
+*idea* of constrained-output AI for completeness, don't lean on the source; Russell's
+provably-beneficial framing is the better-grounded, less-baggage-laden cousin. The load-bearing
+prior art for crystal is the mundane CS underneath: **producer-verifier asymmetry** (checking is
+cheaper than generating) + tool-augmented LMs.
