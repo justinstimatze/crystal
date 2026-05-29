@@ -133,6 +133,41 @@ Effective Tools*, Sept 2025; see PRIOR_ART) — so the novel part isn't offload,
 verifiability-as-master-variable + partial-evaluation + deterministic-default framing on top. It's
 the altitude to test next, not a claim of priority.
 
+## How far down does shift-left go? The compute-substrate gradient (vision — untested)
+
+The model-tier gradient (frontier → cheap → local model) is one axis. The deeper one is the
+**compute substrate** — the same principle (lower a recurring chore onto the cheapest mechanism that
+covers it; author once; amortize; demote on drift) applied all the way down:
+
+`frontier LLM → cheap LLM → local small model → interpreted script → compiled binary → SIMD/vectorized
+→ GPU kernel → FPGA → ASIC → lookup table / analog.`
+
+Each step down: lower per-op latency/cost/energy, higher authoring cost, lower flexibility. This
+isn't sci-fi — it's the existing specialization/compilation hierarchy (HFT strategies → FPGA, ML
+inference → TPU/ASIC, hot regex → compiled DFA, hot code → JIT, constant output → a cached lookup).
+The maximally-ambitious crystal is a **specialization scheduler**: an LLM-driven loop deciding, per
+recurring chore, *how far down the substrate gradient to crystallize it.*
+
+What bounds how far down you can shift (the boundaries you asked about):
+- **Recurrence/volume N** — authoring amortizes only over many runs; silicon pays off only at extreme
+  N. A twice-done chore stays in the cheap model.
+- **Stability (drift)** — re-authoring cost rises *steeply* down the gradient (you can't cheaply
+  re-flash an FPGA bitstream on drift). Deep specialization is only safe for *stable* specs; drift is
+  the enemy of depth, and crystal's demote-on-drift gets more load-bearing the deeper you go.
+- **Verifiability** — you can only shift down what you can verify at that level (spec↔impl
+  equivalence, formal verification). Producer-verifier asymmetry again.
+- **Authoring capability** — the expensive tier must be competent at the target's language (Verilog/
+  CUDA is harder for an LLM than Python — itself a moving frontier).
+- **The irreducible residual** — the genuinely fuzzy/contextual judgment *never* shifts to silicon
+  (an FPGA can't decide "which entity is the subject"). Hardware captures only the most mechanical,
+  stable, verifiable, recurrent fraction; the residual stays at the top forever.
+
+So the boundary isn't a fixed depth — it's a per-chore function of roughly `N × stability ×
+verifiability ÷ authoring_cost`. Most chores bottom out at "compiled deterministic hook" (crystal
+v0); only a rare hyper-stable, hyper-recurrent, fully-verifiable one justifies silicon. **Flagged:
+vision, not measured — crystal has exercised only the model-tier and deterministic-hook end. The
+hardware end is the logical extension of the same algebra, not a demonstrated capability.**
+
 ## Where this goes past Anthropic's published direction (open question for them)
 
 Agree with the Anthropic posts (PRIOR_ART) — they validate decomposition, cheap-model routing,
