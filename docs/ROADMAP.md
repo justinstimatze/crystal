@@ -47,11 +47,15 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    rule set) as a live PreToolUse hook so the static tier actually answers in place of the frontier
    call. *Proves:* the loop closes end to end on live use. *Done when:* a real repetitive command is
    served locally and the gate demotes it on a deliberately introduced drift, live.
-2. **Measure the payoff (the breakeven the value prop asserts but never shows).** For a served
-   deterministic hook: p50/p99 latency before vs after, determinism (exact-repro rate), and the
-   amortization point — how many hits before authoring cost is repaid, and the re-author frequency
-   that erases the win. *Proves:* shift-left nets positive on its claimed axes, or finds where it
-   doesn't. *Done when:* a before/after table exists for ≥1 real chore.
+2. **Measure the payoff — FIRST RESULT LANDED** (`serve`, `SERVE_FINDINGS.md`). Served the
+   deterministic tier in place of the cheap-model call on the covered fraction of the real Bash
+   chore: **~7µs/call vs Haiku p50 640ms (~90,000×) at zero quality cost** (the rule IS the reference
+   on what it covers), **exact-repro** determinism, blended pipeline latency down **77% (= g)**.
+   Coverage g is the lever; the residual is the binding constraint. Also surfaced **caching as the
+   floor of shift-left** — `.crystal-cache` replays a 710ms model call in µs (THESIS "Memoization is
+   the floor"). *Still to do:* the breakeven/amortization point (hits to repay `author`'s one-time
+   Opus authoring cost; the re-author frequency that erases the win) and a live hook (rung 1), not a
+   batch microbenchmark.
 3b. **The residual slice — RESULT LANDED** (`support`, `SUPPORT_FINDINGS.md`). Semantic support
    (paraphrase) — the chore a string tool *can't* cover. det-tool recall on paraphrase = 0/4
    (residual confirmed real); **haiku-whole 1.00 = opus-whole 1.00 @ ~2.6× lower latency** → a cheap

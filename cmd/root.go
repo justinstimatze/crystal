@@ -29,6 +29,7 @@ type CLI struct {
 	Aggregate    AggregateCmd    `cmd:"" help:"Hunt the cheap-model limit: semantic aggregation (count how many of N items match a criterion). whole-task vs map-reduce (cheap per-item classify + deterministic count)."`
 	Triage       TriageCmd       `cmd:"" help:"v1 SLICE: map-reduce + verifier on a real chore — categorize your actual Bash usage. Deterministic rules cover+gate; cheap model does the residual; deterministic tally. No frontier."`
 	Author       AuthorCmd       `cmd:"" help:"Self-author the verifier: the expensive tier writes triage's deterministic rule table from labeled examples, gated on a holdout (corrupted rules rejected), re-authored when a new command class drifts in."`
+	Serve        ServeCmd        `cmd:"" help:"Measure the payoff: serve the deterministic tier in place of the model on the covered fraction; report latency before/after, determinism (exact-repro), and the model round-trip removed."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.

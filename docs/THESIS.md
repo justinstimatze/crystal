@@ -180,6 +180,54 @@ puts crystal's gate at the center, not the periphery. **Flagged: vision, not mea
 exercised only the model-tier and deterministic-hook end; the hardware end is the same algebra
 extended, not a demonstrated capability.**
 
+### Memoization is the floor of the gradient — the "stupid cache trick" (measured)
+
+The cheapest shift-left of all is the dumbest: **a cache hit**. An exact-repeat input doesn't need
+the model, the rule table, or even a `switch` — it needs the *stored answer*. It's the degenerate
+bottom of the substrate gradient: maximal determinism, zero generality, near-zero latency. "Stupid
+cache tricks" belong on the shift-left list precisely because they're the same move (recurring chore
+→ cheapest mechanism that reproduces the answer) taken to its trivial limit.
+
+crystal already runs on this: `.crystal-cache` keys every model completion by a content hash and
+persists the *real measured latency* alongside the text. `serve` measured it — a Haiku
+classification that cost **710ms live** is replayed from disk in **microseconds** on the repeat (p50
+640ms → ~7µs/call, a ~90,000× drop, exact-repro, zero tokens). The model round-trip is *deleted* on
+the covered fraction. That's not a side optimization; it **is** the value prop, demonstrated at the
+floor.
+
+The gradient's cheap end is therefore three rungs, not one:
+
+- **exact-match memoization (cache)** — covers only inputs seen before; no generalization; the
+  reference *is* the stored output. ~µs.
+- **deterministic rule table** (`triage`/`author`) — covers a *class* of inputs (generalizes beyond
+  the seen set); still ~µs; the move up from a cache is that it answers inputs it never saw.
+- **cheap model** — covers the open-ended residual neither of the above can; ~hundreds of ms.
+
+Caching wins where inputs *exactly* recur; the rule table wins where a *pattern* recurs; the model
+is the residual. Each is the cheapest mechanism that still covers its slice — which is the whole
+thesis, read bottom-up.
+
+**Two cache regimes, both shift-left.** The above is *local* memoization — skip the call entirely on
+an exact repeat (crystal's `.crystal-cache`). The second regime is **shifting cost left *within* a
+tier you can't drop**: when you must call the frontier model, structure the input so the provider's
+**prompt cache** hits. You don't change tier; you move the *repeated-input-processing* cost onto the
+provider's cache (Anthropic prompt caching: cached prefix tokens re-bill at ~0.1× input price and
+aren't re-processed, so latency drops too — within the cache's ~5-minute TTL).
+
+The lever is **input ordering**: put the large, stable bulk first (system prompt, tool definitions,
+few-shot exemplars, the long shared document) as a cached prefix; put only the volatile, per-call
+bit last (the specific query). Then N calls over the same context pay full price *once* and
+`cache_read` for the rest, instead of re-billing and re-processing the whole prefix N times. The
+anti-pattern is interpolating something volatile (a timestamp, a per-item id) early in the prompt —
+it busts the prefix and every call misses. crystal's `llm.Result` already records `cache_read_tokens`
+for exactly this measurement; the disk cache currently short-circuits before any API call, so the
+two regimes are complementary, not redundant — local cache for exact repeats, prompt-cache structure
+for the calls you still have to make.
+
+So "marshal the ensemble" includes the caches: drop the tier when you can (memoize / rule-table),
+and when you can't, *shape the call* so the tier you're stuck with bills and thinks as little as
+possible. Both are shifting left.
+
 ## Use each mechanism for its nature — marshal the ensemble (the demand-side principle)
 
 "Don't make a model count" (the `aggregate` result — both tiers miscount, while the cheap model is
