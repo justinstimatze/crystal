@@ -11,10 +11,11 @@ import (
 
 // CLI is the root command struct.
 type CLI struct {
-	Extract ExtractCmd `cmd:"" help:"Walk Claude Code transcripts into a redacted, per-tool-balanced Record corpus."`
-	Eval    EvalCmd    `cmd:"" help:"Replay a synthetic artifact over a corpus and print per-tool fidelity reports."`
-	Measure MeasureCmd `cmd:"" help:"Sweep signature granularities over the full substrate to find crystallizable (frequent AND deterministic) patterns."`
-	Drift   DriftCmd   `cmd:"" help:"Temporal-replay drift experiment: promote a modal hook on a pattern's early occurrences, stream the rest, report demotion and silent-wrong leakage."`
+	Extract     ExtractCmd     `cmd:"" help:"Walk Claude Code transcripts into a redacted, per-tool-balanced Record corpus."`
+	Eval        EvalCmd        `cmd:"" help:"Replay a synthetic artifact over a corpus and print per-tool fidelity reports."`
+	Measure     MeasureCmd     `cmd:"" help:"Sweep signature granularities over the full substrate to find crystallizable (frequent AND deterministic) patterns."`
+	Drift       DriftCmd       `cmd:"" help:"Temporal-replay drift experiment: promote a modal hook on a pattern's early occurrences, stream the rest, report demotion and silent-wrong leakage."`
+	Crystallize CrystallizeCmd `cmd:"" help:"Full lifecycle on one pattern: discover → propose → promote-gate → serve → drift-monitor → demote; emits a redacted deployable artifact."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.
