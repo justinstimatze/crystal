@@ -1,5 +1,11 @@
 # Hybrid Loop Crystallization Engine — Project Brief
 
+> **This is the original charter, kept for provenance. It is superseded where it differs by
+> [`docs/THESIS.md`](docs/THESIS.md) (current framing) and the findings docs. New readers: start
+> at [`README.md`](README.md).** The thesis has since evolved from the cost-gradient framing below
+> to "a trust substrate for recursive self-authoring stacks"; the hard rules and value prop
+> (latency/determinism/reliability/sovereignty) still hold.
+
 Working title. Build a Claude Code plugin that observes my normal CC use, accumulates a typed substrate of tool calls and outcomes, and auto-discovers patterns mechanical enough to migrate down a cost gradient (frontier API → local model + LoRA → deterministic hook). The frontier model stays at the cognitive core; the cheap layers handle the crystallized residue.
 
 ## Thesis
