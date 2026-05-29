@@ -22,10 +22,21 @@ verified prior-art pass (`PRIOR_ART.md`).
 4. **Trust substrate (the actual contribution).** The mechanism is commoditizing.
    What the field is racing *past* is making recursive self-authoring **safe to run
    unattended**. Crystal is the **trust substrate for recursive self-authoring
-   stacks**: verifier-gated promotion, drift-triggered demotion, tamper-proof
+   loops**: verifier-gated promotion, drift-triggered demotion, tamper-proof
    guardrails, and instrumented per-hop signal loss — the discipline that turns a
-   stack of self-improving tiers from a silent-degradation hazard into something you
-   can leave running.
+   self-improving loop system from a silent-degradation hazard into something you can
+   leave running.
+
+   **Topology-general, not just a tier stack.** A vertical stack of tiers is the
+   *path* special-case. The same self-authoring composition gives trees (one
+   supervisor authoring many parallel sub-harnesses), dev-time cycles (a critic loop
+   wrapping a runtime loop — the hybrid-loops dev-time regime), and meshes (co-equal
+   loops generating each other's surface). Crystal's primitives are **edge-local and
+   node-local** — a verifier gates a promotion *edge*, λ is per-*edge* loss, the
+   tamper-proof kernel is a *node* property — so the discipline composes over an
+   arbitrary directed graph of loops, not a single ladder. The experiments so far
+   exercise only the linear/vertical case; trees, cycles, and meshes are in scope and
+   untested.
 
 ## Why "trust substrate" — and why it's partly what hybrid always meant
 
