@@ -24,6 +24,8 @@ secondary, and heavily prior-arted ([`PRIOR_ART.md`](PRIOR_ART.md)). Milestones 
 ## Track A — shift-left (primary)
 
 The goal is to turn the value prop from a hypothesis into a measured result, cheapest first.
+Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-verifiable fraction*
+— place work as cheaply as you can verify it; crystallize = partial-evaluate a recurring chore.
 
 1. **Serve the deterministic hook for real.** Install a `crystallize`-emitted artifact as a live
    PreToolUse hook so the static tier actually answers in place of the frontier call. *Proves:* the

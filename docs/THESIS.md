@@ -115,8 +115,8 @@ flagged as a framing to test rather than a measured result:
 
 So the more-general thing: *spend intelligence to lower fuzzy work onto verifiable primitives, run
 cheap, and accept the unverifiable residual as the irreducible cost floor.* This connects to the
-AI-safety "oracle / bounded / provably-beneficial" lineage (PRIOR_ART) by analogy only — that field
-constrains a *dangerous* optimizer's output; here we constrain a *weak* model's output to be
+AI-safety *bounded / provably-beneficial* lineage (Russell; see PRIOR_ART) by analogy only — that
+field constrains a *capable* optimizer's output; here we constrain a *weak* model's output to be
 checkable. **Honesty flag:** this is a hypothesis. It's grounded where it touches measured ground
 (the leak; producer-verifier asymmetry and partial evaluation are established CS) but is *not*
 validated as "the law" for LLM systems — and is deliberately not inflated into a new grand thesis

@@ -52,6 +52,11 @@ model routers (Copilot/Cursor "Auto", RouteLLM — see [`docs/PRIOR_ART.md`](doc
 re-decide cold every prompt, crystal's policy is **per-recurring-chore and stateful** — that's the
 niche, and the evolution, that nobody else occupies.
 
+The deeper frame (a hypothesis, in [`docs/THESIS.md`](docs/THESIS.md)): the master variable is the
+*cheaply-verifiable fraction*, not the model tier — checking is cheaper than generating, so you
+place work as cheaply as you can *verify* it. Crystallizing a recurring chore is **partial
+evaluation** of it; verification-shaped tasks decompose best, judgment-shaped tasks resist.
+
 So the honest claim is **automatic, drift-surviving shift-left with loud degradation** — *held
 quality* on the verifier-covered (and tool-covered) fraction, *detection + demotion* (not guaranteed
 reproduction) on the uncovered residual.
