@@ -193,6 +193,26 @@ capability knowledge (a "prefer `rg` over `grep`" manifest, antipattern lints) t
 supply itself. This both improves the offloaded sub-step and reinforces the deterministic-default
 thesis — the cheap, robust, *non-model* layer is where correct-tool knowledge lives.
 
+**Tool inventory is a first-class lever (with a provisioning cost).** The offload win is *bounded by
+what's installed*: weir's superior manifest only helps because ~20 modern CLI tools were
+provisioned; a stock host has the 1995 toolbox. So a richer, better-curated inventory directly
+expands the tool-coverable (high-g) fraction — more sub-steps a deterministic/cheap path can own,
+smaller residual for the model. But it isn't free: a one-time provisioning cost (install the tools),
+and a **portability dependency** — a crystallized chore that leans on `rg` breaks on a host without
+it. So the harness must (a) detect host capability and (b) fall back or declare the dependency
+(exactly weir's SessionStart manifest + apt-install guidance). Net: enriching the toolbox is a cheap,
+one-time, high-leverage way to grow the deterministic fraction, and the capability-detection it
+requires is itself part of authoring the decomposition.
+
+**Two causes, and a personal-first edge.** Models target the common denominator for *two* reasons:
+(a) **training-majority defaults** (the statistical prior — grep over rg), and (b) **as a product** —
+a mass-market model serves the median user, so it assumes the median *environment* (stock coreutils)
+because it can't see yours and must work for everyone. Cause (b) is structural, not fixable by more
+training. And it's a real edge for a **personal-first** harness: it can target *your* enriched,
+idiosyncratic toolbox (and conventions, paths, aliases) that the mass-market model is designed to
+assume away. The lab optimizes for everyone's environment; a personal harness optimizes for yours —
+which is exactly the recurring-workload regime where crystal's bets get stronger.
+
 ## Why "trust substrate" — and why it's partly what hybrid always meant
 
 The hybrid-loops framework names the disciplines an LLM block requires beyond the

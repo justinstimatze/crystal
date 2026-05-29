@@ -81,3 +81,10 @@ kernel *across a self-authoring/drift loop*.
   multiple independent readers, or a structured channel) before treating it as a channel property.
 - Every new number goes through the standing rule: `--verbose` per-item inspection before it's a
   finding (the five catches earned it).
+- **Tool inventory is a provisioning prerequisite, not a given.** The deterministic/tool tiers only
+  exist if the tools are installed (weir's data: a stock host reaches for the 1995 toolbox). A
+  crystallized chore that leans on `rg`/`fd` carries a portability dependency — so the harness must
+  detect host capability and fall back or declare the dependency (weir's SessionStart manifest +
+  apt-install guidance is the reuse). Enriching the inventory grows the tool-coverable fraction; a
+  *personal* harness can target the user's specific richer toolbox the mass-market model assumes
+  away. Fold capability-detection into any served-hook/decompose rung above.
