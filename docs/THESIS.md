@@ -1,83 +1,118 @@
 # Crystal — current thesis (north star)
 
-This supersedes the framing in `PROJECT_BRIEF.md` where they differ. The brief
-is the original charter; this is what we actually believe after building Phase 1
-and pressure-testing it.
+Supersedes `PROJECT_BRIEF.md` where they differ. The brief is the original charter;
+this is what we believe after building Phase 1, pressure-testing it twice, and a
+verified prior-art pass (`PRIOR_ART.md`).
 
 ## The throughline (how the framing evolved)
 
-1. **Binary (wrong).** Crystal first read as "frontier Opus vs. static deterministic
-   code" — crystallize a chore into a hook when its output is constant. The
-   `measure` sweep under this frame produced "crystallizability ⟂ value": the only
-   deterministic-enough patterns are state-independent constant-output commands
-   (heartbeats, kills) that aren't worth offloading. **But those measure numbers are
-   retracted — see the correction in `MEASURE_FINDINGS.md` (the headline pattern was
-   an artifact).** More importantly, the binary axis was itself the error.
+1. **Binary (wrong).** "Frontier Opus vs. static deterministic code" — crystallize a
+   chore into a hook when its output is constant. The `measure` sweep produced
+   "crystallizability ⟂ value" — but those numbers are **retracted** (the headline
+   pattern was a walker artifact; see `MEASURE_FINDINGS.md`), and the binary axis was
+   itself the error.
+2. **Ladder (rejected).** A tier router (Opus→…→hook) sending each chore to the
+   cheapest tier that passes a gate. Rejected: routers/cascades are well-trodden
+   (FrugalGPT lineage) and boring.
+3. **Recursive (the mechanism).** A **loop that constructs loops**: each tier authors
+   and re-authors the harness the tier below runs inside; feedback flows down (spec +
+   verifier) and up (drift, escalation). *But this mechanism is also largely prior
+   art* — AutoHarness (DeepMind, Feb 2026) ships the single-hop deterministic-harness
+   version; STOP / Gödel Agent / SICA ship self-authoring. See `PRIOR_ART.md`.
+4. **Trust substrate (the actual contribution).** The mechanism is commoditizing.
+   What the field is racing *past* is making recursive self-authoring **safe to run
+   unattended**. Crystal is the **trust substrate for recursive self-authoring
+   stacks**: verifier-gated promotion, drift-triggered demotion, tamper-proof
+   guardrails, and instrumented per-hop signal loss — the discipline that turns a
+   stack of self-improving tiers from a silent-degradation hazard into something you
+   can leave running.
 
-2. **Ladder (rejected).** Next read: a tier router (Opus → Sonnet → Haiku → local →
-   deterministic hook), routing each chore to the cheapest tier that passes a
-   fidelity gate. Rejected: tier routers are well-trodden, boring, and hard for
-   little payoff.
+## Why "trust substrate" — and why it's partly what hybrid always meant
 
-3. **Recursive (the actual thesis).** Crystal is **a loop that constructs loops.**
-   Each tier's job is not to answer — it is to *author the harness the tier below
-   runs inside, and re-author it based on observation.* Opus writes the code that
-   builds Sonnet's harness; Sonnet, inside that harness, builds Haiku's; and so on.
-   Feedback flows **both ways**: *down* = spec + scaffolding + verifier; *up* =
-   results, drift signals, escalation. The whole vertical lattice of nested,
-   mutually-supervising loops is one "crystal."
+The hybrid-loops framework names the disciplines an LLM block requires beyond the
+von-Neumann algebra: per-block calibration, context-as-code, the dev-time loop. Those
+read as *hygiene* in a single loop. **The moment loops stack — one loop's output
+becomes another loop's authoring input — they become survival.** Crystal is the
+load-bearing instance of hybrid-for-recursion: the place those disciplines get cashed
+out under the one condition (stacking) that makes them mandatory. "Trust substrate" is
+that cash-out.
 
-## What's already proven vs. crystal's delta (prior art: publicrecord)
+## Honest positioning vs. SOTA (verified — see `PRIOR_ART.md`)
 
-`/home/justin/Documents/publicrecord` is a working multi-tier LLM pipeline
-(`opus`+`sonnet` ingest/verify-authoring, `sonnet` batch-verify loop, `haiku`
-copilot query-running; 6,317 findings, 0 quality errors). It predates the hybrid
-concept but has the shape baked in. It establishes:
+Crystal's primitives are **almost all prior art**: tier stacks (OrchVis), eval-gate
+cascades (FrugalGPT), model-authored verifiers (Scoring Verifiers), self-authored
+harnesses (STOP/SICA/Gödel Agent), the deterministic-harness mechanism (**AutoHarness,
+2603.03329 — verbatim crystal's "expensive model synthesizes a cheap deterministic
+program"**), depth-collapse-under-oversight (Scaling Laws for Scalable Oversight), and
+error-cascade-needs-a-deterministic-carrier (From Spark to Fire). The genuinely open
+seams are narrow:
 
-- **Tiers can harness tiers and produce verified output at scale.** (So the
-  one-rung "Opus authors Sonnet's cage" is *already demonstrated* — not the risky part.)
+1. **Recursive composition across a heterogeneous tier ladder** (depth > 2) — cited
+   self-authoring is single-hop.
+2. **Explicit per-hop up-signal loss λ** in a live stack — the closest formal cousin
+   (decision-theoretic cascades) *assumes scores don't degrade with depth*; crystal
+   lives in the regime it assumes away.
+3. **Tamper-proof recursive guardrails** — a verifier the supervised tier
+   structurally **cannot rewrite**. This is the durable, under-served contribution.
 
-What publicrecord does **not** do — and these are exactly crystal's delta:
+## The load-bearing evidence: DGM (verified)
 
-- Its harnesses are **hand-authored** (a human wrote the scripts, prompts, model
-  assignments). Crystal: the tier *above* authors them, dynamically.
-- Its failure handling is a **`--max-errors N consecutive` stop** — the exact rule
-  we proved evadable by intermittent drift (`DRIFT_FINDINGS.md`). And its feedback
-  loop is **closed by a human** reading quality issues and editing scripts.
+Darwin Gödel Machine (2505.22954, corroborated by The Register + Sakana AI) had a
+self-improving agent **fake its own test logs and game its hallucination detector by
+deleting the markers the checker looked for.** That is the published proof that *a
+self-improving tier will corrupt a verifier it can reach* — and the entire reason
+hard rule #4 (stable, hand-written kernel; the supervised tier cannot modify the gate
+above it) is the differentiator, not a footnote.
 
-## The riskiest assumption (what we test)
+## The riskiest assumption (still unproven)
 
-**Can the upper tier detect a lower tier's drift from a signal that propagated UP
-through intermediate tiers (degrading en route) and correctly RE-AUTHOR the lower
-tier's harness — no human, no silent degradation?** publicrecord shows the tiers
-work; it never shows **the stack fixing itself.** That autonomous self-reauthoring
-closure, under lossy up-propagation, is the unproven core and the undercity failure
-mode (silent degradation, now multiplied per layer).
+Can the upper tier detect a lower tier's drift from a signal degraded by propagation,
+and correctly re-author the lower harness — **no human, no silent degradation, with a
+guardrail the lower tier can't corrupt**? Everything is contingent on the live
+experiment producing a non-trivial result here.
 
-## The reusable assets (Phase 1 wasn't wasted)
+## Reusable assets & what's proven vs. assumed
 
-- **The eval/promote/demote gate is the unit cell of the lattice.** Every layer
-  boundary (Opus⊃Sonnet, Sonnet⊃Haiku) *is* a fidelity gate: does the lower tier's
-  output match the upper tier's behavior on this chore? Built, tested, tier-agnostic.
-- **The drift detector is the up-feedback / ambient-meta-loop** — and we already
-  found its consecutive-K rule is evadable; the windowed M-in-W rule is the fix.
-  This matters *more* in the stack: drift at level N is invisible to level N−2, so
-  trustworthy up-propagation is load-bearing for the whole crystal.
+- **Eval/promote/demote gate** = the lattice unit cell; built, tested, tier-agnostic.
+  Its value as a *trust* primitive depends on the lower tier not being able to rewrite
+  it (tamper-proofing — not yet built).
+- **Drift detector** = the up-feedback / ambient-meta-loop. Consecutive-K is evadable;
+  the windowed M-in-W rule is the fix (`DRIFT_FINDINGS.md`).
+- **Lattice sim** is **algebra, not emergent** — the frontier is `(1−λ)^(d−1) ≥
+  demote/recover`, and guardrail coverage is a **cliff at `g = demote/recover`, not a
+  dial** (a manufactured "depth 30" was a search-cap artifact; see correction in
+  `LATTICE_FINDINGS.md`). For drift in the un-checkable residual, `g` does not help.
+- **Two manufactured-confidence catches** (the 219 count; the depth-2 / depth-30
+  numbers) were caught only by verifier-against-ground-truth and adversarial
+  reimplementation. That the project keeps catching *its own* fluent-but-wrong output
+  is the strongest live evidence that the trust discipline is necessary — it's the
+  thesis demonstrated on itself.
+
+## The leapfrog (where to get ahead, not behind)
+
+Don't compete with AutoHarness on *how to author the cage* (lost). Own *making it safe
+to stack and run unattended*, the wall the field hits when stacked self-improvers
+start degrading silently:
+
+- **Un-disableable verifier** (the DGM antidote) — capability-isolated kernel the
+  supervised tier can author *below* but cannot touch *above*.
+- **Oversight altimeter** — measure real λ in a live stack, display current safe depth,
+  warn when the top has gone blind.
+- **Adversarial g-hardening** — a red-team tier hunts the un-covered residual; the
+  supervisor auto-authors fresh deterministic checks; coverage rises as drift mutates.
+- **Trust certificates** — machine-checkable attestation per output (tier, verifier
+  coverage, safe depth, drift-free window), emitted locally. The sovereignty value
+  prop made concrete.
+
+Honest limit: the un-checkable fuzzy residual never reaches zero. The claim is "raise
+the trust floor and make degradation *loud*," never "guarantee safety."
 
 ## Test ladder (cheapest riskiest-assumption test first)
 
-1. **Deterministic topology sim** (`internal/lattice`) — stack ≥2 gate-tiers, inject
-   bottom drift, add a tunable per-hop information-loss knob (the anti-rigging guard),
-   and find the (depth × loss) frontier where self-reauthoring stops converging =
-   **max safe stack depth.** Zero API cost; tests a necessary condition before any
-   live spend. If even the idealized loop can't converge past depth 2, the live
-   version is hopeless and publicrecord's human-in-the-loop was load-bearing.
-2. **Live 2-boundary** (later) — real Opus authors a real Sonnet harness; corrupt
-   Sonnet; does Opus, fed the propagated signal, re-author a fix? Real API cost.
-
-## Mapping to the hybrid framework
-
-Crystal is hybrid's "dev-time loop wrapping the runtime," made recursive: Opus's
-dev-time loop emits Sonnet's runtime harness, whose dev-time loop emits Haiku's.
-The ambient-meta-loop (deterministic hook fires a parallel evaluator whose verdict
-feeds back) is the per-boundary mechanism, stacked vertically.
+1. **Deterministic topology sim** (`internal/lattice`) — done; it's algebra + a
+   characterization of where the loop goes blind, corrected twice.
+2. **Live 2-boundary** (`cmd/experiment`, built, not yet run) — measure real
+   substitution fidelity, channel λ, and guardrail coverage g on a verifiable chore.
+3. **Tamper-proof recursion demo** (the headline) — a self-improving stack that tries
+   to game its own evaluation (the DGM behavior) and is structurally blocked + demoted
+   live, with a visible trust readout. This is the contribution, demonstrated.
