@@ -1,5 +1,13 @@
 # Depth sweep — does content-bearing channel loss compound over depth? (2026-05-29)
 
+> **CORRECTION (see [CONTENTSWEEP_FINDINGS.md](CONTENTSWEEP_FINDINGS.md)).** This doc's claim that
+> corrective content "erodes/inverts with depth" was a **misread**. The rigorous content-fidelity
+> sweep shows content fidelity is **flat with depth (~0.7), not declining** — the failures it cites
+> (items 5, 7, 10, 12) are present at **depth 1** and stable, not depth-progressive. Item 5 is
+> inverted from d1, not "by d3." The correct conclusion: neither detection nor content fidelity
+> compounds-loses to depth 6; the loss is at the **first hop**. Read the section below with that
+> correction in mind.
+
 ground-hop and uncover-hop measured per-hop loss λ≈0 at depth 1. The lattice's pessimism (safe
 depth ~2) and STACKING #7's "a prose summary loses fidelity at every hop" both rest on loss
 **compounding** as the signal is relayed up. This sweep relays uncover-hop's content-bearing prose
