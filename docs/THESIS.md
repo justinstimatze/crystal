@@ -180,6 +180,32 @@ puts crystal's gate at the center, not the periphery. **Flagged: vision, not mea
 exercised only the model-tier and deterministic-hook end; the hardware end is the same algebra
 extended, not a demonstrated capability.**
 
+## Use each mechanism for its nature — marshal the ensemble (the demand-side principle)
+
+"Don't make a model count" (the `aggregate` result — both tiers miscount, while the cheap model is
+48/48 on the per-item judgment) generalizes to the deepest design rule crystal has: **an LLM is a
+pattern engine.** It is superb at fuzzy/semantic recognition and mapping, and structurally weak at
+precise symbolic operations — counting (the "r's in *strawberry*" tokenization failure), exact
+arithmetic, state-tracking, dedup, sorting, precise recall. Use it for what it *is*; route what it
+*isn't* to deterministic mechanisms.
+
+This cuts **both ways**, and the second cut is the anti-hype one: don't reach for the LLM for
+everything, or for things it's *not* good at, **just because it's the shiny new thing.** Much of the
+current discourse throws a model at work that belongs in boring deterministic code (vibe-everything,
+an agent for every task). crystal is partly a corrective to LLM-maximalism: the model is one
+instrument with a specific nature, not the whole orchestra.
+
+So the goal isn't model-vs-tool — it's to **marshal the whole ensemble for collective robustness and
+maximal shift-left**: pattern-engine models (frontier *and* cheap) for the fuzzy/semantic fraction,
+deterministic tools and code for the precise/symbolic fraction, the best available tool inventory
+(weir) so the deterministic options are good ones, and verification gluing the seams. crystal is the
+orchestration discipline that assigns each sub-step to the mechanism whose *nature* fits it, and
+gates the joints. **Robustness is a property of the ensemble, not of any one tier** — and the more
+of the work you can place on a mechanism better-suited (and cheaper/more-verifiable) than a frontier
+model, the further left, and the more robust, the whole system sits. (Demand-side restatement of the
+thesis; a design/values principle, evidenced by `decompose`/`support`/`aggregate`, not a fresh
+measured claim.)
+
 ## Where this goes past Anthropic's published direction (open question for them)
 
 Agree with the Anthropic posts (PRIOR_ART) — they validate decomposition, cheap-model routing,
