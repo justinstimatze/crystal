@@ -126,3 +126,45 @@ cheaply **checkable**. Related only by "constrain the output space"; the motive 
 differ, so it's analogy, not foundation. The load-bearing prior art for crystal is the mundane CS
 underneath: **producer-verifier asymmetry** (checking is cheaper than generating) + tool-augmented
 LMs.
+
+## Anthropic & practitioner writing — shift-left/decompose/offload is largely PUBLISHED (2024–2025)
+
+A sourced pass found the core mechanics crystal leans on are already Anthropic house doctrine — so
+crystal must NOT claim novelty on them. (Verified = page fetched; dates as published.)
+
+- **Building Effective Agents** (anthropic.com/engineering/building-effective-agents, Dec 19 2024) ✅
+  — explicit cheap-model routing: *"Routing easy/common questions to smaller, cost-efficient models
+  like Claude Haiku … and hard/unusual questions to more capable models"*; prompt-chaining
+  decomposition; evaluator-optimizer (= producer-verifier) loop; *"find the simplest solution
+  possible, and only increasing complexity when needed."*
+- **Writing Effective Tools for AI Agents** (…/writing-tools-for-agents, Sept 11 2025) ✅ — the
+  closest match to crystal's refinement: *"offload agentic computation from the agent's context back
+  into the tool calls themselves"*; verifiers *"as simple as an exact string comparison"*; tools
+  return *"only high signal information."* **crystal's "offload the mechanical sub-steps to robust
+  tools, model does the glue" IS this — cite it, don't claim the offload principle as novel.**
+- **Effective Context Engineering** (…/effective-context-engineering-for-ai-agents, Sept 29 2025) ✅
+  — *"smallest possible set of high-signal tokens"* (= cheapest-adequate); deterministic offload via
+  *"Bash commands like head and tail … without ever loading the full data objects into context."*
+- **Multi-agent research system** (…/multi-agent-research-system, June 13 2025) ✅ — model tiering
+  (Opus lead + Sonnet workers beat single Opus ~90%); a dedicated CitationAgent verifier pass.
+  **Honest complication:** *"Multi-agent systems use about 15× more tokens"* — naive decomposition
+  into more *model* subagents *raises* cost. This is the best evidence that crystal's distinct move
+  is offloading to *deterministic/cheap* tiers, not to more frontier agents.
+- **Effective Harnesses for Long-Running Agents** (…/effective-harnesses-for-long-running-agents,
+  Nov 26 2025) ✅ — deterministic init scripts over per-session re-derivation; self-verification
+  gates; explicitly leaves single-vs-multi-agent open (so don't assert decomposition is universally
+  optimal).
+- **Steve Yegge, *Revenge of the Junior Developer*** (sourcegraph.com/blog/…, Mar 22 2025) ✅ —
+  *"Task graph decomposition … is just as important today"*; supervisory agents over agent pods.
+  Contrast worth citing: Yegge's verification is iterative model *self*-review ("Rule of Five"), the
+  opposite of crystal's cheap deterministic gate. (His 2026 items — Gas Town/Beads, a Pragmatic
+  Engineer interview gloss — were snippet-only / post-cutoff and are deliberately NOT cited.)
+
+**Net — novelty narrows honestly:** shift-left, decomposition, cheap-model routing,
+tools-over-generation, and producer-verifier loops are *published prior art* (Anthropic, Dec 2024 –
+Nov 2025). crystal's defensible contribution is the *specific composition* none of them state as a
+unified method: **a deterministic tier behind a cheap verifier as the DEFAULT (the model as the
+exception), assigned per-recurring-chore and demoted on drift** — inverting "a model that uses
+tools" into "tools, with a model only for the residual," made stateful. That this aligns with
+Anthropic's own engineering direction is a *credibility tailwind*, not a threat: crystal isn't
+fringe, it's the deterministic-default corner of a direction the lab is already publishing.

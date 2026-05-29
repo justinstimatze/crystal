@@ -120,7 +120,11 @@ field constrains a *capable* optimizer's output; here we constrain a *weak* mode
 checkable. **Honesty flag:** this is a hypothesis. It's grounded where it touches measured ground
 (the leak; producer-verifier asymmetry and partial evaluation are established CS) but is *not*
 validated as "the law" for LLM systems — and is deliberately not inflated into a new grand thesis
-(the trust-substrate over-reach is the cautionary tale). It's the altitude to test next.
+(the trust-substrate over-reach is the cautionary tale). Note too that Anthropic already published
+the *offload* half — "offload agentic computation … back into the tool calls themselves" (*Writing
+Effective Tools*, Sept 2025; see PRIOR_ART) — so the novel part isn't offload, it's the
+verifiability-as-master-variable + partial-evaluation + deterministic-default framing on top. It's
+the altitude to test next, not a claim of priority.
 
 ## Why "trust substrate" — and why it's partly what hybrid always meant
 
