@@ -142,31 +142,43 @@ covers it; author once; amortize; demote on drift) applied all the way down:
 `frontier LLM → cheap LLM → local small model → interpreted script → compiled binary → SIMD/vectorized
 → GPU kernel → FPGA → ASIC → lookup table / analog.`
 
-Each step down: lower per-op latency/cost/energy, higher authoring cost, lower flexibility. This
-isn't sci-fi — it's the existing specialization/compilation hierarchy (HFT strategies → FPGA, ML
-inference → TPU/ASIC, hot regex → compiled DFA, hot code → JIT, constant output → a cached lookup).
-The maximally-ambitious crystal is a **specialization scheduler**: an LLM-driven loop deciding, per
-recurring chore, *how far down the substrate gradient to crystallize it.*
+It's the existing specialization/compilation hierarchy (HFT strategies → FPGA, ML inference →
+TPU/ASIC, hot regex → compiled DFA, hot code → JIT, constant output → a cached lookup) — but with a
+**new** twist.
 
-What bounds how far down you can shift (the boundaries you asked about):
-- **Recurrence/volume N** — authoring amortizes only over many runs; silicon pays off only at extreme
-  N. A twice-done chore stays in the cheap model.
-- **Stability (drift)** — re-authoring cost rises *steeply* down the gradient (you can't cheaply
-  re-flash an FPGA bitstream on drift). Deep specialization is only safe for *stable* specs; drift is
-  the enemy of depth, and crystal's demote-on-drift gets more load-bearing the deeper you go.
-- **Verifiability** — you can only shift down what you can verify at that level (spec↔impl
-  equivalence, formal verification). Producer-verifier asymmetry again.
-- **Authoring capability** — the expensive tier must be competent at the target's language (Verilog/
-  CUDA is harder for an LLM than Python — itself a moving frontier).
+**The new thing (the correction): LLMs are collapsing authoring cost at *every* substrate at once.**
+Classically you descended tier by tier because each lower substrate cost much more to author (writing
+Verilog ≫ writing Python). That gate is dissolving — a frontier model can write Python, a CUDA
+kernel, or HDL — so it is **not a linear descent**: you **slam left**, jumping directly to the
+deepest viable substrate, using whatever it takes, skipping the tiers in between. The
+maximally-ambitious crystal is a **specialization scheduler**: an LLM loop that picks the target
+substrate per recurring chore and authors straight to it.
+
+What bounds how far down you can slam (the boundaries you asked about) — and note authoring cost is
+*no longer the dominant gate*:
+- **Recurrence/volume N** — authoring amortizes over runs; the deepest substrates still pay off only
+  at high N (though as authoring cheapens, the N threshold drops).
+- **Stability (drift)** — *this flips with cheap authoring.* Re-authoring used to be the barrier to
+  depth ("you can't re-flash a bitstream cheaply"). When the LLM can cheaply *re-author* the deep
+  implementation on drift, drift stops gating depth — what *doesn't* cheapen is **re-verification**.
+- **Verifiability becomes THE binding constraint** — you can author a GPU kernel for free, but can
+  you trust it, and re-trust it each time it's re-authored on drift? Producer-verifier asymmetry, now
+  load-bearing: the bottleneck moves from "can we write it" to "can we verify it." **This is exactly
+  crystal's gate** — verifier-gated crystallize + demote is what makes slam-left (and re-slam-on-
+  drift) *safe*. So cheap authoring doesn't make crystal less relevant; it makes the *verification*
+  half the whole game.
+- **Authoring capability** — the residual of the collapsing cost: Verilog is still harder for an LLM
+  than Python today (a moving frontier), so the reachable depth rises over time.
 - **The irreducible residual** — the genuinely fuzzy/contextual judgment *never* shifts to silicon
-  (an FPGA can't decide "which entity is the subject"). Hardware captures only the most mechanical,
-  stable, verifiable, recurrent fraction; the residual stays at the top forever.
+  (an FPGA can't decide "which entity is the subject"). The deepest substrates capture only the most
+  mechanical, stable, verifiable, recurrent fraction; the residual stays at the top forever.
 
-So the boundary isn't a fixed depth — it's a per-chore function of roughly `N × stability ×
-verifiability ÷ authoring_cost`. Most chores bottom out at "compiled deterministic hook" (crystal
-v0); only a rare hyper-stable, hyper-recurrent, fully-verifiable one justifies silicon. **Flagged:
-vision, not measured — crystal has exercised only the model-tier and deterministic-hook end. The
-hardware end is the logical extension of the same algebra, not a demonstrated capability.**
+So the boundary isn't a fixed depth, and it's no longer authoring-cost-gated — it's roughly `N ×
+stability × **verifiability**`, with authoring cost a fast-shrinking denominator. As LLM authoring
+approaches free, **verification is the rate-limiter on how far left you can safely slam** — which
+puts crystal's gate at the center, not the periphery. **Flagged: vision, not measured — crystal has
+exercised only the model-tier and deterministic-hook end; the hardware end is the same algebra
+extended, not a demonstrated capability.**
 
 ## Where this goes past Anthropic's published direction (open question for them)
 
