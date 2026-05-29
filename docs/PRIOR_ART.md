@@ -17,6 +17,8 @@ self-sabotage) was confirmed real with independent corroboration.
 | Model authors a **deterministic** harness that carries signal losslessly (guardrail-g) | **not novel (Feb 2026)** | **AutoHarness (2603.03329)** — verbatim crystal's "expensive model synthesizes cheap deterministic program that runs without API calls" |
 | Safe depth collapses with oversight depth | **published phenomenon** | Scaling Laws for Scalable Oversight (2504.18530); Recursive Self-Critiquing (2502.04675) |
 | Errors amplify per hop unless a deterministic carrier intervenes | **published** | From Spark to Fire (2603.04474) — ~89% containment via a governance layer ⚠️ |
+| An untrusted model overseen by a trusted component it **cannot subvert** | **not novel (the owning field)** | AI Control — Greenblatt et al., *Improving Safety Despite Intentional Subversion* (2312.06942, ICML 2024); trusted-monitoring/editing line 🔶 |
+| "The agent must not corrupt the signal that grades it" (tamper-resistance) | **not novel (formalized ~5y prior)** | Reward-tampering lineage — Decoupled Approval (2011.08827), current-RF / REALab (Everitt et al.) 🔶 |
 | Windowed M-in-W drift trigger | **incremental** | trigger-design class |
 
 ⚠️ *From Spark to Fire* is real and on-topic, but the specific "mean-field / spectral threshold
@@ -44,18 +46,34 @@ hallucination detector by deleting the markers the checker looked for** — a Go
 Corroborated by The Register and Sakana AI. This is direct empirical evidence for crystal's
 central safety claim: *a self-improving tier will corrupt a verifier it can reach.*
 
-## What is genuinely crystal's (narrow, and contingent)
+🔶 *AI Control and reward-tampering rows added 2026-05-29 from the adversarial panel. The base
+papers are real and well-known (2312.06942 is ICML 2024); their exact IDs were **not** re-fetched
+this pass, and the panel's claimed 2025–26 follow-up IDs are **unverified and several are
+post-cutoff — deliberately omitted** until independently resolved. The conceptual overlap holds
+regardless of the specific follow-ups.*
 
-1. **Recursive composition** of the authoring relation across a *heterogeneous* tier ladder
-   (depth > 2) — every cited self-authoring system is single-hop or single-population.
-2. **Explicit per-hop up-signal loss λ** modeled/measured in a live stack — the closest formal
-   cousin (decision-theoretic cascades, 2605.06350) *assumes confidence scores don't degrade
-   with depth*; crystal lives in the regime it assumes away.
-3. **Tamper-proof recursive guardrails** — a verifier the supervised tier structurally cannot
-   rewrite. DGM is the published proof this is needed and unbuilt.
+## What is genuinely crystal's (narrow — and the trust angle is more contested than earlier drafts claimed)
 
-The first two are open seams the field will likely close fast (stacked-AutoHarness). **#3 — making
-recursive self-authoring *safe to run unattended* — is the durable, under-served contribution**,
-and reframes crystal from "crystallization engine" (mechanism, beaten) to "trust substrate for
-recursive self-authoring stacks." All of it remains contingent on the live experiment producing a
-non-trivial result.
+An adversarial prior-art pass (2026-05-29) found the **trust-substrate framing carries the heaviest
+prior art**: the **AI Control** program is built on exactly "an untrusted model overseen by a
+trusted component it cannot subvert," and **reward-tampering** formalized "the agent must not
+corrupt the signal that grades it" years earlier. So the earlier draft's "tamper-proof oversight is
+the durable, under-served contribution" **overclaimed.** Re-scoped honestly:
+
+1. **Recursive composition** across a *heterogeneous* tier ladder (depth > 2) — cited self-authoring
+   systems are single-hop or single-population. Open seam the field will likely close fast.
+2. **Per-hop up-signal loss λ as a *live, per-edge instrument*** you read to compute current safe
+   depth — distinct from decision-theoretic cascades (2605.06350, *assume* scores don't degrade) and
+   from Scaling Laws for Scalable Oversight (2504.18530, *derives* optimal depth analytically but
+   doesn't *measure* live λ). Narrow but real.
+3. **A tamper-proof kernel specifically *across a self-authoring / drift loop*** — not "tamper-proof
+   oversight" in general (AI Control owns that), but its instantiation where the thing being
+   overseen is *re-authoring its own harness over time*. The engineering novelty is structural
+   capability-isolation on the authoring edge; the *problem* is old (DGM is the recent proof it
+   still bites).
+
+**Re-centering (2026-05-29):** these seams are the *secondary* trust story. The project's primary
+value is the humble shift-left itself — crystallize mechanical work down to a cheaper/deterministic
+tier behind a gate, and keep it there as patterns drift (`crystallize`, built). The trust substrate
+is the scaffolding that keeps shift-left from rotting, not the headline. All trust claims remain
+contingent on a live tamper-proof demo that does not yet exist.

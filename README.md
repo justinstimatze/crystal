@@ -1,76 +1,110 @@
 # crystal
 
 **Shift mechanical work off the frontier model onto faster, cheaper, eventually-deterministic
-tiers — and keep it there as patterns drift, without silent quality loss.**
+tiers — and keep it there as patterns drift, with degradation that's loud instead of silent.**
 
 ## Why bother
 
-The frontier model is the bottleneck on axes that *don't* go away as prices fall: **latency**
-(round-trip + big-model decode, compounding across call-hungry agentic loops), **throughput and
-ratelimit headroom** (finite frontier budget; mechanical work crowds out the cognitive core), and
-**determinism / dependency** (sampling variance, API dependency, data egress). Moving the
-mechanical, repetitive work *left* — onto a smaller/local, ultimately deterministic tier — wins all
-of those, and runs on hardware you own. (The win is **not** token cost: frontier prices are
-collapsing, so "save tokens" is the wrong frame — it's latency, determinism, sovereignty, and
-throughput.)
+The frontier model is the bottleneck on axes that *don't* go away as token prices fall:
 
-But cheap tiers are *worse*, so shifting left naively trades a quality collapse you won't notice for
-the speed. Two things make it actually bankable:
+- **Determinism** — a crystallized deterministic hook is exactly reproducible; no sampling variance. The most durable win, and the one a cloud model structurally can't give you.
+- **Sovereignty** — the cheapest tier can run on hardware you own, with no API dependency or data egress. (Partial, honestly: see the caveat below.)
+- **Latency** — a local/cheap tier skips the frontier round-trip and big-model decode; compounds across call-hungry agentic loops. *Conditional* on the gate being deterministic (no added round-trip) and authoring amortizing over many hits.
+- **Throughput / ratelimit headroom** — frees finite frontier budget for the cognitive core. Real today, but a transient capacity artifact that fades as frontier supply grows.
 
-- **A verifier gate** turns "cheap tier, risky" into "cheap tier, gated" — the work only migrates
-  down if a check confirms it reproduces the frontier outcome, and it's **demoted the moment it
-  drifts**. This is the difference between a real win and silent rot.
-- **Self-authoring** makes it scale and *survive*: the frontier tier writes the cheaper tier's
-  harness (prompt, schema, gate, verifier) and **re-writes it on drift**, so you don't hand-engineer
-  a bespoke migration per task and watch it decay. A static crystallized hook rots; a self-authored
-  one adapts.
+The win is explicitly **not** token cost — frontier prices are collapsing, so "save tokens" is the wrong frame. It's the bundle above, weighted toward determinism and sovereignty.
 
-So the useful claim is **automatic, drift-surviving shift-left at held quality.** The hard part —
-and crystal's actual contribution — is the discipline that keeps it safe when the loops stack and
-run unattended.
+**Two honest caveats up front.** *Sovereignty is partial:* the cheap tier is sovereign at
+steady-state inference, but the self-authoring/re-authoring step still touches the frontier, so
+it's "sovereign at inference, frontier-dependent at adaptation time." And the **deterministic-tier**
+case (a static hook) is real and built; the **local-small-model** tier (RTX 3080 + LoRA, per the
+brief) is **aspirational and unmeasured** — every live experiment here uses cloud Haiku as the cheap
+tier.
 
-## What crystal is
+### What makes it bankable (and what doesn't yet)
 
-A **trust substrate for recursive self-authoring loops**: verifier-gated promotion,
-drift-triggered demotion, a tamper-proof kernel (a verifier the authored tier structurally cannot
-rewrite — the [DGM](docs/THESIS.md) antidote), and **instrumented per-hop signal loss (λ)**. These
-primitives are *edge-local and node-local* — a verifier gates a promotion **edge**, λ is
-per-**edge** loss, the kernel is a **node** property — so the discipline composes over an arbitrary
-graph of loops, not just a line: a vertical **stack** of tiers (the simplest case), but also
-**trees** (one supervisor authoring many parallel sub-harnesses), **dev-time cycles** (a critic loop
-wrapping a runtime loop), and **meshes** (co-equal loops generating each other's surface). The
-self-authoring *mechanism* is now commoditizing (AutoHarness, STOP, SICA, Gödel Agent — see
-[`docs/PRIOR_ART.md`](docs/PRIOR_ART.md)); making it *safe to run unattended* is the open problem.
+Cheap tiers are *worse*, so shifting left naively trades a quality collapse you won't notice for the
+speed. Two mechanisms hold the line:
 
-(The experiments below exercise only the vertical/linear case; trees, cycles, and meshes are in
-scope but not yet measured.) Full framing in [`docs/THESIS.md`](docs/THESIS.md); original charter in
-[`PROJECT_BRIEF.md`](PROJECT_BRIEF.md).
+- **A verifier gate** (built) — work migrates down only if a check confirms it reproduces the
+  frontier outcome, and is **demoted when it drifts in a way the verifier can express.** This is the
+  difference between a real win and silent rot. *Limit:* a deterministic check can't see semantic
+  drift it can't express (see `g` below), and a self-improving tier will game a verifier it can
+  reach — the [DGM](docs/THESIS.md) result. The **tamper-proof** version of the gate is **not yet
+  built**, so today's gate is the gameable kind for anything beyond a fixed deterministic hook.
+- **Self-authoring** (the adaptive part) — the frontier tier writes the cheap tier's harness and
+  re-writes it on drift, so a migration doesn't rot the way a hand-written static replacement does.
 
-> Status: research-stage personal project. The eval/promote/demote gate, the drift detector, the
-> topology sim, and four live grounding experiments are built and run. The headline contribution —
-> a tamper-proof recursive guardrail demo — is **not yet built**. Numbers in the findings docs are
-> the ground truth; this README summarizes.
+So the honest claim is **automatic, drift-surviving shift-left with loud degradation** — *held
+quality* on the verifier-covered fraction, *detection + demotion* (not guaranteed reproduction) on
+the uncovered residual.
+
+## Try it (on your own data)
+
+`crystallize` is the humble shift-left, end to end, no LLM in the loop: it scans your Claude Code
+transcripts, finds the dominant repetitive deterministic command, proposes a static hook,
+promote-gates it on determinism, serves a holdout while watching for drift, demotes if it drifts,
+and writes a redacted deployable artifact.
+
+```sh
+go run . crystallize --home ~ --match "git status"
+# discover → propose (modal hook) → gate (PROMOTE/REFUSE) → serve+drift-monitor → demote
+# → writes crystallized/<pattern>.json   (refuses loudly if the command isn't deterministic enough)
+```
+
+This is the v0 (deterministic-tier) slice; the LLM/local-model tiers are the roadmap
+([`docs/ROADMAP.md`](docs/ROADMAP.md)).
 
 ## What's been measured
 
-The two knobs that decide whether shift-left is safe are **g** (does a verifier catch the cheap
-tier's errors — *which work is safe to migrate down*) and **λ** (does the supervisory signal survive
-relay — *how deep the supervision reaches before it goes blind*). Four live experiments grounded
-both on real and constructed substrates with hard, by-construction labels.
+Two knobs decide whether shift-left is safe: **g** (does a verifier catch the cheap tier's errors —
+*which work is safe to migrate down*) and **λ** (does the supervisory signal survive relay — *how
+deep supervision reaches before going blind*). Four experiments grounded them with hard,
+by-construction labels. **Only `ground-hop` runs on real transcript records; the other three share
+one 14-item hand-authored synthetic corpus**, so the content/depth conclusions rest on the
+constructed side.
 
 | experiment | question | result |
 |---|---|---|
-| `ground-hop` | g on byte-exact tool drift | **g = 1.00**; per-hop λ ≈ 0 (typed channel) |
-| `uncover-hop` | g when a check provably can't catch the error | schema **0.00** / substring-grounded **0.50**; a content-bearing prose channel recovered the residual at λ ≈ 0 |
+| `ground-hop` | g on byte-exact tool drift (real records) | **g = 1.00**; per-hop λ ≈ 0 (typed channel; ≈0 is tautological for byte-exact) |
+| `uncover-hop` | g when a check provably can't catch the error | schema **0.00**; substring-grounding cleanly separates the two constructed drift classes (catches absent-value, misses in-source distractor) — the in-source half is uncatchable by *any* substring check |
 | `depth-sweep` | does loss compound over relay depth? | error **detection** flat at 1.00 through depth 6 |
-| `content-sweep` | does *corrective content* compound-lose? | content fidelity **flat at ~0.70** through depth 6 — **no compounding** |
+| `content-sweep` | does *corrective content* compound-lose? | content fidelity **flat at ~0.70** through depth 6 — no compounding |
 
-**Central finding:** the loss is at **hop 1, not in depth and not predicted by format.** A
-content-bearing prose channel is ~as lossless as a typed one at one hop (the real axis is
-*content-vs-verdict*, not prose-vs-typed); neither detection nor content fidelity compounds-loses
-through six relays; the binding constraint is the first hop's summarizer/reader quality (~70% here,
-lowest on name-distractor errors). This *tensions with* the lattice's depth-pessimism — see the
-caveats in the findings docs (cooperative relay, N=14, depth 6).
+**Central finding (scoped):** under a *cooperative, instructed relay (N=14, depth 6, Haiku)*, the
+loss is at **hop 1, not in depth.** A content-bearing channel is ~as lossless as a typed one at one
+hop (*consistent with* "content-vs-verdict, not prose-vs-typed" being the axis — though that's a
+cross-experiment comparison, not a same-item A/B). The ~0.70 ceiling is an **entangled reading**:
+it mixes channel loss with a fallible recovery-reader (a single Opus call that sometimes picks the
+wrong span even when the channel carried the right answer) and is **not** cleanly a channel
+property. See the findings docs for the confound and the wide-CI caveats — *do not quote ~0.70 or
+λ≈0 as constants.*
+
+## The safety discipline (secondary)
+
+Shift-left is the point; this is what keeps it from rotting once loops stack. The verifier gate and
+drift detector (built) are the load-bearing parts. The ambitious extension — a **tamper-proof
+kernel** the authored tier structurally cannot rewrite, **per-hop λ as a live oversight altimeter**,
+and composition over arbitrary loop topologies (trees, dev-time cycles, meshes — *in scope, not yet
+measured*; only the linear case is exercised) — is **mostly unbuilt** and has substantial prior art
+(AI Control, reward-tampering; see [`docs/PRIOR_ART.md`](docs/PRIOR_ART.md)). The defensible open
+sub-problem is narrow: a tamper-proof kernel *across a self-authoring/drift loop*. Full framing and
+honest positioning in [`docs/THESIS.md`](docs/THESIS.md); original charter in
+[`PROJECT_BRIEF.md`](PROJECT_BRIEF.md).
+
+> Status: research-stage personal project. Built and tested: the eval/promote/demote gate, the drift
+> detector, the topology sim, the `crystallize` lifecycle, and four grounding experiments. Not built:
+> the tamper-proof kernel, the LLM/local-model tiers, anything running unattended over time. The
+> findings docs are ground truth; this README summarizes.
+
+## Reading order (for the details)
+
+1. [`docs/THESIS.md`](docs/THESIS.md) — how the framing evolved and honest SOTA positioning. [`PROJECT_BRIEF.md`](PROJECT_BRIEF.md) is the original charter.
+2. [`docs/ROADMAP.md`](docs/ROADMAP.md) — what's built, what's next, and the vertical slice that would prove the thesis.
+3. [`docs/PRIOR_ART.md`](docs/PRIOR_ART.md) — citation map: which primitives are prior art, which seams survive.
+4. [`docs/SUBSTRATE_SURVEY.md`](docs/SUBSTRATE_SURVEY.md) — the real transcript schema the gate replays against.
+5. **Phase-1 gate:** [`MEASURE_FINDINGS.md`](docs/MEASURE_FINDINGS.md), [`DRIFT_FINDINGS.md`](docs/DRIFT_FINDINGS.md), [`LATTICE_FINDINGS.md`](docs/LATTICE_FINDINGS.md).
+6. **The grounding arc, in order:** [`EXPERIMENT_FINDINGS.md`](docs/EXPERIMENT_FINDINGS.md) → [`GROUNDHOP_FINDINGS.md`](docs/GROUNDHOP_FINDINGS.md) → [`UNCOVERHOP_FINDINGS.md`](docs/UNCOVERHOP_FINDINGS.md) → [`DEPTHSWEEP_FINDINGS.md`](docs/DEPTHSWEEP_FINDINGS.md) → [`CONTENTSWEEP_FINDINGS.md`](docs/CONTENTSWEEP_FINDINGS.md).
 
 ## Building and running
 
@@ -81,36 +115,29 @@ in `.env` (or the environment); every LLM call is disk-cached by content hash, s
 go build ./...        # or: go run . <subcommand>
 go test ./...         # internal/eval/eval_test.go is the Phase-1 go/no-go gate
 
+go run . crystallize --home ~ --match "git status"   # the shift-left lifecycle on your own data
 go run . ground-hop   --verbose    # g and per-hop λ on real byte-exact drift
-go run . uncover-hop  --verbose    # g<1 regime + fuzzy recovery of the residual
+go run . uncover-hop  --verbose    # the g<1 regime + fuzzy recovery of the residual
 go run . depth-sweep  --verbose    # detection recall vs relay depth
 go run . content-sweep --verbose   # corrective-content fidelity vs relay depth
 ```
 
-Offline subcommands (no API): `extract` (build the redacted corpus), `eval` (replay a synthetic
-artifact), `measure`, `drift`, `lattice`. `probe` is a one-call plumbing check. Run `go run .
---help` for the full list.
-
-## Reading order (for the details)
-
-1. [`docs/THESIS.md`](docs/THESIS.md) — framing (binary → ladder → recursive → trust substrate) and honest SOTA positioning. [`PROJECT_BRIEF.md`](PROJECT_BRIEF.md) is the original charter.
-2. [`docs/PRIOR_ART.md`](docs/PRIOR_ART.md) — verified citation map: which primitives are prior art, which seams are open.
-3. [`docs/SUBSTRATE_SURVEY.md`](docs/SUBSTRATE_SURVEY.md) — the real transcript schema the eval gate replays against.
-4. **Phase-1 gate:** [`MEASURE_FINDINGS.md`](docs/MEASURE_FINDINGS.md), [`DRIFT_FINDINGS.md`](docs/DRIFT_FINDINGS.md), [`LATTICE_FINDINGS.md`](docs/LATTICE_FINDINGS.md).
-5. **The grounding arc, in order:** [`EXPERIMENT_FINDINGS.md`](docs/EXPERIMENT_FINDINGS.md) → [`GROUNDHOP_FINDINGS.md`](docs/GROUNDHOP_FINDINGS.md) → [`UNCOVERHOP_FINDINGS.md`](docs/UNCOVERHOP_FINDINGS.md) → [`DEPTHSWEEP_FINDINGS.md`](docs/DEPTHSWEEP_FINDINGS.md) → [`CONTENTSWEEP_FINDINGS.md`](docs/CONTENTSWEEP_FINDINGS.md).
+Other offline subcommands (no API): `extract`, `eval`, `measure`, `drift`, `lattice`. `probe` is a
+one-call plumbing check. `go run . --help` for the full list.
 
 ## Why the numbers are trustworthy
 
 Every aggregate is checked against raw per-item output before it's called a finding (`--verbose`
 dumps, pre-registered caveats, hard by-construction labels). This isn't ceremony: five times a
 fluent, confident number dissolved on inspection — the 219 walker miscount, the lattice depth
-artifacts, `experiment`'s λ=0.90, `ground-hop` run-1's λ=0, and `depth-sweep`'s "content erodes
-with depth" (a self-correction, overturned by `content-sweep`). **Read the `--verbose` output
-before trusting any aggregate.**
+artifacts, `experiment`'s λ=0.90, `ground-hop` run-1's λ=0, and `depth-sweep`'s "content erodes with
+depth" (a self-correction, overturned by `content-sweep`). That track record is a *measurement*
+discipline — good engineering hygiene with `--verbose` — not evidence for the unbuilt tamper-proof
+kernel; don't conflate the two. **Read the `--verbose` output before trusting any aggregate.**
 
 ## Hard rules (from the brief, still binding)
 
 - **No verifier, no crystallization.** An unregistered tool/channel is *unverifiable*, never a silent pass.
 - **Fail loud.** Every divergence is localized; empty/ambiguous verdicts are surfaced, never defaulted.
-- **Stable kernel.** A tier may author the harness *below* it; it must not be able to rewrite the gate *above* it (the [DGM](docs/THESIS.md) antidote).
+- **Stable kernel.** A tier may author the harness *below* it; it must not be able to rewrite the gate *above* it (the [DGM](docs/THESIS.md) antidote — aspirational; today's gate isn't yet tamper-proof).
 - **Demote more aggressively than you promote**, and never demote judgment to a tier that can't carry it.
