@@ -22,9 +22,12 @@ work committed; clean tree.
   engineering = Every). crystal's bet is the *union* + demote-up-a-tier-on-drift + deterministic-
   default + per-recurring-chore-stateful. Don't claim first-to-invert.
 
-## What's built (8 experiments + the v1 slice)
+## What's built (8 experiments + the v1 slice + self-author)
 
-CLI: `crystal <cmd>` (kong). Experiments measure; `triage` ships.
+CLI: `crystal <cmd>` (kong). Experiments measure; `triage` ships; `author` self-authors.
+- `author` — **self-authors the verifier** (commit c6b5946): Opus writes triage's rule table, gated
+  (0.93→promote, corrupted 0.01→reject), re-authored on injected drift (8/8 recovered).
+  `AUTHOR_FINDINGS.md`.
 - `triage` — **v1 SLICE (SHIPPED)**: map-reduce + verifier on a real chore (categorize real Bash
   usage). g=0.77 deterministic, cheap model on the 23% residual, deterministic reduce, **0 frontier
   calls**. `SLICE_FINDINGS.md`.
@@ -39,21 +42,29 @@ CLI: `crystal <cmd>` (kong). Experiments measure; `triage` ships.
 - Phase-1: `eval`/`compare`/`drift`/`lattice`/`crystallize`/`measure`/`extract` (the gate, comparators,
   windowed demotion, topology sim, lifecycle, corpus).
 
-## THE NEXT BUILD (recommended) — self-author the verifier
+## Self-author the verifier — DONE (`author`, `AUTHOR_FINDINGS.md`, commit c6b5946)
 
-`triage`'s rules are hand-written. The actual crystal mechanism: **the expensive tier authors the
-deterministic classifier, gated, re-authored on drift.** Concretely:
-1. **Author**: Opus reads a sample of real Bash commands + the category set, emits a rule table
-   (pattern → category) as JSON.
-2. **Gate**: apply authored rules to a holdout; promote only if accuracy ≥ threshold vs labels
-   (hand-rules in `detClassify`/`segClassify` in `cmd/triage.go`, or Haiku-on-residual, as the
-   reference). No-verifier-no-crystallization, enforced.
-3. **Serve + drift**: run the authored rules; inject a new command class; show the windowed-M-in-W
-   demotion fire → Opus re-authors. Head-to-head: Opus-authored rules vs hand-authored, hard labels.
-   The key measurement (per the thesis): does the gate reliably catch *bad* authored rules?
+The recommended next build LANDED. `crystal author`: Opus authors `triage`'s deterministic rule
+table from labeled examples → deterministic gate promotes only at ≥0.90 holdout fidelity vs the
+hand-rule reference → windowed-M-in-W drift trigger forces a verified re-author. Live (8,589
+holdout): authored **0.93 → PROMOTE**, corrupted negative control **0.01 → REJECT** (gate is
+load-bearing), injected container class **DEMOTE@2 → re-author → 8/8 = 1.00 RECOVERED**. Author
+fidelity scaled with sample size (200→0.87, 400→0.89, 800→0.93) at a fixed 0.90 bar — every green
+came from more data, never a lowered threshold. *Caveat:* fidelity-to-reference (hand-rules), not
+ground-truth; still a batch, not a served hook.
 
-Alternative rung (ROADMAP A1): serve a crystallized artifact / `triage`'s rules as a *live*
-PreToolUse hook in place of a frontier call; measure real latency in the loop.
+## THE NEXT BUILD (recommended) — serve the hook live + measure the payoff (ROADMAP A1→A2)
+
+Everything so far is a batch over a corpus. The unmeasured claim is the value prop itself. Next:
+1. **Serve** a promoted artifact (`triage`'s rules or an `author`-promoted table) as a live
+   PreToolUse hook answering in place of a frontier call; demote live on a deliberately introduced
+   drift.
+2. **Measure** p50/p99 latency before vs after, determinism (exact-repro rate), and the amortization
+   point (hits to repay authoring cost; re-author frequency that erases the win). `payoff` has the
+   latency-measurement scaffolding to reuse.
+
+The far rung (A5): swap the cheap tier to a local small model (+LoRA) on owned hardware — the
+sovereignty end of the gradient.
 
 ## House rules / cautions (earned this session)
 
