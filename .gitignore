@@ -21,3 +21,6 @@
 # Runtime / tooling artifacts (not project source)
 .claude/
 .plancheck-debug.json
+
+# Live PreToolUse hook drift-window state (per-session runtime artifact)
+.crystal-hook-state.json

@@ -1,11 +1,13 @@
 # NEXT SESSION — crystal handoff (2026-05-29)
 
-Resume cleanly from here. HEAD `60163a3` (or later); `go build ./...` + `go test ./...` + `go vet
-./...` all green; all work committed; clean tree.
+Resume cleanly from here. HEAD at the `hook` commit (or later); `go build ./...` + `go test ./...` +
+`go vet ./...` all green; all work committed; clean tree.
 
-This session added three rungs on top of `triage`: `author` (self-authors the verifier),
-`serve` (measures the latency payoff), `amortize` (prices it). The only remaining batch→live gap is
-the live PreToolUse hook (see THE NEXT BUILD below).
+Prior session added three rungs on top of `triage`: `author` (self-authors the verifier), `serve`
+(measures the latency payoff), `amortize` (prices it). **This session closed the last batch→live
+gap: `hook` — a real Claude Code PreToolUse hook serving the deterministic tier live (0 model calls
+on the covered fraction), with demote-on-drift across real process boundaries** (`HOOK_FINDINGS.md`).
+The remaining open rung is now A5: the local-model cheap tier (the sovereignty end of the gradient).
 
 ## The thesis, current (read `docs/THESIS.md` for the full version)
 
@@ -26,9 +28,12 @@ the live PreToolUse hook (see THE NEXT BUILD below).
   engineering = Every). crystal's bet is the *union* + demote-up-a-tier-on-drift + deterministic-
   default + per-recurring-chore-stateful. Don't claim first-to-invert.
 
-## What's built (8 experiments + the v1 slice + self-author)
+## What's built (8 experiments + the v1 slice + self-author + serve/amortize + the live hook)
 
-CLI: `crystal <cmd>` (kong). Experiments measure; `triage` ships; `author` self-authors.
+CLI: `crystal <cmd>` (kong). Experiments measure; `triage` ships; `author` self-authors; `hook` serves live.
+- `hook` / `hook-demo` — **the live PreToolUse hook** (the batch→live gap closed): a real Claude
+  Code hook answering the categorize chore deterministically (0 model calls), demote-on-drift across
+  real process boundaries. `HOOK_FINDINGS.md`, `docs/hooks/settings.snippet.json`.
 - `amortize` — **prices the artifact** (commit 9daf3b3): latency breakeven **43 covered hits** (one
   ~23.5s Opus author call); **re-authoring more often than once per 43 hits nets negative** (so
   demote-on-drift, not detection, is load-bearing); token breakeven ~2,944 (~70× slower → latency is
@@ -73,19 +78,30 @@ the lever; the residual is the binding constraint. Also added **caching as the f
 (THESIS "Memoization is the floor"): local memoization (`.crystal-cache`, replays a 710ms call in µs)
 AND prompt-cache input-structuring (stable bulk first, volatile last → re-bill only `cache_read`).
 
-## THE NEXT BUILD (recommended) — the live PreToolUse hook (ROADMAP A1, the last batch→live gap)
+## The live PreToolUse hook — DONE (`hook` / `hook-demo`, `HOOK_FINDINGS.md`)
 
-The amortization breakeven is DONE (`amortize`). The remaining honest gap is that EVERYTHING is a
-batch over a corpus, never a hook in a real loop. Next:
-- **Live hook**: emit a promoted artifact (`triage`/`author` rules, or a `crystallize` artifact) as
-  an actual Claude Code **PreToolUse hook** that answers a recurring chore in place of a frontier
-  call, and demote live on a deliberately introduced drift. *Proves:* the loop closes on live use,
-  not just in a benchmark. *Watch:* host capability — the deterministic tier leans on installed tools
-  (`weir`'s manifest); detect-and-fallback or declare the dependency.
+The last batch→live gap is closed. `crystal hook` is a real Claude Code PreToolUse hook (stdin event
+→ stdout `additionalContext` with the deterministic category, **0 model calls** on the covered
+fraction; silent defer on the residual; never denies; fail-open). `crystal hook-demo` drives the
+**compiled binary** over 24 live PreToolUse events — a separate process per command, the M-in-W drift
+window surviving only via an on-disk `--state` file — and the tier **DEMOTES live** when a container
+burst collapses coverage. Live run: 16 real commands (10 served / 6 deferred, no false demote) then 8
+container commands → demote. Contract verified against raw stdout (covered→category, residual→silent,
+non-Bash→pass-through, `total` correctly not incremented). *Honest finding:* the live trigger fired
+one command into the burst because trailing normal residual had clustered — the coverage trigger sees
+coverage, not drift-vs-residual (M-in-W tuning). *Host-capability:* this rule table shells out to
+nothing → fully portable, **zero weir dependency**. Wiring snippet: `docs/hooks/settings.snippet.json`.
 
-The far rung (A5): swap the cheap tier to a local small model (+LoRA) on owned hardware — the
-sovereignty end of the gradient. Reuse candidates: sibling projects **cupel**/**lexicon** (verify
-what's actually there first).
+## THE NEXT BUILD (recommended) — A5: the local-model cheap tier (the sovereignty rung)
+
+Everything cheap so far is cloud Haiku or the deterministic tier. The last open rung is the gradient's
+far end:
+- **Local small model (+LoRA) on owned hardware** (RTX 3080, per the brief). Swap the residual's
+  cheap tier from cloud Haiku to a local model behind the same gate; re-measure latency + held
+  quality. *Proves:* the sovereignty/determinism pitch is real, not aspirational. *Reuse candidates:*
+  sibling projects **cupel** / **lexicon** (verify what's actually there first — don't assume).
+  *Watch:* this is the first rung needing real local-inference plumbing; scope a probe (one local
+  call through the gate) before the full slice, mirroring how `probe` de-risked the cloud tier.
 
 ## House rules / cautions (earned this session)
 

@@ -31,6 +31,8 @@ type CLI struct {
 	Author       AuthorCmd       `cmd:"" help:"Self-author the verifier: the expensive tier writes triage's deterministic rule table from labeled examples, gated on a holdout (corrupted rules rejected), re-authored when a new command class drifts in."`
 	Serve        ServeCmd        `cmd:"" help:"Measure the payoff: serve the deterministic tier in place of the model on the covered fraction; report latency before/after, determinism (exact-repro), and the model round-trip removed."`
 	Amortize     AmortizeCmd     `cmd:"" help:"Price the authored artifact: how many served hits repay the one-time authoring round-trip, and the re-author cadence at which drift churn erases the win."`
+	Hook         HookCmd         `cmd:"" help:"Live PreToolUse hook: read a Bash tool event on stdin, inject the deterministic command category as additionalContext (0 model calls), and demote-on-drift via a windowed state file. The batch→live gap closed."`
+	HookDemo     HookDemoCmd     `cmd:"" help:"Drive the real 'crystal hook' binary over a live stream of PreToolUse events (separate processes, on-disk drift window): serve real commands, inject the container-drift class, watch the tier demote live."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.

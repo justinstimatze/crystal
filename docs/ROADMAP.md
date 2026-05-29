@@ -15,9 +15,9 @@ secondary, and heavily prior-arted ([`PRIOR_ART.md`](PRIOR_ART.md)). Milestones 
 - Four grounding experiments — `g` and `λ` measured (one on real records, three on a 14-item synthetic corpus).
 
 **Not built (the honest gaps):**
-- The **payoff is unmeasured.** Every result so far measures the *safety discipline* (does the gate catch errors, does the signal survive). Nothing yet shows shift-left *bought* anything — no end-to-end latency/throughput before-vs-after.
-- The crystallized artifact is written to disk but **not actually installed/served** as a live hook.
-- The **LLM cheap tier** and the **local-model tier** (RTX 3080 + small model + LoRA, per the brief) — every experiment uses cloud Haiku.
+- ~~The **payoff is unmeasured.**~~ MEASURED (`serve`/`amortize`): ~90,000× on the covered fraction, blended −77%, latency breakeven 43 hits.
+- ~~The crystallized artifact is written to disk but **not actually installed/served** as a live hook.~~ SERVED (`hook`): a real PreToolUse hook answering live with 0 model calls + demote-on-drift across process boundaries.
+- The **local-model tier** (RTX 3080 + small model + LoRA, per the brief) — every experiment uses cloud Haiku or the deterministic tier (the last open rung, A5).
 - The **tamper-proof kernel** — today's gate is the gameable kind (the DGM result).
 - Anything running **unattended over real time**; any topology past the linear relay.
 
@@ -43,10 +43,19 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    a *fixed* 0.90 bar — every green came from more data, never a lowered threshold; the gate rejected
    plausible-but-imperfect tables (0.87–0.89) rather than serving them. *Caveat:* fidelity-to-reference,
    not ground-truth (the reference is the hand-rules); still a batch, not a live served hook.
-1. **Serve the deterministic hook for real.** Install a `crystallize`-emitted artifact (or `triage`'s
-   rule set) as a live PreToolUse hook so the static tier actually answers in place of the frontier
-   call. *Proves:* the loop closes end to end on live use. *Done when:* a real repetitive command is
-   served locally and the gate demotes it on a deliberately introduced drift, live.
+1. **Serve the deterministic hook for real — RESULT LANDED** (`hook` / `hook-demo`,
+   `HOOK_FINDINGS.md`). `crystal hook` is a real Claude Code PreToolUse hook: stdin event → stdout
+   `additionalContext` with the deterministic category (0 model calls on the covered fraction),
+   silent defer on the residual, never denies. `hook-demo` drives the *compiled binary* over 24 live
+   events — a separate process per command, the M-in-W drift window surviving only via an on-disk
+   `--state` file — streaming 16 real commands (10 served / 6 deferred, no false demote) then the
+   container-drift class, and the tier **DEMOTES live** when coverage collapses. *Proves:* the loop
+   closes end to end on live use, across real process boundaries, not just in a benchmark. *Honest
+   finding:* the live trigger fired one command into the burst because trailing normal residual had
+   already clustered in the window — the coverage trigger sees coverage, not "drift vs residual
+   noise" (M-in-W tuning, ties `consecutive-divergence-demotion-is-evadable`). *Host-capability:*
+   this rule table shells out to nothing → fully portable, zero weir dependency (a rule table using
+   `rg`/`fd` would need a capability probe). Wiring: `docs/hooks/settings.snippet.json`.
 2. **Measure the payoff — FIRST RESULT LANDED** (`serve`, `SERVE_FINDINGS.md`). Served the
    deterministic tier in place of the cheap-model call on the covered fraction of the real Bash
    chore: **~7µs/call vs Haiku p50 640ms (~90,000×) at zero quality cost** (the rule IS the reference
