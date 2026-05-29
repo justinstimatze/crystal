@@ -16,6 +16,7 @@ type CLI struct {
 	Measure     MeasureCmd     `cmd:"" help:"Sweep signature granularities over the full substrate to find crystallizable (frequent AND deterministic) patterns."`
 	Drift       DriftCmd       `cmd:"" help:"Temporal-replay drift experiment: promote a modal hook on a pattern's early occurrences, stream the rest, report demotion and silent-wrong leakage."`
 	Crystallize CrystallizeCmd `cmd:"" help:"Full lifecycle on one pattern: discover → propose → promote-gate → serve → drift-monitor → demote; emits a redacted deployable artifact."`
+	Lattice     LatticeCmd     `cmd:"" help:"Deterministic feedback-topology sim: depth × per-hop-loss convergence grid for the self-reauthoring tier stack (the riskiest-assumption test, no API cost)."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.

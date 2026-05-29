@@ -1,5 +1,18 @@
 # Substrate Crystallizability Measurement
 
+> ⚠️ **CORRECTION (2026-05-28): the numbers below are RETRACTED.** The headline
+> "crystallizable" pattern — `gt deacon heartbeat 2>&1`, reported at N=219, det=1.00 —
+> is an artifact. The phrase `gt deacon heartbeat` appears ~5× in the real (non-self)
+> transcripts and **zero** times as a `"command":` field; it lives inside a *persona
+> prompt* ("I am Deacon. Start patrol: run gt deacon heartbeat…"). 219 ≫ 5 is a flat
+> contradiction, so the measure aggregation is miscounting/mis-attributing. The
+> transcript walker passes a synthetic regression test (`transcript_test.go`), so the
+> bug is at the aggregation level or a real-data shape not yet reproduced; root-cause
+> deferred (needs an instrumented scan). **Do not cite these counts as findings.**
+> This is itself an instance of the failure mode the project exists to prevent: a
+> fluent, confidently-quoted, plausible-but-wrong result, caught only by checking the
+> raw source. See `THESIS.md` for the framing that supersedes this whole exercise.
+
 Run 2026-05-28 via `crystal measure --home /home/justin --home /home/gas6amus`
 over **217,184** registered-tool records from 160 main sessions (subagents excluded).
 
