@@ -16,7 +16,8 @@ secondary, and heavily prior-arted ([`PRIOR_ART.md`](PRIOR_ART.md)). Milestones 
 
 **Not built (the honest gaps):**
 - ~~The **payoff is unmeasured.**~~ MEASURED (`serve`/`amortize`): ~90,000× on the covered fraction, blended −77%, latency breakeven 43 hits.
-- ~~The crystallized artifact is written to disk but **not actually installed/served** as a live hook.~~ SERVED (`hook`): a real PreToolUse hook answering live with 0 model calls + demote-on-drift across process boundaries — **but the loop does not auto-close**: hook demotes+flags, `author` re-authors, no code wires them (panel, `PANEL_FINDINGS.md`). The deployed speedup is ~50–110× (process-fork floor ~5.9ms), not the ~90,000× in-process figure. g=0.77 is **in-sample** (g→0.00 on a foreign command stack). Open: wire the seam + harden M-in-W (interleave/terminal-DoS evasions).
+- ~~The crystallized artifact is written to disk but **not actually installed/served** as a live hook.~~ SERVED (`hook`): a real PreToolUse hook answering live with 0 model calls + demote-on-drift across process boundaries. The deployed speedup is ~50–110× (process-fork floor ~5.9ms), not the ~90,000× in-process figure; g=0.77 is **in-sample** (g→0.00 on a foreign command stack) — both scoped after the panel (`PANEL_FINDINGS.md`).
+- ~~The live loop does not auto-close.~~ CLOSED (`hook-loop`, `HOOK_LOOP_FINDINGS.md`): demote→re-author→gate→swap→re-promote→resume runs autonomously across 24 real processes; the two M-in-W evasions (interleave, terminal-DoS) are fixed. Remaining gap is epistemic: the new class's labels still come from a provided oracle (= A5).
 - The **local-model tier** (RTX 3080 + small model + LoRA, per the brief) — every experiment uses cloud Haiku or the deterministic tier (the last open rung, A5).
 - The **tamper-proof kernel** — today's gate is the gameable kind (the DGM result).
 - Anything running **unattended over real time**; any topology past the linear relay.
@@ -43,19 +44,20 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    a *fixed* 0.90 bar — every green came from more data, never a lowered threshold; the gate rejected
    plausible-but-imperfect tables (0.87–0.89) rather than serving them. *Caveat:* fidelity-to-reference,
    not ground-truth (the reference is the hand-rules); still a batch, not a live served hook.
-1. **Serve the deterministic hook for real — RESULT LANDED** (`hook` / `hook-demo`,
-   `HOOK_FINDINGS.md`). `crystal hook` is a real Claude Code PreToolUse hook: stdin event → stdout
-   `additionalContext` with the deterministic category (0 model calls on the covered fraction),
-   silent defer on the residual, never denies. `hook-demo` drives the *compiled binary* over 24 live
-   events — a separate process per command, the M-in-W drift window surviving only via an on-disk
-   `--state` file — streaming 16 real commands (10 served / 6 deferred, no false demote) then the
-   container-drift class, and the tier **DEMOTES live** when coverage collapses. *Proves:* the loop
-   closes end to end on live use, across real process boundaries, not just in a benchmark. *Honest
-   finding:* the live trigger fired one command into the burst because trailing normal residual had
-   already clustered in the window — the coverage trigger sees coverage, not "drift vs residual
-   noise" (M-in-W tuning, ties `consecutive-divergence-demotion-is-evadable`). *Host-capability:*
-   this rule table shells out to nothing → fully portable, zero weir dependency (a rule table using
-   `rg`/`fd` would need a capability probe). Wiring: `docs/hooks/settings.snippet.json`.
+1. **Serve the deterministic hook for real, AND close the loop — RESULT LANDED** (`hook` /
+   `hook-demo` / `hook-loop`, `HOOK_FINDINGS.md` + `HOOK_LOOP_FINDINGS.md`). `crystal hook` is a real
+   Claude Code PreToolUse hook: stdin event → stdout `additionalContext` with the deterministic
+   category (0 model calls on the covered fraction), silent defer on the residual, never denies; it
+   serves from a swappable `--rules` artifact. `hook-demo` shows DETECTION live (compiled binary, 24
+   separate processes, the M-in-W window surviving via the `--state` file, DEMOTES on a container
+   burst). **`hook-loop` closes the loop:** demote→re-author→gate→swap-artifact→re-promote→resume,
+   autonomously across 24 real processes — the once-drifting class recovers 8/8. The panel-found
+   evasions are fixed (cumulative rate gate catches the interleave; `repromote()` fixes terminal
+   demotion). *Deployed cost honestly:* ~5.9ms/call process-fork floor → ~50–110× over a model call
+   (not the in-process µs). *Host-capability:* pure Go, shells out to nothing → binary-portable, zero
+   weir dep (coverage is host-specific though: g=0.77 in-sample, g→0.00 off-stack). *Remaining gap:*
+   the re-author's labels for a NEW class come from a provided oracle — no-live-oracle discovery is A5.
+   Wiring: `docs/hooks/settings.snippet.json`.
 2. **Measure the payoff — FIRST RESULT LANDED** (`serve`, `SERVE_FINDINGS.md`). Served the
    deterministic tier in place of the cheap-model call on the covered fraction of the real Bash
    chore: **~7µs/call vs Haiku p50 640ms (~90,000×) at zero quality cost** (the rule IS the reference

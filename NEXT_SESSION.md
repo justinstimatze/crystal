@@ -8,29 +8,34 @@ Prior session added three rungs on top of `triage`: `author` (self-authors the v
 gap: `hook` — a real Claude Code PreToolUse hook serving the deterministic tier live (0 model calls
 on the covered fraction), with demote-on-drift across real process boundaries** (`HOOK_FINDINGS.md`).
 
-## ⇒ DECIDED NEXT ACTION (start here): WIRE THE SEAM — close the loop for real
+## ⇒ DECIDED NEXT ACTION (start here): A5 — the local-model cheap tier (the last open rung)
 
-The adversarial panel RAN (2026-05-29, `docs/PANEL_FINDINGS.md`) and overturned three headlines, all
-re-verified against raw and fixed in source + docs this session:
-1. **"Loop closes live" was FALSE** — `hook` demotes+flags; `author` re-authors; **no code wires
-   them** (grep-verified; `Demoted` never unset → terminal demotion). This is now the build.
-2. **"90,000× / 7µs" is in-process only** — the live `hook` pays ~5.9ms process-fork per call →
-   ~50–110× over a 640ms Haiku call, not 90,000× (the µs figure stays scoped to `serve`).
-3. **g=0.77 is in-sample** — a data-science command stack scores **g=0.00** through the real
-   `detClassify`; binary-portability ≠ coverage-portability. Generalization untested.
-Survivors: token breakeven ~2,944; the typed comparators; the `author` gate (already-caveated as
-fidelity-to-reference). Two new M-in-W evasions found: 2-in-5 interleave evades forever; terminal
-demotion is a self-inflicted DoS.
+Two things landed this session and the seam the panel exposed is now CLOSED:
 
-**THE BUILD (the seam the panel exposed):** make the live loop actually autonomous. Today `hook`
-writes a re-author flag nothing reads. Wire: hook demotion → trigger `authorRules` (the `author`
-batch loop in `author_drift.go` already works, just disconnected) → gate → redeploy the rule table →
-**re-promote** the tier (add the missing `Demoted=false` path). While there, harden M-in-W against the
-2-in-5 interleave and the terminal-DoS (a re-promote path fixes the DoS; the interleave needs a
-cumulative/integral term, not just local density). *Done when:* a `hook-demo`-style run demotes on
-drift, auto-re-authors, and **resumes serving** without a human deleting the state file.
+**(a) Adversarial panel** (`docs/PANEL_FINDINGS.md`) overturned three headlines, all re-verified vs raw:
+1. "90,000× / 7µs" is in-process only — the live `hook` pays ~5.9ms process-fork → ~50–110× over a
+   640ms Haiku call (µs figure scoped to `serve`).
+2. "g=0.77" is in-sample — a data-science stack scores **g=0.00** through the real `detClassify`;
+   binary-portability ≠ coverage-portability.
+3. "the loop closes live" was FALSE at panel time (hook demotes+flags, no code wired it to `author`).
 
-AFTER the seam, the remaining BUILD rung is A5: the local-model cheap tier (the sovereignty end).
+**(b) The seam, wired shut** (`hook-loop`, `docs/HOOK_LOOP_FINDINGS.md`): demote→re-author→gate→
+swap-artifact→re-promote→resume runs **autonomously across 24 real processes** — the once-drifting
+container class recovers 8/8. The hook serves from a swappable `--rules` artifact; `repromote()` fixes
+the terminal-DoS; a cumulative rate gate catches the 2-in-5 interleave. 5 unit tests (both panel
+evasions are regression tests). **The loop is mechanically autonomous but epistemically
+oracle-dependent:** the re-author's labels for a NEW class still come from a provided reference
+(`containerRef`). That epistemic gap IS A5.
+
+**THE BUILD — A5: the local-model cheap tier (the sovereignty end + the live oracle).** Swap the
+residual's cheap tier from cloud Haiku to a local small model (+LoRA) on owned hardware (RTX 3080,
+per the brief), behind the same gate; re-measure latency + held quality. *Two payoffs:* (1) proves the
+sovereignty/determinism pitch is real, not aspirational; (2) a local judge is a candidate **live
+oracle** — the missing label source that would let `hook-loop`'s re-author discover a new class's
+ground truth without a human/cloud call (closing evasion 3, confidently-wrong-is-invisible, too).
+*Scope a probe first* (one local call through the gate, mirroring how `probe` de-risked the cloud
+tier). *Reuse candidates:* sibling projects **cupel** / **lexicon** — verify what's actually there
+before assuming. *Done when:* a chore is served from local hardware with the gate intact.
 
 ## The thesis, current (read `docs/THESIS.md` for the full version)
 
@@ -54,9 +59,12 @@ AFTER the seam, the remaining BUILD rung is A5: the local-model cheap tier (the 
 ## What's built (8 experiments + the v1 slice + self-author + serve/amortize + the live hook)
 
 CLI: `crystal <cmd>` (kong). Experiments measure; `triage` ships; `author` self-authors; `hook` serves live.
-- `hook` / `hook-demo` — **the live PreToolUse hook** (the batch→live gap closed): a real Claude
-  Code hook answering the categorize chore deterministically (0 model calls), demote-on-drift across
-  real process boundaries. `HOOK_FINDINGS.md`, `docs/hooks/settings.snippet.json`.
+- `hook` / `hook-demo` / `hook-loop` — **the live PreToolUse hook AND the closed loop**: a real
+  Claude Code hook answering the categorize chore deterministically (0 model calls), serving from a
+  swappable `--rules` artifact, demote-on-drift across real process boundaries; `hook-loop` closes
+  the loop (demote→re-author→gate→swap→re-promote→resume) autonomously across 24 processes, fixing
+  the panel's terminal-DoS + interleave evasions. `HOOK_FINDINGS.md`, `HOOK_LOOP_FINDINGS.md`,
+  `PANEL_FINDINGS.md`, `docs/hooks/settings.snippet.json`.
 - `amortize` — **prices the artifact** (commit 9daf3b3): latency breakeven **43 covered hits** (one
   ~23.5s Opus author call); **re-authoring more often than once per 43 hits nets negative** (so
   demote-on-drift, not detection, is load-bearing); token breakeven ~2,944 (~70× slower → latency is

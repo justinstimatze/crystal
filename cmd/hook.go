@@ -43,9 +43,36 @@ import (
 // host-tool dependency is zero. A rule table that delegated to `rg`/`fd` would
 // carry that dependency and the hook would need a capability probe + fallback.
 type HookCmd struct {
-	State  string `help:"Path to the cross-invocation drift-window state file." default:".crystal-hook-state.json"`
-	DriftM int    `help:"Demote after M uncovered commands within the sliding window." default:"3"`
-	DriftW int    `help:"Sliding window size for the drift trigger." default:"5"`
+	State string `help:"Path to the cross-invocation drift-window state file." default:".crystal-hook-state.json"`
+	Rules string `help:"Path to a tier-authored rule-table artifact (JSON) to serve from. If absent, serves from the compiled detClassify baseline. This is the file the re-author loop atomically swaps." default:""`
+	// Burst gate (fast): demote on a sudden uncovered cluster.
+	DriftM int `help:"Demote after M uncovered commands within the sliding window (sudden-burst gate)." default:"3"`
+	DriftW int `help:"Sliding window size for the burst gate." default:"5"`
+	// Cumulative gate (slow): catches sustained interleaved drift that stays
+	// below the burst density forever (the 2-in-5-interleave evasion the panel
+	// found). Demote when the trailing long-window uncovered RATE exceeds the
+	// threshold — an integral term the local-density burst gate cannot see.
+	DriftLongW    int     `help:"Cumulative gate: trailing window over which the sustained uncovered RATE is measured." default:"20"`
+	DriftLongMinN int     `help:"Cumulative gate stays inactive until this many commands have been seen (avoid early noise)." default:"12"`
+	DriftLongRate float64 `help:"Cumulative gate: demote if the trailing uncovered rate ≥ this. Must sit ABOVE the host's baseline residual rate (1-g) and below the drift rate." default:"0.35"`
+}
+
+// driftCfg bundles the serving classifier and both demotion gates so decideHook
+// stays a pure function of (state, command, cfg).
+type driftCfg struct {
+	classify func(string) string
+	m, w     int     // burst gate
+	longW    int     // cumulative window
+	longMinN int     // cumulative gate activation floor
+	longRate float64 // cumulative uncovered-rate threshold
+}
+
+func (c *HookCmd) cfg(classify func(string) string) driftCfg {
+	return driftCfg{
+		classify: classify,
+		m:        c.DriftM, w: c.DriftW,
+		longW: c.DriftLongW, longMinN: c.DriftLongMinN, longRate: c.DriftLongRate,
+	}
 }
 
 // hookEvent is the subset of the PreToolUse stdin payload we consume.
@@ -73,12 +100,46 @@ type hookSpecific struct {
 // part (the demotion accumulates across real process boundaries, not in one
 // in-memory loop).
 type hookState struct {
-	Window         []bool `json:"window"`           // recent coverage: true = a rule covered it
-	Demoted        bool   `json:"demoted"`          // tier has been demoted; chore is back on the model
-	Served         int    `json:"served"`           // answered deterministically (0 model calls)
-	Deferred       int    `json:"deferred"`         // residual + post-demote, handed to the model
-	Total          int    `json:"total"`            // Bash commands seen
-	DemotedAtTotal int    `json:"demoted_at_total"` // the command index demotion fired at (-1 = never)
+	Window          []bool   `json:"window"`           // recent coverage (burst gate): true = a rule covered it
+	LongWindow      []bool   `json:"long_window"`      // longer trailing coverage (cumulative gate)
+	Demoted         bool     `json:"demoted"`          // tier has been demoted; chore is back on the model
+	DemoteReason    string   `json:"demote_reason"`    // "burst" | "sustained" (which gate fired)
+	NeedsReauthor   bool     `json:"needs_reauthor"`   // demotion set this; the re-author loop reads it
+	RecentUncovered []string `json:"recent_uncovered"` // a sample of the drifted commands, for re-author training
+	Served          int      `json:"served"`           // answered deterministically (0 model calls)
+	Deferred        int      `json:"deferred"`         // residual + post-demote, handed to the model
+	Total           int      `json:"total"`            // Bash commands seen
+	DemotedAtTotal  int      `json:"demoted_at_total"` // the command index demotion fired at (-1 = never)
+	Reauthors       int      `json:"reauthors"`        // how many times the loop re-authored + re-promoted
+}
+
+// recordUncovered keeps a capped, deduped sample of drifted commands so the
+// re-author step has real examples of what the rules stopped covering.
+func (st *hookState) recordUncovered(cmd string) {
+	for _, c := range st.RecentUncovered {
+		if c == cmd {
+			return
+		}
+	}
+	st.RecentUncovered = append(st.RecentUncovered, cmd)
+	const cap = 16
+	if len(st.RecentUncovered) > cap {
+		st.RecentUncovered = st.RecentUncovered[len(st.RecentUncovered)-cap:]
+	}
+}
+
+// repromote is the missing inverse of demotion (the panel's terminal-DoS fix):
+// after the re-author loop swaps in a rule table that covers the drifted class,
+// it clears the demotion and resets the drift windows so the tier serves again.
+func repromote(st *hookState) {
+	st.Demoted = false
+	st.NeedsReauthor = false
+	st.DemoteReason = ""
+	st.Window = nil
+	st.LongWindow = nil
+	st.RecentUncovered = nil
+	st.DemotedAtTotal = -1
+	st.Reauthors++
 }
 
 // hookDecision is the pure, testable outcome of one hook invocation.
@@ -89,25 +150,57 @@ type hookDecision struct {
 	category          string // the served category (when served)
 }
 
+// demote flips the tier off, records which gate fired and a re-author flag, and
+// returns the demotion decision. The triggering command is itself uncovered (or
+// counts as deferred), so it goes to the model.
+func demote(st *hookState, reason, detail string) hookDecision {
+	st.Demoted = true
+	st.DemoteReason = reason
+	st.NeedsReauthor = true
+	st.DemotedAtTotal = st.Total
+	st.Deferred++
+	return hookDecision{
+		demotedNow: true,
+		category:   reason,
+		additionalContext: fmt.Sprintf("[crystal] DEMOTED the deterministic Bash-command categorizer (%s gate): %s. "+
+			"The chore is handed back to the model tier and flagged for re-authoring (needs_reauthor); the hook will "+
+			"no longer inject deterministic categories until the re-author loop swaps in a covering rule table and "+
+			"re-promotes the tier.", reason, detail),
+	}
+}
+
 // decideHook is the pure core: given the current state and one Bash command,
-// update the drift window and decide whether to serve a deterministic answer,
-// defer to the model, or demote the tier. It mutates st in place.
-func decideHook(st *hookState, command string, m, w int) hookDecision {
+// update the drift windows and decide whether to serve a deterministic answer,
+// defer to the model, or demote the tier. It mutates st in place. The serving
+// classifier is injected via cfg.classify so a re-authored rule-table artifact
+// can replace the compiled baseline live.
+func decideHook(st *hookState, command string, cfg driftCfg) hookDecision {
 	st.Total++
 
-	// Already demoted: the chore lives on the model tier now. Silent pass-through.
+	// Already demoted: the chore lives on the model tier now. Silent pass-through
+	// — but keep OBSERVING the uncovered commands so the pending re-author sees
+	// the full drifted class, not just the few examples seen before demotion. (A
+	// re-author trained only on the pre-demotion sample under-covers the class and
+	// the gate rightly rejects it; collecting post-demotion examples is what lets
+	// the loop actually recover.)
 	if st.Demoted {
 		st.Deferred++
+		if cfg.classify(command) == "" {
+			st.recordUncovered(command)
+		}
 		return hookDecision{}
 	}
 
-	cat := detClassify(command)
+	cat := cfg.classify(command)
 	covered := cat != ""
+	if !covered {
+		st.recordUncovered(command)
+	}
 
-	// Slide the coverage window.
+	// Slide the burst (short) window.
 	st.Window = append(st.Window, covered)
-	if len(st.Window) > w {
-		st.Window = st.Window[len(st.Window)-w:]
+	if len(st.Window) > cfg.w {
+		st.Window = st.Window[len(st.Window)-cfg.w:]
 	}
 	uncoveredInWindow := 0
 	for _, c := range st.Window {
@@ -116,18 +209,36 @@ func decideHook(st *hookState, command string, m, w int) hookDecision {
 		}
 	}
 
-	// Drift trigger: M uncovered within the window → coverage has collapsed.
-	if uncoveredInWindow >= m {
-		st.Demoted = true
-		st.DemotedAtTotal = st.Total
-		st.Deferred++ // this command is itself uncovered → it goes to the model
-		return hookDecision{
-			demotedNow: true,
-			additionalContext: fmt.Sprintf("[crystal] DEMOTED the deterministic Bash-command categorizer: "+
-				"%d of the last %d commands were uncovered (coverage collapse — a domain the crystallized rules "+
-				"do not cover). This chore is handed back to the model tier and flagged for re-authoring; the "+
-				"hook will no longer inject deterministic categories.", uncoveredInWindow, len(st.Window)),
+	// Slide the cumulative (long) window.
+	st.LongWindow = append(st.LongWindow, covered)
+	if cfg.longW > 0 && len(st.LongWindow) > cfg.longW {
+		st.LongWindow = st.LongWindow[len(st.LongWindow)-cfg.longW:]
+	}
+	uncoveredLong := 0
+	for _, c := range st.LongWindow {
+		if !c {
+			uncoveredLong++
 		}
+	}
+	longRate := 0.0
+	if n := len(st.LongWindow); n > 0 {
+		longRate = float64(uncoveredLong) / float64(n)
+	}
+
+	// Burst gate (fast): M uncovered within the short window → sudden collapse.
+	if uncoveredInWindow >= cfg.m {
+		return demote(st, "burst", fmt.Sprintf("%d of the last %d commands were uncovered (sudden coverage collapse)",
+			uncoveredInWindow, len(st.Window)))
+	}
+
+	// Cumulative gate (slow): a sustained uncovered RATE over the long window,
+	// even when no short window ever reaches M. This catches the interleaved
+	// drift the burst gate is structurally blind to (panel finding): e.g. a
+	// steady covered,drift,covered,drift… at 40% uncovered never hits 3-in-5 but
+	// trips a 0.35-over-12 rate gate.
+	if cfg.longRate > 0 && len(st.LongWindow) >= cfg.longMinN && longRate >= cfg.longRate {
+		return demote(st, "sustained", fmt.Sprintf("uncovered rate %.0f%% over the last %d commands (sustained drift "+
+			"below the burst threshold)", longRate*100, len(st.LongWindow)))
 	}
 
 	if covered {
@@ -165,11 +276,42 @@ func (c *HookCmd) Run() error {
 	if err != nil {
 		return usageError{fmt.Errorf("loading hook state %q: %w", c.State, err)}
 	}
-	dec := decideHook(st, ev.ToolInput.Command, c.DriftM, c.DriftW)
+	classify, err := servingClassifier(c.Rules)
+	if err != nil {
+		// A bad artifact must not block the user's command: fall back to the
+		// compiled baseline and serve fail-open.
+		classify = detClassify
+	}
+	dec := decideHook(st, ev.ToolInput.Command, c.cfg(classify))
 	if err := saveHookState(c.State, st); err != nil {
 		return usageError{fmt.Errorf("saving hook state %q: %w", c.State, err)}
 	}
 	return emitAllow(dec.additionalContext)
+}
+
+// servingClassifier returns the classifier the hook serves from: a tier-authored
+// rule-table artifact if rulesPath points at one, else the compiled detClassify
+// baseline. This is the indirection that lets the re-author loop change live
+// serving behavior by swapping the artifact file.
+func servingClassifier(rulesPath string) (func(string) string, error) {
+	if rulesPath == "" {
+		return detClassify, nil
+	}
+	b, err := os.ReadFile(rulesPath)
+	if os.IsNotExist(err) {
+		return detClassify, nil // not authored yet → baseline
+	}
+	if err != nil {
+		return detClassify, err
+	}
+	var t ruleTable
+	if err := json.Unmarshal(b, &t); err != nil {
+		return detClassify, fmt.Errorf("corrupt rule artifact %q: %w", rulesPath, err)
+	}
+	if len(t.Rules) == 0 {
+		return detClassify, fmt.Errorf("rule artifact %q has zero rules", rulesPath)
+	}
+	return t.classify, nil
 }
 
 // emitAllow writes a PreToolUse "allow" decision with optional injected context.
@@ -208,6 +350,20 @@ func saveHookState(path string, st *hookState) error {
 		return err
 	}
 	return os.WriteFile(path, b, 0o644)
+}
+
+// writeRuleArtifact writes a rule table to disk atomically (temp + rename) so the
+// live hook never reads a half-written artifact mid-swap.
+func writeRuleArtifact(path string, t ruleTable) error {
+	b, err := json.MarshalIndent(t, "", "  ")
+	if err != nil {
+		return err
+	}
+	tmp := path + ".tmp"
+	if err := os.WriteFile(tmp, b, 0o644); err != nil {
+		return err
+	}
+	return os.Rename(tmp, path)
 }
 
 // HookDemoCmd proves the hook is LIVE, not a batch: it drives the real built
@@ -264,7 +420,7 @@ func (c *HookDemoCmd) Run() error {
 		if i == driftStart {
 			fmt.Printf("\n=== injected drift: %d container commands the rules never saw ===\n", len(driftCommands))
 		}
-		ctxText, decision, err := invokeHook(self, statePath, cmd, c.DriftM, c.DriftW)
+		ctxText, decision, err := invokeHook(self, statePath, "", cmd, c.DriftM, c.DriftW)
 		if err != nil {
 			return usageError{fmt.Errorf("invoking hook on %q: %w", cmd, err)}
 		}
@@ -295,10 +451,9 @@ func (c *HookDemoCmd) Run() error {
 	if demotedAt >= 0 {
 		fmt.Printf("  DEMOTED live at stream index %d (the %d-in-%d window collapsed on the container burst).\n", demotedAt, c.DriftM, c.DriftW)
 		fmt.Printf("  served deterministically (0 model calls): %d  ·  deferred to model: %d\n", served, deferred)
-		fmt.Println("  After demotion the hook injects nothing and writes a re-author FLAG — but nothing reads")
-		fmt.Println("  it: `author` is a separate command a human runs (the live loop demotes+flags, it does NOT")
-		fmt.Println("  auto-re-author; wiring that seam is open work — see docs/PANEL_FINDINGS.md). Demotion is")
-		fmt.Println("  terminal: no re-promote path, recover by deleting the --state file.")
+		fmt.Println("  After demotion this demo injects nothing — it shows DETECTION only. The closed loop")
+		fmt.Println("  (demote → auto re-author → gate → swap artifact → re-promote → RESUME serving) is")
+		fmt.Println("  `crystal hook-loop`, which wires `author` to the live hook across process boundaries.")
 	} else {
 		fmt.Printf("  served %d, deferred %d, NO demotion — the drift window never collapsed.\n", served, deferred)
 		fmt.Println("  (If the injected burst didn't demote, the window W is too wide or M too high for the burst length.)")
@@ -312,18 +467,20 @@ func (c *HookDemoCmd) Run() error {
 
 // invokeHook runs the real `crystal hook` binary once with cmd as a PreToolUse
 // Bash event on stdin, returning the injected additionalContext (if any) and the
-// raw stdout JSON.
-func invokeHook(self, statePath, cmd string, m, w int) (additionalContext, rawJSON string, err error) {
+// raw stdout JSON. rulesPath (may be "") is passed through as --rules so the
+// orchestrator can drive the hook against a swappable artifact.
+func invokeHook(self, statePath, rulesPath, cmd string, m, w int) (additionalContext, rawJSON string, err error) {
 	ev := hookEvent{HookEventName: "PreToolUse", ToolName: "Bash"}
 	ev.ToolInput.Command = cmd
 	payload, err := json.Marshal(ev)
 	if err != nil {
 		return "", "", err
 	}
-	c := exec.Command(self, "hook",
-		"--state", statePath,
-		"--drift-m", fmt.Sprint(m),
-		"--drift-w", fmt.Sprint(w))
+	args := []string{"hook", "--state", statePath, "--drift-m", fmt.Sprint(m), "--drift-w", fmt.Sprint(w)}
+	if rulesPath != "" {
+		args = append(args, "--rules", rulesPath)
+	}
+	c := exec.Command(self, args...)
 	c.Stdin = bytes.NewReader(payload)
 	var out bytes.Buffer
 	c.Stdout = &out

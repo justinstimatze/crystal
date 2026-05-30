@@ -59,11 +59,13 @@ then injects the 8-command container class `author` uses as its known drift.
 **What the run shows (corrected after the 2026-05-29 panel — see `PANEL_FINDINGS.md`):** 10 of 16
 real commands served deterministically (0 model calls), the 6-command residual deferred silently
 without ever false-demoting, and the injected container burst demoted the tier — after which the hook
-injects nothing and writes a re-author *flag*. **The loop does NOT close live.** Grep-verified:
-nothing in `hook.go` calls `authorRules`; `author` is a separate command a human runs; `Demoted`
-is never unset (terminal demotion, recover by deleting `--state`). The flag string is cosmetic —
-no code reads it. So this is **demote-and-flag**, not autonomous detect→re-author→redeploy. Wiring
-that seam is the sharpest open build (ahead of A5).
+injects nothing and writes a re-author *flag*. **At the time of the panel the loop did NOT close live** (grep-verified: nothing in `hook.go`
+called `authorRules`; `Demoted` was never unset). **That seam is now wired shut** — see
+`HOOK_LOOP_FINDINGS.md`: the hook serves from a swappable artifact, `repromote()` clears demotion, a
+cumulative gate catches the interleave, and `crystal hook-loop` runs detect→re-author→gate→swap→
+re-promote→resume autonomously across 24 real processes (verified: the once-drifting class recovers
+8/8). What remains is epistemic, not mechanical: the re-author's labels for the *new* class still
+come from a provided reference (the no-live-oracle gap = ROADMAP A5).
 
 **Deployed cost (the process-startup floor the µs figure omits):** each PreToolUse call is a fresh
 OS process. Measured here, 100 real `crystal hook` forks: **~5.9ms/call** — Go process startup, which

@@ -7,16 +7,16 @@ verdicts and the casualties; the source/docs were corrected where a claim was ov
 
 ## The scoreboard
 
-| Claim under attack | Verdict | Corrected form |
+| Claim under attack | Verdict | Corrected form / fix |
 |---|---|---|
 | "det tier ~90,000× vs Haiku" | **REFUTED for the live hook** | in-process (serve) ~90,000×; the live **hook** pays process-startup, ~50–110× over a 640ms Haiku call |
-| "the loop closes live" | **REFUTED** | hook *demotes + flags*; `author` re-authors; **no code connects them** — a human is the wire |
+| "the loop closes live" | **REFUTED → now FIXED** | was: hook demotes+flags, `author` re-authors, no code connects them. **Wired shut in `hook-loop`** (`HOOK_LOOP_FINDINGS.md`): demote→re-author→gate→swap→re-promote→resume, autonomous across 24 real processes. Mechanically autonomous; still oracle-dependent for the new class's labels (A5). |
 | "g=0.77 deterministic coverage" | **WEAKENED → in-sample only** | g=0.77 on this user's Go/`gh` corpus; **untested** off-stack; a plausible data-science user → **g=0.00** |
 | "latency breakeven = 43 hits" | **WEAKENED** | unstable point estimate; re-runs against the same cache give **36–37**; author latency is one draw from a 19.7–26.9s spread |
-| live M-in-W demotion is robust | **REFUTED (two new evasions)** | 2-in-5 interleave evades **forever**; terminal demotion is a **DoS**; confidently-wrong is **invisible** |
+| live M-in-W demotion is robust | **REFUTED → two of three FIXED** | 2-in-5 interleave evaded **forever** → **fixed** (cumulative rate gate); terminal demotion was a **DoS** → **fixed** (re-promote path); confidently-wrong is **still invisible** (no live oracle — that's A5). |
 | token breakeven ~2,944 (~70× slower) | **SURVIVES** | reproduced 2,825–2,915; order of magnitude holds |
 | typed comparators > string equality | **SURVIVES** | outcome-class gate catches error↔success flips a `==` misses (but unused by triage/hook path) |
-| author gate is load-bearing (0.01 reject) | **SURVIVES, already-caveated** | the gate holds a fixed bar; *but* its reference IS `detClassify` — fidelity-to-case-statement, not ground truth (AUTHOR_FINDINGS already says so) |
+| author gate is load-bearing (0.01 reject) | **SURVIVES, already-caveated** | the gate holds a fixed bar; *but* its reference IS `detClassify` — fidelity-to-case-statement, not ground truth (AUTHOR_FINDINGS already says so). `hook-loop` re-confirmed it: a docker-only re-author was rejected at 4/8 before a full one passed at 8/8. |
 
 ## The eighth manufactured-confidence catch (mine)
 
@@ -28,7 +28,10 @@ tier is **~50–110× faster than a 640ms Haiku call, not 90,000×**. I wrote th
 HOOK_FINDINGS; this catch is self-inflicted. The µs number is real *for the in-process regime* and
 stays in SERVE_FINDINGS scoped to it; the live-hook docs now carry the ~ms process floor.
 
-## The load-bearing casualty: the live loop does not close
+> **Update (same session): this casualty is FIXED.** The seam was wired shut in `crystal hook-loop` —
+> see `HOOK_LOOP_FINDINGS.md`. The section below is the original finding that motivated the fix.
+
+## The load-bearing casualty: the live loop does not close (now wired shut)
 
 Grep-verified: `authorRules` is called only by `author` / `author_drift` / `amortize`. **Nothing in
 `hook.go` calls it.** `Demoted = false` appears **nowhere** — demotion is terminal; the only recovery
@@ -41,6 +44,11 @@ Closing it for real (wire hook demotion → re-author → redeploy) is now the s
 of A5.
 
 ## Two new M-in-W evasions (extend `consecutive-divergence-demotion-is-evadable`)
+
+> **Update (same session): evasions 1 and 2 are FIXED** — the cumulative rate gate catches the
+> interleave, the re-promote path fixes the terminal DoS (`HOOK_LOOP_FINDINGS.md`, both unit-tested).
+> Evasion 3 (confidently-wrong is invisible) stands — it needs a live oracle (ROADMAP A5).
+
 
 1. **Sustained 2-in-5 interleave evades forever.** `covered, drift, covered, drift, …` holds
    steady-state at 2 uncovered per 5-window and **never** reaches M=3, while the table is wrong/silent
@@ -71,8 +79,17 @@ source contradicts.
 
 ## Fixes applied this session
 
+**Doc/claim retractions:**
 - `cmd/hook.go` demo epilogue + `HOOK_FINDINGS.md`: retract "the loop closes live"; state demote-and-flag
   honestly; add the ~ms process-startup floor and scope the µs/90,000× to the in-process `serve` regime.
 - `HOOK_FINDINGS.md` host-capability section: split *binary* portability (true, zero deps) from
   *coverage* portability (host-specific, g→0.00 on a foreign stack, untested).
 - `SLICE_FINDINGS.md` / `ROADMAP.md`: scope g=0.77 as in-sample on this user's corpus; generalization untested.
+
+**Code fixes (the seam wired shut) — `cmd/hook.go`, `cmd/hook_loop.go`, `HOOK_LOOP_FINDINGS.md`:**
+- Hook serves from a swappable rule-table artifact (`--rules`), not only the compiled baseline.
+- `repromote()` added — demotion is no longer terminal (fixes the DoS).
+- Cumulative rate gate added alongside the burst gate (catches the 2-in-5 interleave).
+- Demoted tier keeps observing uncovered commands so the re-author sees the full drifted class.
+- `crystal hook-loop` orchestrates the closed loop end-to-end across real processes (verified: 8/8 recover).
+- 5 unit tests, including both panel evasions as regression tests.
