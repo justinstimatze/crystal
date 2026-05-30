@@ -18,7 +18,7 @@ secondary, and heavily prior-arted ([`PRIOR_ART.md`](PRIOR_ART.md)). Milestones 
 - ~~The **payoff is unmeasured.**~~ MEASURED (`serve`/`amortize`): ~90,000× on the covered fraction, blended −77%, latency breakeven 43 hits.
 - ~~The crystallized artifact is written to disk but **not actually installed/served** as a live hook.~~ SERVED (`hook`): a real PreToolUse hook answering live with 0 model calls + demote-on-drift across process boundaries. The deployed speedup is ~50–110× (process-fork floor ~5.9ms), not the ~90,000× in-process figure; g=0.77 is **in-sample** (g→0.00 on a foreign command stack) — both scoped after the panel (`PANEL_FINDINGS.md`).
 - ~~The live loop does not auto-close.~~ CLOSED (`hook-loop`, `HOOK_LOOP_FINDINGS.md`): demote→re-author→gate→swap→re-promote→resume runs autonomously across 24 real processes; the two M-in-W evasions (interleave, terminal-DoS) are fixed. Remaining gap is epistemic: the new class's labels still come from a provided oracle (= A5).
-- The **local-model tier** (RTX 3080 + small model + LoRA, per the brief) — every experiment uses cloud Haiku or the deterministic tier (the last open rung, A5).
+- ~~The **local-model tier** (RTX 3080 + small model + LoRA, per the brief).~~ PROBED (`local-probe`, `A5_PROBE_FINDINGS.md`): the tier is plumbed (`internal/local`, ollama) and measured — but the NAIVE version (qwen2:1.5b, CPU, no GPU) is **not viable**: 0.46 accuracy vs det 1.00 / Haiku 0.76, and ~4× slower (p50 2.5s vs 0.6s). A5 needs the GPU + a stronger/tuned model the brief assumed. Plumbed and measured, not yet paying.
 - The **tamper-proof kernel** — today's gate is the gameable kind (the DGM result).
 - Anything running **unattended over real time**; any topology past the linear relay.
 
@@ -100,12 +100,17 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    *can't* cover (fuzzy/paraphrase). *Still to do:* a chore with a real uncovered residual
    (paraphrase/semantic-support citation checking), longer/harder inputs (the predicted whole-task
    hallucination didn't surface on the easy set), and the tool-de-biasing angle (weir).
-5. **Close the sovereignty gap (the gradient's far end).** Swap the cheap tier to a local small
-   model (+ LoRA) on owned hardware; re-measure latency and held quality. The cost gradient is
-   `frontier → … → local+LoRA → deterministic hook`; `payoff` currently stops at cloud Haiku. Reuse
-   candidate: the local-hybrid work in sibling projects **cupel** and **lexicon** (verify what's
-   actually there before assuming). *Proves:* the sovereignty/determinism pitch is real, not
-   aspirational. *Done when:* a chore is served from local hardware with the gate intact.
+5. **Close the sovereignty gap (the gradient's far end) — PROBED, NEGATIVE on this hardware**
+   (`local-probe`, `A5_PROBE_FINDINGS.md`). The local tier is plumbed (`internal/local`, an ollama
+   HTTP client cached like the cloud one) and measured on the covered fraction: `qwen2:1.5b` on CPU
+   scored **0.46 accuracy vs det 1.00 / Haiku 0.76, at p50 2.5s (~4× slower than Haiku)** — not
+   viable as a cheap tier, and too weak (0.46) to be the live oracle the `hook-loop` re-author needs.
+   *Bonus:* even Haiku matched det only 0.76 inside coverage (compound-command ambiguity), so the
+   deterministic tier is the most ACCURATE on its covered fraction, not just the fastest — the thesis
+   in one number. *Path to viable A5:* GPU (the brief's RTX 3080, not on this host) + a 7B-class or
+   LoRA-tuned model, or a confirm step that ratifies a weak local oracle's label proposals. *Status:*
+   plumbed and measured, not yet paying. *Done when:* a chore is served from local hardware at
+   accuracy ≥ Haiku and latency ≤ Haiku, with the gate intact.
 
 ## Track B — trust substrate (secondary, ambitious)
 

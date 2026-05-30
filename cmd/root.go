@@ -34,6 +34,7 @@ type CLI struct {
 	Hook         HookCmd         `cmd:"" help:"Live PreToolUse hook: read a Bash tool event on stdin, inject the deterministic command category as additionalContext (0 model calls), and demote-on-drift via a windowed state file. The batch→live gap closed."`
 	HookDemo     HookDemoCmd     `cmd:"" help:"Drive the real 'crystal hook' binary over a live stream of PreToolUse events (separate processes, on-disk drift window): serve real commands, inject the container-drift class, watch the tier demote live."`
 	HookLoop     HookLoopCmd     `cmd:"" help:"Close the loop LIVE: author→serve→demote→re-author→swap artifact→re-promote→resume, across real hook processes. Wires demote-on-drift to the re-author the panel found disconnected; fixes terminal demotion."`
+	LocalProbe   LocalProbeCmd   `cmd:"" help:"A5 probe: can a LOCAL small model (ollama) do the categorize chore well/fast enough to be the cheap tier — and the live oracle hook-loop lacks? Accuracy + latency vs Haiku on the covered fraction (det = ground truth)."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.

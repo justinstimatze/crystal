@@ -8,7 +8,31 @@ Prior session added three rungs on top of `triage`: `author` (self-authors the v
 gap: `hook` — a real Claude Code PreToolUse hook serving the deterministic tier live (0 model calls
 on the covered fraction), with demote-on-drift across real process boundaries** (`HOOK_FINDINGS.md`).
 
-## ⇒ DECIDED NEXT ACTION (start here): A5 — the local-model cheap tier (the last open rung)
+## ⇒ STATUS (2026-05-29 night): A5 PROBED — negative on this hardware; pick the path next session
+
+A5 is now **plumbed and measured** (`local-probe`, `internal/local` ollama client,
+`A5_PROBE_FINDINGS.md`). Clean negative: `qwen2:1.5b` on CPU (no GPU on this host) scored **0.46
+accuracy vs det 1.00 / Haiku 0.76**, at **p50 2.5s (~4× slower than Haiku)** — not a viable cheap
+tier, and too weak (0.46) to be the live oracle the `hook-loop` re-author needs (that gap stays open).
+*Bonus finding:* even Haiku matched det only 0.76 inside coverage (compound-command ambiguity) → the
+deterministic tier is the most ACCURATE on its covered fraction, not just the fastest (the thesis in
+one number). All numbers re-counted from raw `--verbose`.
+
+**Next session — pick the A5 path (the build is gated on a decision, not unblocked work):**
+- **(a) GPU + stronger model** — the brief's RTX 3080 (not reachable from this host); a 7B-class model
+  on GPU likely closes most of the 0.46→0.76 gap and the latency gap. Needs the hardware online.
+- **(b) +LoRA fine-tune on this chore** — the brief's actual bet; a tuned small model could match det
+  on covered commands. Most work; highest payoff if it lands.
+- **(c) confirm step** — treat a weak local oracle's labels as *proposals* a stronger tier ratifies
+  before they train the gate. Cheapest; closes the oracle gap without needing local accuracy ≥ Haiku.
+- **(d) call Track A done** — the loop is closed; A5 is honestly scoped as "plumbed, not yet paying."
+  Consolidate THESIS/README and stop.
+
+Run `local-probe` ONLY on the small corpus (never `--home`) — local CPU inference holds a ~1GB model
+resident; stop it after (`ollama stop qwen2:1.5b`) to free RAM.
+
+---
+## (superseded) earlier decided action: A5 — the local-model cheap tier
 
 Two things landed this session and the seam the panel exposed is now CLOSED:
 
