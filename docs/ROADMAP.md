@@ -16,7 +16,7 @@ secondary, and heavily prior-arted ([`PRIOR_ART.md`](PRIOR_ART.md)). Milestones 
 
 **Not built (the honest gaps):**
 - ~~The **payoff is unmeasured.**~~ MEASURED (`serve`/`amortize`): ~90,000× on the covered fraction, blended −77%, latency breakeven 43 hits.
-- ~~The crystallized artifact is written to disk but **not actually installed/served** as a live hook.~~ SERVED (`hook`): a real PreToolUse hook answering live with 0 model calls + demote-on-drift across process boundaries.
+- ~~The crystallized artifact is written to disk but **not actually installed/served** as a live hook.~~ SERVED (`hook`): a real PreToolUse hook answering live with 0 model calls + demote-on-drift across process boundaries — **but the loop does not auto-close**: hook demotes+flags, `author` re-authors, no code wires them (panel, `PANEL_FINDINGS.md`). The deployed speedup is ~50–110× (process-fork floor ~5.9ms), not the ~90,000× in-process figure. g=0.77 is **in-sample** (g→0.00 on a foreign command stack). Open: wire the seam + harden M-in-W (interleave/terminal-DoS evasions).
 - The **local-model tier** (RTX 3080 + small model + LoRA, per the brief) — every experiment uses cloud Haiku or the deterministic tier (the last open rung, A5).
 - The **tamper-proof kernel** — today's gate is the gameable kind (the DGM result).
 - Anything running **unattended over real time**; any topology past the linear relay.

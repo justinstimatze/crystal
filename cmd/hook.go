@@ -295,14 +295,18 @@ func (c *HookDemoCmd) Run() error {
 	if demotedAt >= 0 {
 		fmt.Printf("  DEMOTED live at stream index %d (the %d-in-%d window collapsed on the container burst).\n", demotedAt, c.DriftM, c.DriftW)
 		fmt.Printf("  served deterministically (0 model calls): %d  ·  deferred to model: %d\n", served, deferred)
-		fmt.Println("  After demotion the hook injects nothing — the chore is back on the model tier, flagged")
-		fmt.Println("  for re-authoring (the same detect→re-author loop `author` closes, now triggered live).")
+		fmt.Println("  After demotion the hook injects nothing and writes a re-author FLAG — but nothing reads")
+		fmt.Println("  it: `author` is a separate command a human runs (the live loop demotes+flags, it does NOT")
+		fmt.Println("  auto-re-author; wiring that seam is open work — see docs/PANEL_FINDINGS.md). Demotion is")
+		fmt.Println("  terminal: no re-promote path, recover by deleting the --state file.")
 	} else {
 		fmt.Printf("  served %d, deferred %d, NO demotion — the drift window never collapsed.\n", served, deferred)
 		fmt.Println("  (If the injected burst didn't demote, the window W is too wide or M too high for the burst length.)")
 	}
-	fmt.Println("\nThis is the real PreToolUse contract over real process boundaries — the loop closes live,")
-	fmt.Println("not just in a benchmark. The rule table shells out to nothing, so the hook is fully portable.")
+	fmt.Println("\nThis is the real PreToolUse contract over real process boundaries — demotion accumulates live,")
+	fmt.Println("not just in a benchmark. The BINARY is fully portable (shells out to nothing); the COVERAGE is")
+	fmt.Println("host-specific (g→0 on a foreign command stack). Each live invocation is a fresh process (~ms")
+	fmt.Println("startup), so the deployed speedup over a model call is ~50–110×, not the in-process µs figure.")
 	return nil
 }
 

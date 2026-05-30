@@ -59,3 +59,10 @@ verifier is actually right.
 The slice ships: a real chore done by the full shift-left stack, zero frontier calls, g=0.77, the
 cheap model only on the residual, deterministic counting — and building it on real data corrected
 the deterministic verifier in a way the synthetic experiments couldn't. Dirty hands.
+
+**Scope caveat (2026-05-29 panel, `PANEL_FINDINGS.md`):** g=0.77 is **in-sample**. `detClassify` is a
+hand-tuned `switch` over ~45 tokens from *this* user's Go/`gh` stack, measured on the 48-command
+corpus it was tuned against; **no held-out corpus exists**. Run through the same `detClassify`, a
+plausible data-science command distribution (`python3`/`conda`/`docker`/`kubectl`/`dvc`/`uv`) scores
+**g=0.00**. So 0.77 is a property of *this* command distribution, not of the classifier — coverage
+generalization is untested and, off-stack, can be zero.

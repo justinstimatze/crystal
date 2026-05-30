@@ -56,10 +56,21 @@ then injects the 8-command container class `author` uses as its known drift.
   served deterministically (0 model calls): 10  ·  deferred to model: 20
 ```
 
-**The loop closes live:** 10 of 16 real commands served deterministically (0 model calls), the
-6-command residual deferred silently without ever false-demoting, and the injected container burst
-demoted the tier — after which the hook injects nothing and the chore is back on the model tier,
-flagged for the same re-author `author` already proved (now triggered live).
+**What the run shows (corrected after the 2026-05-29 panel — see `PANEL_FINDINGS.md`):** 10 of 16
+real commands served deterministically (0 model calls), the 6-command residual deferred silently
+without ever false-demoting, and the injected container burst demoted the tier — after which the hook
+injects nothing and writes a re-author *flag*. **The loop does NOT close live.** Grep-verified:
+nothing in `hook.go` calls `authorRules`; `author` is a separate command a human runs; `Demoted`
+is never unset (terminal demotion, recover by deleting `--state`). The flag string is cosmetic —
+no code reads it. So this is **demote-and-flag**, not autonomous detect→re-author→redeploy. Wiring
+that seam is the sharpest open build (ahead of A5).
+
+**Deployed cost (the process-startup floor the µs figure omits):** each PreToolUse call is a fresh
+OS process. Measured here, 100 real `crystal hook` forks: **~5.9ms/call** — Go process startup, which
+no coverage `g` removes. Over a 640ms Haiku call the deployed speedup is **~50–110×, not the
+~90,000× / ~7µs in-process figure** (that figure is real for `serve`, an in-process cache replay, and
+stays scoped to it in `SERVE_FINDINGS.md`). The eighth manufactured-confidence catch was conflating
+the in-process function timing with the out-of-process hook this very file ships.
 
 ## Honest finding: the coverage trigger conflates residual clusters with drift
 
@@ -79,11 +90,20 @@ asserted in `cmd/hook_test.go`.
 ## Host-capability (the weir caveat, answered)
 
 The roadmap flagged that the deterministic tier may lean on installed tools (weir's manifest). For
-**this** rule table the dependency is **zero**: `detClassify` is pure Go string matching — it shells
-out to nothing, so the hook is fully portable. The caveat is real but class-specific: a rule table
-that delegated to `rg`/`fd` *would* carry the dependency and would need a capability probe + fallback
-(weir's SessionStart manifest is the reuse). Documenting which kind of rule table you serve is the
-discipline.
+**this** rule table the *binary* dependency is **zero**: `detClassify` is pure Go string matching — it
+shells out to nothing, so the hook runs on any host. The caveat is real but class-specific: a rule
+table that delegated to `rg`/`fd` *would* carry the dependency and would need a capability probe +
+fallback (weir's SessionStart manifest is the reuse).
+
+**But binary-portability is not coverage-portability** (the panel's sharpest portability catch).
+"Runs anywhere" ≠ "answers anywhere." `detClassify` is a hand-tuned `switch` over ~45 tokens specific
+to *this* user's stack (`git`, `gh`, `go build`, `cargo`, the weir toolchain). g=0.77 is **in-sample**
+— measured on the corpus the rules were tuned against; **no held-out corpus exists** (`--home` only
+re-reads this same user's other machines). Run through the real `detClassify`, a plausible
+data-science user's commands (`python3`, `jupyter`, `conda`, `docker`, `kubectl`, `terraform`, `dvc`,
+`uv pip`, `awk`) score **g=0/30 = 0.00** (verified in-package this session). So the honest scope is:
+the *binary* is host-portable; the *coverage* is host-specific and, off this stack, can be zero.
+Documenting which kind of rule table you serve — and that g is in-sample — is the discipline.
 
 ## Verification (against raw, house rule)
 
@@ -103,8 +123,11 @@ its state it emits a plain `allow`, so it can never block the user's command.
 
 ## Bottom line
 
-The shift-left stack now runs end to end **live**, not just in a benchmark: a real PreToolUse hook
-answers a recurring chore deterministically with 0 model calls on the covered fraction, defers the
-residual, and demotes itself across real process boundaries when a domain shift collapses its
-coverage — the last batch→live gap closed. The remaining far rung is the local-model cheap tier
+The shift-left stack now *serves* **live**, not just in a benchmark: a real PreToolUse hook answers a
+recurring chore deterministically with 0 model calls on the covered fraction (at ~5.9ms process-fork
+cost, ~50–110× over a model call), defers the residual, and **demotes** itself across real process
+boundaries when a domain shift collapses its coverage. *But the loop does not close on its own* — the
+hook demotes and flags; re-authoring is a separate manual `author` run (see `PANEL_FINDINGS.md`). Two
+open builds, in order: (1) **wire the seam** — hook demotion → auto re-author → redeploy — and harden
+M-in-W against the interleave/terminal-DoS evasions the panel found; (2) the local-model cheap tier
 (ROADMAP A5), the sovereignty end of the gradient.
