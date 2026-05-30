@@ -14,8 +14,8 @@ ground truth — the only place with trustworthy labels). All numbers verified a
 
 | tier | accuracy vs det reference | latency p50 | latency p99 |
 |---|---|---|---|
-| deterministic (`detClassify`) | **37/37 = 1.00** (IS the reference) | ~µs | ~µs |
-| cloud cheap (Haiku) | **28/37 = 0.76** | 627ms | 1102ms |
+| deterministic (`detClassify`) | **37/37 = 1.00** (IS the reference — *after* the bug fix below) | ~µs | ~µs |
+| cloud cheap (Haiku) | **29/37 = 0.78** (was 0.76 against the buggy reference) | 627ms | 1102ms |
 | **LOCAL (`qwen2:1.5b`)** | **17/37 = 0.46** | **2470ms** | **16299ms** (one outlier 25s) |
 
 ## Verdict: the naive local tier does NOT pay on this hardware — a clean negative
@@ -31,16 +31,34 @@ ground truth — the only place with trustworthy labels). All numbers verified a
   labels half the time; the gate would (correctly) reject the re-authored table, or worse, promote a
   table trained on noise. **The no-live-oracle gap stays open.**
 
-## The bonus finding (reinforces the whole thesis)
+## The bonus finding — AUDITED (the ninth manufactured-confidence catch, self-caught)
 
-Even **Haiku matches the deterministic reference only 0.76** on the covered fraction — the cloud cheap
-model disagrees with the rules ~24% of the time on commands the rules cover. Part of that is genuine
-ambiguity, not pure model error: the disagreements cluster on **compound commands** like
-`cd X && git add …` (det calls it `git` via the "first real action beats a leading cd" reduce; the
-models split it as `file-edit`/`nav`). But the direction is the thesis in one number: **on its covered
-fraction the deterministic tier is not just faster than the cheap model — it is MORE ACCURATE** (1.00
-vs 0.76 vs 0.46). The cheap tiers earn their place only on the *residual* the rules can't cover; inside
-coverage, the rule table dominates. "Don't reach for a model where a rule is exact."
+The first draft of this doc claimed Haiku's disagreements with det were "genuine compound-command
+ambiguity, not pure error." That was a fluent *vibes* claim — asserted, not inspected. The slimemold
+reasoning hook flagged it as load-bearing-vibes, so I audited all 9 Haiku misses against the raw rows.
+The audit overturned part of my own claim:
+
+- **8 of 9 Haiku misses are det-correct** — `mkdir`→file-edit, `chmod`→file-edit, bare `cd`→nav,
+  and the genuine compound/`cd`-reduce cases (`cd X && <action>` where det's reduce wins and the model
+  is fooled by the leading `cd`). So the ambiguity story holds for most, but as *model error against a
+  correct rule*, not symmetric ambiguity.
+- **1 of 9 was a `detClassify` BUG, not ambiguity.** `until curl … | grep -q 200; do …; done; … && tail …`
+  was labeled `search/inspect` because det inspects only each segment's LEADING token, and the `until`
+  keyword masked the `curl` — so det landed on the `grep`/`tail` segments. The right label is `network`
+  (a URL poll), and Haiku had said exactly that — it was marked *wrong against a buggy reference*.
+
+**So "det = 1.00 ground truth" was contaminated by 1/37 (2.7%).** Fixed: `segClassify` now strips
+leading shell control-flow / timing wrappers (`until`/`while`/`time`) that hide the action word — the
+same bug family as the original leading-`cd` compound fix, found the same way (auditing real data),
+excluding sudo/env/xargs (they interpose flag-args). Regression test in `cmd/triage_test.go`. After
+the fix the reference is corrected and **Haiku rises 0.76 → 0.78** (its `until curl`→network call now
+agrees with det); local stays 0.46.
+
+The thesis direction survives the correction, now on a *clean* reference: **on its covered fraction the
+deterministic tier is the MOST ACCURATE tier, not just the fastest** (1.00 > 0.78 > 0.46). Cheap tiers
+earn their place only on the *residual* the rules can't cover; inside coverage, the corrected rule
+table dominates. "Don't reach for a model where a rule is exact" — but *do* audit the rule against raw,
+because the reference itself can carry a bug that silently mismeasures every tier compared to it.
 
 ## What this de-risks, and the path to a viable A5
 

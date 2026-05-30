@@ -83,6 +83,16 @@ func segClassify(seg string) string {
 	if len(fields) == 0 {
 		return ""
 	}
+	// Strip leading shell control-flow / timing wrappers that hide the real
+	// action word (`until curl …`, `while …`, `time go test …`). Found by
+	// auditing the A5 probe: `until curl … | grep` was mislabeled search/inspect
+	// because the `until` keyword masked the curl. Limited to wrappers that take
+	// the command word IMMEDIATELY next — sudo/env/xargs are excluded because
+	// they interpose flag-args (`sudo -u u cmd`, `xargs -I{} cmd`) a blind strip
+	// would mis-read. Same bug family as the leading-`cd` compound fix.
+	for len(fields) > 1 && (fields[0] == "until" || fields[0] == "while" || fields[0] == "time") {
+		fields = fields[1:]
+	}
 	tok := fields[0]
 	two := tok
 	if len(fields) > 1 {
