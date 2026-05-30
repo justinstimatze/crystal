@@ -7,7 +7,30 @@ Prior session added three rungs on top of `triage`: `author` (self-authors the v
 (measures the latency payoff), `amortize` (prices it). **This session closed the last batch→live
 gap: `hook` — a real Claude Code PreToolUse hook serving the deterministic tier live (0 model calls
 on the covered fraction), with demote-on-drift across real process boundaries** (`HOOK_FINDINGS.md`).
-The remaining open rung is now A5: the local-model cheap tier (the sovereignty end of the gradient).
+
+## ⇒ DECIDED NEXT ACTION (start here): adversarially pressure-test the thesis
+
+Track A is now feature-complete (`triage→author→serve→amortize→hook`, loop closes live). The user
+chose — before building any more rungs — to **attack the whole crystal claim with a panel of
+skeptics, each told to REFUTE, not confirm.** This is a multi-agent batch op (run it FIRST in the
+fresh session, the reason we compacted). Survivors become real claims; casualties get fixed or a
+finding retracted. The four refutation angles:
+- **breakeven economist** — is the 43-hit latency breakeven real or cherry-picked? (re-derive from
+  raw cache: Opus 23,552ms author call ÷ ~548ms/hit; check the model-p50 probe wasn't gamed.)
+- **host-portability skeptic** — does g=0.77 survive a DIFFERENT user's corpus? (`detClassify` was
+  tuned on this user's Bash; run `triage`/`serve --home <other>` if a second corpus exists, else flag
+  it as untested generalization.)
+- **drift adversary** — can intermittent/adversarial drift evade the live M-in-W hook? (this session
+  already found residual clusters can tip it EARLY; the symmetric attack is slow/flapping drift that
+  never hits M-in-W — see `consecutive-divergence-demotion-is-evadable`.)
+- **"so what" critic** — is any of this better than a 20-line bash script / a `case` statement? The
+  sharpest attack: the deterministic tier IS basically a case statement; the novel part is the
+  self-author + gate + demote loop, not the rules. Make the panel force that distinction.
+
+Verify every surviving number against raw `--verbose`/cache before it stays a claim (house rule;
+seven manufactured-confidence catches so far). Then the build rungs below remain.
+
+The remaining open BUILD rung is A5: the local-model cheap tier (the sovereignty end of the gradient).
 
 ## The thesis, current (read `docs/THESIS.md` for the full version)
 
