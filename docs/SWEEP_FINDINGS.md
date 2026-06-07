@@ -90,6 +90,27 @@ Crystal is the artifact that retires this whole cluster at once.
   stdin contract. The remaining promote-set (`main` via git config, Co-Authored-By trailer,
   `gh repo create` private-default, secrets linter, `/schedule`-offer Stop-linter) is still recall-only.
 
+## Context-reclaim, MEASURED — and a self-tempering (2026-06-07)
+
+The session's "context-budget is the cost axis that doesn't collapse" framing was an unverified
+deduction (a reasoning-topology hook flagged it as load-bearing-and-unanchored across three turns).
+Measured against raw bytes:
+
+- Global `CLAUDE.md` = 28,539 chars ≈ **7,134 tok injected EVERY turn, every project** (the denominator).
+- Clean always-injected *mechanizable* reclaim — the GitHub section (private-default + main-not-master,
+  186 chars) + the `/schedule`-offer bullet (251 chars) = 437 chars ≈ **109 tok/turn = 1.5%** of the file.
+- Measurement-honesty catch: per-project memory atoms that *match* a promote-set rule are whole
+  190-line files (plancheck's is 8,033 chars), NOT the rule — the rule line itself is ~20 tok. Counting
+  files as rule-cost would have inflated this ~25×; the rule text is tiny everywhere.
+
+**Conclusion — tempering my own earlier claim:** context-reclaim is real and permanent but **small and
+bounded** (~1.5% now). It does not collapse the way per-call tokens do, but it is a *minor absolute
+quantity*, because (a) most standing guidance is irreducibly semantic and un-mechanizable, and (b)
+you would never hand-carry thousands of mechanical rules in always-injected context, so the ceiling is
+the mechanizable fraction of what's already there. **Latency / determinism / reliability remain the
+PRIMARY value of shift-left; context-reclaim is a minor secondary, not a headline.** The slimemold
+flag was correct; this is the kind of over-elevation the verify-against-raw rule exists to catch.
+
 ## How crystal tracks what it crystallized (the self-monitoring design)
 
 Not a central babysitter — **each crystallized chore is its own sub-hybrid-loop, responsible for its

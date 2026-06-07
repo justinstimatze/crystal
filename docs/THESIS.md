@@ -85,6 +85,44 @@ reuse robust modules, accept the residual leak, let crystallize/demote accrete w
 hold. (See `PRIOR_ART.md` for why per-recurring-chore stateful tiering is an unoccupied niche vs
 per-request routers.)
 
+## Crystallize your own remembering — the reflexive application (2026-06-07)
+
+The cleanest one-line statement of what crystal *is*: **auto-chunking + shift-left applied to
+remembering itself.** An expert chunks a recurring N-step procedure into one named unit so working
+memory holds one token, not N; Claude re-derives it every session. Crystal binds the pattern into one
+deterministic named unit (a hook, a `make` target, a git config) served from the *environment*
+instead of from attention. In the shift-left vocabulary above: **recall is the frontier tier** (lossy,
+forgettable, re-run every turn) and **a deterministic artifact is the cheap tier** — so promoting a
+standing rule from memory to an artifact is shift-left, with *remembering* as the chore migrated.
+
+- **The recursion that names the target.** A memory rule is the first-order "don't make me remember";
+  it still fails because *applying* it is a second-order act of remembering. The fix collapses the
+  recursion — move the constraint into the environment where the wrong path is unavailable. *Not
+  having to remember to not have to remember.* The proof a memory rule is not enough: a rule already
+  written and still violated shows recall-and-hope tops out; mint the artifact.
+- **Promotion trigger — sharper than "recurs N times."** Promote a rule that recurred *despite being
+  a rule.* The deterministic, verifiable proxy (`SWEEP_FINDINGS.md`): **re-encoded across N projects**
+  — the same rule independently re-written in N memories means recall failed to chunk (`git add -A`
+  ban in 4 projects, `main`-not-`master` in 3, secrets-to-files in 3). `weir` is the existence proof
+  (a `which`→`command-v` correction already promoted to a *blocking* PreToolUse hook).
+- **Built (`cmd/guard.go`).** `crystal guard` is the first **constraint-type** crystallization — a
+  PreToolUse hook that denies `git add -A|.|--all`. It ships as a **self-monitoring sub-hybrid-loop**:
+  a constraint has no answers to verify, so its drift signal is **override frequency** (the analog of
+  the categorizer hook's coverage-collapse demote). Tracking design: each artifact self-monitors; the
+  *installed hooks are the registry* (no central babysitter; any manifest must be derived from them).
+- **The cost story, MEASURED and tempered.** Promoting memory→artifact does reclaim standing context
+  every turn — but measured, the always-injected mechanizable reclaim is ~109 tok/turn = **1.5%** of
+  the 7,134-tok global `CLAUDE.md` (`SWEEP_FINDINGS.md`). Real and permanent, but **minor and bounded**
+  (most standing guidance is irreducibly semantic). It does not collapse like per-call tokens, but it
+  is *not* a headline. **Latency / determinism / reliability stay the primary value; context-reclaim
+  is a minor secondary** — recorded here so the framing is not over-sold.
+- **The scaling seam.** `guard`/`hook` are one-rule-one-hook *prototypes*. At hundreds–thousands of
+  rules, one hook per rule means N process-forks per call (~5.9ms × N). The architecture that scales
+  is a **single dispatcher over a rule LIBRARY** (rules as data, in-process eval, per-rule state),
+  which also gives the registry (the library dir) and the **public/personal split** — the engine +
+  schema ship publicly; each user grows their own library. Build it before the library grows past a
+  handful or crystal goes public.
+
 ## The general principle this is circling (hypothesis — reasoning, not yet grounded)
 
 "Shift-left a substep" is the local, cost-projection of something more general. Stated plainly, and

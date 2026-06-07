@@ -3,6 +3,15 @@
 **Shift mechanical work off the frontier model onto faster, cheaper, eventually-deterministic
 tiers — and keep it there as patterns drift, with degradation that's loud instead of silent.**
 
+One concrete form is **crystallizing your own remembering**: a standing rule you keep having to
+restate — and that keeps getting re-written across projects because recall doesn't generalize — is
+mechanical residue. Promote it from memory (recalled-and-hope) to a deterministic artifact that fires
+unconditionally. `crystal guard` is the first: a PreToolUse hook that denies `git add -A` (a rule
+found independently re-encoded in 4 of this author's projects). See the reflexive-application section
+of [`docs/THESIS.md`](docs/THESIS.md) and [`docs/SWEEP_FINDINGS.md`](docs/SWEEP_FINDINGS.md) — with
+the honest caveat that the *context-budget* reclaim from this is real but minor (~1.5%/turn); latency,
+determinism, and reliability remain the primary win.
+
 ## Why bother
 
 The frontier model is the bottleneck on axes that *don't* go away as token prices fall:
