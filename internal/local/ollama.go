@@ -19,6 +19,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -62,8 +63,22 @@ func New(cacheDir string) (*Client, error) {
 	if err := os.MkdirAll(cacheDir, 0o755); err != nil {
 		return nil, err
 	}
-	// A generous timeout: CPU inference of a small model can take seconds.
-	return &Client{host: Host(), cacheDir: cacheDir, http: &http.Client{Timeout: 120 * time.Second}}, nil
+	// A generous timeout. A model that SPILLS past VRAM (e.g. a 35B on a 10GB card,
+	// ~70% in system RAM) can stall well past 120s under RAM pressure even for a
+	// 16-token generation — an N=250 run hit exactly that and aborted at 72/250.
+	// Default 300s; override with OLLAMA_TIMEOUT_S for slower hosts/bigger spills.
+	return &Client{host: Host(), cacheDir: cacheDir, http: &http.Client{Timeout: timeout()}}, nil
+}
+
+// timeout is the per-call ceiling: OLLAMA_TIMEOUT_S seconds if set and valid,
+// else 300s (generous for a spilling model; cached calls return instantly).
+func timeout() time.Duration {
+	if s := os.Getenv("OLLAMA_TIMEOUT_S"); s != "" {
+		if n, err := strconv.Atoi(s); err == nil && n > 0 {
+			return time.Duration(n) * time.Second
+		}
+	}
+	return 300 * time.Second
 }
 
 // Reachable returns nil if the ollama server answers, else a helpful error.
