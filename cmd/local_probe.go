@@ -118,7 +118,10 @@ func (c *LocalProbeCmd) Run() error {
 	if lp50, hp50 := percentile(localLat, 0.50), percentile(haikuLat, 0.50); lp50 <= hp50 {
 		fmt.Printf("Local p50 %dms ≤ cloud %dms (latency favors local).\n", lp50, hp50)
 	} else {
-		fmt.Printf("But local p50 %dms > cloud %dms — on THIS host (CPU, no GPU) local is slower.\n", lp50, hp50)
+		// Don't assert the remote host's hardware — the client only knows OLLAMA_HOST.
+		// Slow local p50 is usually a model-too-big-for-VRAM offload, not GPU absence;
+		// right-size the model to the card before concluding the tier is slow.
+		fmt.Printf("But local p50 %dms > cloud %dms (host %s) — if the model exceeds VRAM it offloads to CPU; try a model that fits resident.\n", lp50, hp50, local.Host())
 	}
 	// Oracle viability: the same accuracy number answers whether the local model
 	// could LABEL a new class for the hook-loop re-author without a cloud call.
@@ -126,9 +129,13 @@ func (c *LocalProbeCmd) Run() error {
 	switch {
 	case localAcc >= 0.90:
 		fmt.Printf("PLAUSIBLE — %.2f vs the deterministic reference; good enough to propose labels behind the gate.\n", localAcc)
+	case localAcc >= haikuAcc-0.05:
+		fmt.Printf("BELOW the 0.90 bar at %.2f, but it TIES cloud-cheap (Haiku %.2f) — so the gap is the\n", localAcc, haikuAcc)
+		fmt.Printf("    reference's own debatable edge conventions, not a weak model. A confirm step (local proposes,\n")
+		fmt.Printf("    a cheap cloud call ratifies) is the viable oracle path; raw 0.90-vs-det is the wrong bar.\n")
 	default:
 		fmt.Printf("TOO WEAK at %.2f — a label source this noisy would feed the gate bad training; the new-class\n", localAcc)
-		fmt.Printf("    oracle gap stays open (needs a stronger local model, GPU, +LoRA, or a confirm step).\n")
+		fmt.Printf("    oracle gap stays open (needs a stronger model, a model that fits VRAM, +LoRA, or a confirm step).\n")
 	}
 	return nil
 }

@@ -75,7 +75,8 @@ type genRequest struct {
 	System  string         `json:"system,omitempty"`
 	Prompt  string         `json:"prompt"`
 	Stream  bool           `json:"stream"`
-	Options map[string]any `json:"options,omitempty"`
+	Think   bool           `json:"think"` // explicitly false: thinking-capable models (qwen3.x) otherwise
+	Options map[string]any `json:"options,omitempty"` // spend the whole num_predict budget on hidden reasoning and return an empty response
 }
 
 type genResponse struct {
@@ -96,6 +97,7 @@ func (c *Client) Classify(ctx context.Context, model, system, prompt string, num
 		System: system,
 		Prompt: prompt,
 		Stream: false,
+		Think:  false, // classification: no hidden reasoning — answer directly (else num_predict is eaten by thinking)
 		Options: map[string]any{
 			"num_predict": numPredict,
 			"temperature": 0,

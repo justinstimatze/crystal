@@ -1,4 +1,40 @@
-# A5 probe — the local cheap tier (`crystal local-probe`, 2026-05-29)
+# A5 probe — the local cheap tier (`crystal local-probe`)
+
+## ⇒ UPDATE 2026-06-07: the negative is OVERTURNED on accuracy (GPU + a capable model)
+
+The 2026-05-29 negative below was a **toy-model artifact**, not a local-tier verdict. Re-run against a
+real model on real hardware — `qwen3.6:35b` (a 36B MoE) on the user's RTX 3080 box over the LAN
+(`OLLAMA_HOST=http://192.168.4.114:11434`, zero code change — `internal/local` already reads it):
+
+| tier | accuracy vs det | p50 | p99 |
+|---|---|---|---|
+| det (`detClassify`) | 1.00 (reference) | ~µs | ~µs |
+| Haiku (cloud cheap) | 0.78 (29/37) | 627ms | 1102ms |
+| **qwen3.6:35b (LOCAL, 3080)** | **0.76 (28/37)** | **3298ms** | **22523ms** |
+
+- **Accuracy blocker GONE.** 0.76 **ties Haiku** (0.78, one row apart) — vs qwen2:1.5b's 0.46. A
+  capable local model matches cloud-cheap accuracy on this chore. (Recounted from raw: 37 rows,
+  haiku✓=29, local✓=28.)
+- **Pre-flight bug caught (would have faked a 0.00).** `qwen3.x` is a *thinking* model; under the
+  16-token cap it spent the whole budget on hidden `thinking` and returned `response:""` — every
+  command a parse-fail. `internal/local`'s comment *claimed* "thinking-free" but never set the flag;
+  fixed (`Think:false` on the generate request). Thinking off → answers directly, warm short call 0.86s.
+- **Latency is a model-VRAM-fit problem, not GPU absence.** 24GB model on a 10GB card → heavy CPU
+  offload → p50 3.3s. The old verdict hardcoded "CPU, no GPU"; fixed to not assert the remote host's
+  hardware. **Next:** a 7–8B at Q4 fits ~5–6GB *fully resident* → expected Haiku-level accuracy AND
+  sub-second latency.
+- **Live-oracle, reframed.** Both Haiku and local sit ~0.77 *against det* — the ceiling is det's
+  debatable edge conventions (every `gh` subcommand labeled `network`; the model says `other`/`git`,
+  arguably more right), not model weakness. 0.90-vs-det is the wrong bar. A **confirm step** (local
+  proposes, a slower model ratifies) is the viable oracle path — and it can be **all-local on one box**
+  (GPU fast proposer + CPU careful ratifier/re-authorer, `num_gpu:0` to pin the second to CPU).
+
+*Status: A5 accuracy de-risked; latency pending a VRAM-fitting model; two-model single-box ensemble is
+the next probe. Original (toy-model) write-up kept below for the record.*
+
+---
+
+# A5 probe — the local cheap tier (2026-05-29, superseded above)
 
 A5 is the sovereignty rung: swap the residual's cheap tier from cloud Haiku to a LOCAL model on owned
 hardware. Before building the full slice, one probe — the way `probe` de-risked the cloud tier — asks
