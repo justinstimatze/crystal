@@ -127,6 +127,72 @@ differ, so it's analogy, not foundation. The load-bearing prior art for crystal 
 underneath: **producer-verifier asymmetry** (checking is cheaper than generating) + tool-augmented
 LMs.
 
+## Local tier, mesh, cascade & agreement prior art (2026-06-07 sweep)
+
+Triggered by the A5 result (local 8B+35B on an owned 3080, two-model agreement as a label-trust
+signal, remote ollama orchestration). Three parallel research passes. **All three converged on the
+same verdict, which matches this doc's standing line: the mechanisms are prior art; the *integration*
+is the seam.**
+
+**Vein 1 — local inference orchestration & mesh (the plumbing is commodity).** Remote load/unload/
+inspect over HTTP is fully solved: ollama (`keep_alive`, `OLLAMA_MAX_LOADED_MODELS`), NVIDIA Triton
+EXPLICIT model-control, [vLLM Sleep Mode](https://blog.vllm.ai/2025/10/26/sleep-mode.html) (offload
+weights→RAM, wake 18–200× faster than reload), LM Studio headless. Single-box model-swap-by-VRAM:
+[llama-swap](https://github.com/mostlygeek/llama-swap). "Mesh of owned devices" is crowded —
+[exo](https://github.com/exo-explore/exo), [Petals](https://github.com/bigscience-workshop/petals),
+[distributed-llama](https://github.com/b4rtaz/distributed-llama), [GPUStack](https://github.com/gpustack/gpustack),
+[Kalavai](https://github.com/kalavai-net/kalavai-client), LocalAI-federated, LM Studio **LM Link**
+(Tailscale mesh of your boxes) — but **nearly all do capacity-sharding (split one model across boxes)
+or manual selection, not task-aware whole-model routing with an output gate.**
+
+**Vein 2 — agreement-as-trust is a reinvention (cite, don't claim).** "Two models agree → trust the
+label; disagree → abstain/escalate" is **tri-training** (Zhou & Li, TKDE 2005, lamda.nju.edu.cn) at
+N=2, and the escalate half is **Query-by-Committee** active learning (Seung et al., COLT 1992).
+The 0.86-on-agreement lift is the *expected* precision/recall of abstention (deep ensembles,
+Lakshminarayanan 2017; confident learning, Northcutt 2021) — **so report the coverage you abstain on,
+not just the accuracy on the retained set.** Closest LLM-era: **Panel of LLM evaluators (PoLL)**,
+Verga 2024 (arXiv 2404.18796 — diverse cheap models beat one big judge, ~7–8× cheaper). Using a
+*second distinct-capability* model rather than self-checking is well-motivated by the
+generation>verification self-verification asymmetry (Weng 2023, arXiv 2212.09561).
+
+**Vein 3 — proposer/ratifier cascade is FrugalGPT et al.** Cheap-first, escalate-on-signal is
+[FrugalGPT](https://arxiv.org/abs/2305.05176) (2023), [AutoMix](https://arxiv.org/abs/2310.12963)
+(small generates → self-verify → POMDP escalate), [EcoAssistant](https://arxiv.org/abs/2310.03046)
+(+ caching-as-floor). The token-level structural twin is **speculative decoding**
+([Leviathan 2022](https://arxiv.org/abs/2211.17192); Medusa, EAGLE). Routing-before-running:
+[RouteLLM](https://arxiv.org/abs/2406.18665), [Hybrid LLM](https://arxiv.org/abs/2404.14618)
+(easy→edge/small, hard→cloud/large). **The proposer-confidence trigger (logprob/entropy) is also
+recent prior art: [UCCI](https://arxiv.org/abs/2605.18796) (2026) — and it warns raw entropy is
+miscalibrated, so a calibration layer (isotonic/temperature) is table-stakes, not a differentiator.**
+Cascade-vs-route taxonomy: survey arXiv 2603.04445.
+
+### The defensible seam (all three passes independently landed here)
+
+Every surveyed router/cascade routes on **predicted difficulty or load** and then **trusts the cheap
+output**. None pairs zoo-routing with an **output-correctness gate that demotes-on-drift**. crystal's
+unclaimed cell is the *composition*: (1) **per-recurring-chore identity** as the routing key (not a
+per-query difficulty guess), (2) a **deterministic verifier** (not a learned/LLM judge — which is
+what makes "verify ≪ generate" actually hold at task level, the property spec-decoding gets free at
+token level but cloud cascades do not), (3) **all-local tiers**, (4) **crystallize + demote-on-drift**.
+Lead novelty there; cite FrugalGPT / AutoMix / tri-training / QBC / PoLL / UCCI / Leviathan as the
+mechanisms. (Consistent with this doc's thesis: novelty is integration, not invention.)
+
+### Steal, don't reinvent (concrete adoptions surfaced)
+
+- **LoRA-adapter swap instead of whole-GGUF swap** for per-task local specialization:
+  [S-LoRA](https://arxiv.org/abs/2311.03285) / [LoRAX](https://github.com/predibase/lorax) /
+  vLLM multi-LoRA — near-zero-cost per-task swap on one resident base. Changes the dispatcher's
+  local-model design if specialists become adapters.
+- **vLLM Sleep Mode** for the strong ratifier: keep it warm-in-RAM, wake per task, instead of cold
+  reload (directly addresses the 35B's spill cost).
+- **Calibrate the proposer-confidence trigger** before trusting logprob/entropy (UCCI).
+- **Report abstention coverage** with every "accuracy-on-agreement" number.
+
+*Citation hygiene:* arXiv IDs for Medusa, EAGLE, SelectiveNet (Geifman & El-Yaniv 2019), and
+Learning-to-Defer (Mozannar & Sontag 2020) were given from model memory by the research pass, **not
+confirmed this session — verify before external citation.** All bracket-linked IDs above were
+search-confirmed.
+
 ## Anthropic & practitioner writing — shift-left/decompose/offload is largely PUBLISHED (2024–2025)
 
 A sourced pass found the core mechanics crystal leans on are already Anthropic house doctrine — so
