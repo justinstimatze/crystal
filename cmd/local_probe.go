@@ -66,14 +66,20 @@ func (c *LocalProbeCmd) Run() error {
 	if len(labeled) == 0 {
 		return usageError{fmt.Errorf("no reference-covered commands in %s", src)}
 	}
+	totalCovered := len(labeled) // the full deduped reference-covered pool, before any sampling
 	labeled = subsample(labeled, c.N)
+	// Make "real N" honest: say how many we graded AND the pool it was sampled from.
+	sampled := ""
+	if len(labeled) < totalCovered {
+		sampled = fmt.Sprintf(" [sampled from %d covered]", totalCovered)
+	}
 
 	if c.Model2 != "" {
-		fmt.Printf("local-probe: %d reference-covered commands (%s); cloud=%s local=%s + %s (agreement) @ %s\n\n",
-			len(labeled), src, llm.ModelHaiku, c.Model, c.Model2, local.Host())
+		fmt.Printf("local-probe: %d reference-covered commands%s (%s); cloud=%s local=%s + %s (agreement) @ %s\n\n",
+			len(labeled), sampled, src, llm.ModelHaiku, c.Model, c.Model2, local.Host())
 	} else {
-		fmt.Printf("local-probe: %d reference-covered commands (%s); cloud=%s local=%s @ %s\n\n",
-			len(labeled), src, llm.ModelHaiku, c.Model, local.Host())
+		fmt.Printf("local-probe: %d reference-covered commands%s (%s); cloud=%s local=%s @ %s\n\n",
+			len(labeled), sampled, src, llm.ModelHaiku, c.Model, local.Host())
 	}
 
 	// Run each tier as ONE pass over the corpus rather than interleaving per
