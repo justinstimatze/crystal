@@ -8,6 +8,16 @@ Prior session added three rungs on top of `triage`: `author` (self-authors the v
 gap: `hook` — a real Claude Code PreToolUse hook serving the deterministic tier live (0 model calls
 on the covered fraction), with demote-on-drift across real process boundaries** (`HOOK_FINDINGS.md`).
 
+## ⇒ TODO (redo cleanly, do NOT skip): clean from-scratch N=250 --home agreement run
+The first N=250 `--home` agreement run ABORTED at 72/250 (qwen3.6:35b blew past the 120s client
+timeout — RAM-pressure stall from the ~70% VRAM spill; fixed → 300s default + `OLLAMA_TIMEOUT_S`,
+commit `ff3ebee`). A resumed run reuses the FAILED run's 71 cached 35B results. That's valid for
+CORRECTNESS (content-hash cache + temp-0 determinism → cached label == fresh label) but a LOOPHOLE
+for discipline + LATENCY (resumed run reports mixed-regime cached timings — do NOT cite p50/p99 from
+it). **Redo later from a clean slate:** clear this corpus's 35B cache entries, run once under one
+consistent policy (300s timeout, or treat timeout-as-abstention — pick one), capture clean latency.
+Only then are the N=250 latency numbers citable. Coverage/on-agree from the resume are fine to cite now.
+
 ## ⇒ STATUS (2026-06-07 late): local tier DE-RISKED on a real GPU + prior-art swept — next = wire the local agreement oracle
 
 Tree clean; `go build/vet/test` green. Commits this stretch: `f165402` (guard) → `8858b10` (context-
