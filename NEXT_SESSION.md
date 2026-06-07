@@ -8,6 +8,52 @@ Prior session added three rungs on top of `triage`: `author` (self-authors the v
 gap: `hook` — a real Claude Code PreToolUse hook serving the deterministic tier live (0 model calls
 on the covered fraction), with demote-on-drift across real process boundaries** (`HOOK_FINDINGS.md`).
 
+## ⇒ STATUS (2026-06-07 late): local tier DE-RISKED on a real GPU + prior-art swept — next = wire the local agreement oracle
+
+Tree clean; `go build/vet/test` green. Commits this stretch: `f165402` (guard) → `8858b10` (context-
+reclaim measured + reflexive vision) → `cb12932` (dispatch) → `abc00d0` (A5 overturned) → `65a7a4f`
+(8B frontier + agreement) → `34165a1` (prior-art sweep). **Read `A5_PROBE_FINDINGS.md` (top section)
+and `PRIOR_ART.md` (2026-06-07 section).**
+
+**What landed (all measured, all remote — the user's RTX 3080 box orchestrated entirely over HTTP via
+`OLLAMA_HOST`; pull/load/unload/`/api/ps` never touched by hand; `internal/local` reads `OLLAMA_HOST`
+with zero code change):**
+- **A5 negative OVERTURNED** (was a toy-1.5b artifact). Frontier vs det: Haiku 0.78@627ms ·
+  qwen3.6:35b **0.76**@3298ms (spills 70% to RAM, `/api/ps`-measured) · qwen3:8b **0.68@219ms** (3×
+  faster than Haiku, fully VRAM-resident). A capable local model ties Haiku on accuracy.
+- **All-local label oracle found:** 8B & 35B agree on **76%** of commands; on agreement **0.86**
+  accurate → trust-on-agreement / abstain-on-disagreement closes the `hook-loop` no-oracle gap with no
+  cloud. (Self-caught + retracted a bogus "blended latency 968ms" — escalate-on-disagreement needs
+  both models run, so no speedup.)
+- **`crystal guard` + `crystal dispatch` built** (constraint-type crystallization + the rule-library
+  dispatcher — the scaling architecture; rules-as-data + tested matcher registry). Context-reclaim
+  measured small (~1.5%/turn) and tempered. Reflexive vision in `THESIS.md` + `SWEEP_FINDINGS.md`.
+- **Prior-art swept (3 parallel passes, converged):** agreement-trust = tri-training (2005) + QBC
+  (1992); cascade = FrugalGPT/AutoMix; logprob trigger = UCCI 2026 (raw entropy miscalibrated). The
+  defensible seam is the **deterministic gate + demote-on-drift + per-chore + all-local** integration,
+  NOT the agreement/cascade. Cite, don't claim.
+
+**⇒ DECIDED NEXT ACTION (ranked by leverage):**
+1. **Validate agreement at real N, then wire it into the loop** (highest leverage; the project's
+   central open gap). (1a) re-run the two-model agreement on the full `--home` transcript corpus to
+   see if 76%-agree / 0.86 holds beyond N=37 [cheap, de-risks]; **report abstention coverage**, not
+   just accuracy-on-agreement (prior-art note). (1b) feed local 8B+35B agreement as `hook-loop`'s
+   re-author label oracle — framed as tri-training/PoLL feeding **our deterministic gate** (lead
+   novelty on the gate+demote, not the agreement). Closes "autonomous self-authoring, fully local."
+2. **`crystal sweep`** — auto-detect re-encoded-across-N-projects rules → propose dispatcher library
+   entries (the real auto-chunk; no hardware dep).
+3. **Proposer-confidence latency trigger** — 8B logprob/entropy → escalate only the uncertain ~24% to
+   the 35B. *Prerequisite (UCCI):* calibrate the signal (isotonic/temperature) — raw entropy is
+   miscalibrated; this is table-stakes, not optional.
+4. **Fold `hook`'s classifier into the dispatcher** (one process, both rule kinds).
+
+*Design fork to decide before more local-model routing:* LoRA-adapter swap (S-LoRA/LoRAX/vLLM
+multi-LoRA) instead of separate whole models — near-zero per-task swap on one resident base. *Local
+ops cheat-sheet:* models reachable at `http://192.168.4.114:11434`; `qwen3:8b` (resident) + `qwen3.6:35b`
+(spills) pulled; `keep_alive:"30m"|0|-1` controls residency; `think:false` REQUIRED for qwen3.x (else
+thinking eats the token budget → empty response). Pull remotely via `/api/pull`.
+
+---
 ## ⇒ STATUS (2026-06-07): vision clarified + crystal swept on its OWN substrate
 
 A conceptual session that produced a sharper statement of what crystal *is*, and a deterministic

@@ -44,7 +44,7 @@ blocking PreToolUse hook).
 - ~~The **payoff is unmeasured.**~~ MEASURED (`serve`/`amortize`): ~90,000× on the covered fraction, blended −77%, latency breakeven 43 hits.
 - ~~The crystallized artifact is written to disk but **not actually installed/served** as a live hook.~~ SERVED (`hook`): a real PreToolUse hook answering live with 0 model calls + demote-on-drift across process boundaries. The deployed speedup is ~50–110× (process-fork floor ~5.9ms), not the ~90,000× in-process figure; g=0.77 is **in-sample** (g→0.00 on a foreign command stack) — both scoped after the panel (`PANEL_FINDINGS.md`).
 - ~~The live loop does not auto-close.~~ CLOSED (`hook-loop`, `HOOK_LOOP_FINDINGS.md`): demote→re-author→gate→swap→re-promote→resume runs autonomously across 24 real processes; the two M-in-W evasions (interleave, terminal-DoS) are fixed. Remaining gap is epistemic: the new class's labels still come from a provided oracle (= A5).
-- ~~The **local-model tier** (RTX 3080 + small model + LoRA, per the brief).~~ PROBED (`local-probe`, `A5_PROBE_FINDINGS.md`): the tier is plumbed (`internal/local`, ollama) and measured — but the NAIVE version (qwen2:1.5b, CPU, no GPU) is **not viable**: 0.46 accuracy vs det 1.00 / Haiku 0.76, and ~4× slower (p50 2.5s vs 0.6s). A5 needs the GPU + a stronger/tuned model the brief assumed. Plumbed and measured, not yet paying.
+- ~~The **local-model tier** (RTX 3080 + small model + LoRA, per the brief).~~ ACCURACY DE-RISKED on a real GPU (`local-probe`, `A5_PROBE_FINDINGS.md`): on the user's RTX 3080 over the LAN (zero code change), `qwen3.6:35b` scores **0.76, tying Haiku 0.78** (the old 0.46 was a toy 1.5b model); `qwen3:8b` is **3× faster than Haiku** (219ms, fully VRAM-resident) but 0.68. Two-model agreement (76%) → **0.86 accuracy = an all-local label oracle** (closes the `hook-loop` no-oracle gap). Not yet wired into the loop; latency of the strong tier pending a VRAM-fitting model. Prior art swept (`PRIOR_ART.md`): the seam is the deterministic gate + demote-on-drift, not the agreement/cascade.
 - The **tamper-proof kernel** — today's gate is the gameable kind (the DGM result).
 - Anything running **unattended over real time**; any topology past the linear relay.
 
@@ -126,17 +126,31 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    *can't* cover (fuzzy/paraphrase). *Still to do:* a chore with a real uncovered residual
    (paraphrase/semantic-support citation checking), longer/harder inputs (the predicted whole-task
    hallucination didn't surface on the easy set), and the tool-de-biasing angle (weir).
-5. **Close the sovereignty gap (the gradient's far end) — PROBED, NEGATIVE on this hardware**
-   (`local-probe`, `A5_PROBE_FINDINGS.md`). The local tier is plumbed (`internal/local`, an ollama
-   HTTP client cached like the cloud one) and measured on the covered fraction: `qwen2:1.5b` on CPU
-   scored **0.46 accuracy vs det 1.00 / Haiku 0.76, at p50 2.5s (~4× slower than Haiku)** — not
-   viable as a cheap tier, and too weak (0.46) to be the live oracle the `hook-loop` re-author needs.
-   *Bonus:* even Haiku matched det only 0.76 inside coverage (compound-command ambiguity), so the
-   deterministic tier is the most ACCURATE on its covered fraction, not just the fastest — the thesis
-   in one number. *Path to viable A5:* GPU (the brief's RTX 3080, not on this host) + a 7B-class or
-   LoRA-tuned model, or a confirm step that ratifies a weak local oracle's label proposals. *Status:*
-   plumbed and measured, not yet paying. *Done when:* a chore is served from local hardware at
-   accuracy ≥ Haiku and latency ≤ Haiku, with the gate intact.
+5. **Close the sovereignty gap (the gradient's far end) — ACCURACY DE-RISKED on a real GPU; latency
+   path clear; an all-local label oracle found** (`local-probe`, `A5_PROBE_FINDINGS.md`). The 2026-05-29
+   negative (`qwen2:1.5b`, CPU, 0.46) was a **toy-model artifact** — overturned 2026-06-07. Measured
+   on the user's RTX 3080 over the LAN (`OLLAMA_HOST`, **zero code change** — `internal/local` already
+   reads it; the GPU box is orchestrated entirely over HTTP: pull/load/unload/`/api/ps`, never touched
+   by hand). The frontier, all verified against raw:
+
+   | tier | acc vs det | p50 | p99 | VRAM |
+   |---|---|---|---|---|
+   | Haiku (cloud) | 0.78 | 627ms | 1102ms | — |
+   | qwen3.6:35b (local, spills 70% to RAM) | 0.76 | 3298ms | 22523ms | 30% |
+   | qwen3:8b (local, fully resident) | 0.68 | **219ms** | 424ms | 100% ✓ |
+
+   A capable local model **ties Haiku on accuracy** (0.76); the 8B is **3× faster than Haiku** but too
+   weak solo. The 35B's latency is a model-VRAM-fit issue (24GB on a 10GB card → CPU offload, measured
+   via `/api/ps`), not GPU absence. **Two-model agreement (N=37):** 8B and 35B agree on **76%** of
+   commands and on agreement are **0.86** accurate — an **all-local TRUST signal** (trust on agreement,
+   abstain/escalate on disagreement) that closes the `hook-loop` no-oracle gap with no cloud. *Caught
+   + retracted* an invalid "blended-latency 968ms" (escalate-on-disagreement needs both models run →
+   no speedup). *Prior art (see `PRIOR_ART.md` 2026-06-07):* agreement-trust = tri-training/QBC;
+   cascade = FrugalGPT/AutoMix; logprob trigger = UCCI (raw entropy miscalibrated → calibration is
+   table-stakes); orchestration = commodity. *Steal:* LoRA-adapter swap (S-LoRA/LoRAX) over whole-GGUF
+   swap; vLLM Sleep Mode for the warm ratifier. *Status:* accuracy de-risked, agreement-oracle found,
+   not yet wired into the loop. *Done when:* a chore is served from local hardware at accuracy ≥ Haiku
+   and latency ≤ Haiku, with the gate intact, AND the re-author draws labels from local agreement.
 
 6. **Crystallize crystal's own standing rules — SWEPT + FLAGSHIP BUILT**
    (`SWEEP_FINDINGS.md`, `cmd/guard.go`). The reflexive application: instead of categorizing Bash usage, mine the
