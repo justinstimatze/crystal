@@ -29,8 +29,42 @@ real model on real hardware — `qwen3.6:35b` (a 36B MoE) on the user's RTX 3080
   proposes, a slower model ratifies) is the viable oracle path — and it can be **all-local on one box**
   (GPU fast proposer + CPU careful ratifier/re-authorer, `num_gpu:0` to pin the second to CPU).
 
-*Status: A5 accuracy de-risked; latency pending a VRAM-fitting model; two-model single-box ensemble is
-the next probe. Original (toy-model) write-up kept below for the record.*
+### The frontier, completed — and a two-model agreement result (same day)
+
+Pulled `qwen3:8b` *remotely* (ollama `/api/pull` — the whole flow is HTTP: pull, load, unload,
+`/api/ps`; the GPU box is never touched by hand) and measured it. It fits **fully VRAM-resident**
+(`/api/ps`: 5.5GB/5.5GB, 0 in RAM). Three measured points now:
+
+| tier | acc vs det | p50 | p99 | VRAM |
+|---|---|---|---|---|
+| Haiku (cloud) | 0.78 | 627ms | 1102ms | — |
+| qwen3.6:35b (local, spills) | 0.76 | 3298ms | 22523ms | 30% resident |
+| qwen3:8b (local, resident) | 0.68 | **219ms** | 424ms | 100% ✓ |
+
+A clean accuracy/latency frontier: the 8B is **3× faster than Haiku** but 0.68 (too weak solo); the
+35B ties Haiku but is slow (spills to CPU). This is the proposer/ratifier split in real numbers.
+
+**Two-model agreement (cross-tab of the two cached probes, N=37):**
+- 8B and 35B **agree on 76%** of commands; when they agree, accuracy is **0.86** — above either alone
+  (0.68 / 0.76) and above Haiku (0.78). Agreement concentrates correctness.
+- Disagreements (24%) flag the hard/ambiguous cases (35B right 4, 8B right 1, neither 4 — the
+  det-edge `gh`→`network` family).
+
+**Self-caught invalid number (the discipline working):** an initial "blended latency ≈ 968ms" for a
+confirm-step was **WRONG and is retracted**. The escalation trigger used was *"the two models
+disagree,"* which requires running BOTH models on every command — so you never skip the 35B; real
+latency is ≥3.3s, no speedup. The figure claimed a saving the method cannot deliver.
+
+**What the agreement result actually buys (better than latency): an all-local TRUST signal — the
+live-oracle gap, closed locally.** The open problem from [[hook-loop-closes-the-seam]] was trusting a
+local label for a new class with no oracle. Answer: run two independent local models; **trust the
+label on agreement (0.86, 76% of commands), abstain/escalate on disagreement.** No cloud, no human, no
+confidence plumbing — agreement IS the signal. *For a real latency win* you need a proposer-ONLY
+trigger (8B logprob/entropy → escalate only the uncertain ~24% to the 35B); that is unmeasured, the
+honest next experiment. Caveat: N=37, directional not robust.
+
+*Status: A5 accuracy de-risked; the two-model agreement gives an all-local label-trust signal; a
+proposer-confidence latency experiment is the next step. Original (toy-model) write-up kept below.*
 
 ---
 
