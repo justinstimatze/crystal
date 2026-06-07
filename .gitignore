@@ -24,3 +24,5 @@
 
 # Live PreToolUse hook drift-window state (per-session runtime artifact)
 .crystal-hook-state.json
+# Guard constraint self-monitoring state (fire/override counts — runtime)
+.crystal-guard-state.json

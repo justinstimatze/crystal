@@ -1,0 +1,18 @@
+{
+  "_comment": "Wire crystal's CONSTRAINT-type crystallization in as a live Claude Code PreToolUse hook. Merge this 'hooks' block into ~/.claude/settings.json (global — this rule is host-wide, not per-project). Replace /path/to/crystal with the built binary. Unlike `crystal hook` (which only ANSWERS, never denies), `crystal guard` DENIES `git add -A | git add . | git add --all` and tells the model to stage explicit paths — the standing rule the sweep found re-encoded in 4 projects (SWEEP_FINDINGS.md). It self-monitors: every match updates the --state file (denied vs bypassed), and a sustained override rate flags the rule NeedsRevision (the constraint analog of the categorizer hook's coverage-collapse demote). To override for a single command, run it with CRYSTAL_GUARD_SKIP=1. Fail-open: anything that isn't an unambiguous stage-everything is allowed.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/crystal guard --state ${CLAUDE_PROJECT_DIR}/.crystal-guard-state.json",
+            "timeout": 10,
+            "statusMessage": "crystal guard: git-add policy"
+          }
+        ]
+      }
+    ]
+  }
+}

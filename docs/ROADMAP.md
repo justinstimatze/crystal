@@ -5,6 +5,32 @@ trust substrate is the safety scaffolding that keeps shift-left from rotting —
 secondary, and heavily prior-arted ([`PRIOR_ART.md`](PRIOR_ART.md)). Milestones are "done when
 *measured*," not "done when it exists."
 
+## What crystal is, stated clearly (the vision)
+
+Crystal is **auto-chunking + shift-left applied to remembering.** An expert chunks a recurring
+N-step procedure into one named unit so working memory holds one token, not N; Claude doesn't do that
+across sessions — it re-derives the dance every time. Crystal detects the recurring pattern, binds it
+into one deterministic named unit (a hook, a `make` target, a git config), and serves it from the
+*environment* instead of from attention.
+
+Seen this way, **recall is the frontier tier and a deterministic artifact is the cheap tier.**
+Carrying a standing rule in memory and re-applying it every turn is expensive, lossy, and
+forgettable; the artifact is reliable, fires unconditionally, and — the cost axis that does *not*
+collapse — **costs zero standing context on every future turn** (the rule leaves the prompt). The
+per-call token figure collapses (see rung 2); context-budget-reclaimed-forever does not.
+
+The recursion that names the target: a memory rule is the first-order "don't make me remember"; it
+still fails because *applying* it is a second-order act of remembering. The fix collapses the
+recursion — move the constraint into the environment where the wrong path is unavailable. *Not having
+to remember to not have to remember.*
+
+**Promotion trigger** (sharper than "recurs N times"): a rule that **recurred despite already being a
+rule.** The deterministic, verifiable proxy the substrate sweep found is **re-encoded across N
+projects** — the same rule independently re-written in N memories means recall failed to generalize
+([`SWEEP_FINDINGS.md`](SWEEP_FINDINGS.md)). **Reflexive target:** crystal's first customer is its own
+standing instructions — `weir` already proves the shape (a recurring correction promoted to a
+blocking PreToolUse hook).
+
 ## Where it is now
 
 **Built + tested + run:**
@@ -111,6 +137,37 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    LoRA-tuned model, or a confirm step that ratifies a weak local oracle's label proposals. *Status:*
    plumbed and measured, not yet paying. *Done when:* a chore is served from local hardware at
    accuracy ≥ Haiku and latency ≤ Haiku, with the gate intact.
+
+6. **Crystallize crystal's own standing rules — SWEPT + FLAGSHIP BUILT**
+   (`SWEEP_FINDINGS.md`, `cmd/guard.go`). The reflexive application: instead of categorizing Bash usage, mine the
+   user's own `CLAUDE.md` + memory across all `~/Documents` repos for standing rules and partition
+   them by whether a deterministic oracle exists (mechanizable → promotable to a hook/config) vs
+   semantic (recall-only, honestly un-promotable). Deterministic sweep (no model calls, no transcript
+   reads): **156** feedback memories + **758** `CLAUDE.md` rule lines; the sharp signal is
+   **re-encoded-across-projects** (recall failed to chunk) — `git add -A` ban re-written in **4**
+   projects, `main`-not-`master` in **3**, secrets-to-files in **3**. `weir` is the existence proof
+   (a `which`→`command-v` correction already promoted to a blocking PreToolUse hook). The promote-set
+   is *new rules of weir's shape*, not a new system. *Self-illustrating:* the user wrote the crystal
+   thesis itself ("auto-fire, stop making me remember") as a standing rule in **≥4** projects — a
+   rule that had to be re-remembered per project. **Flagship BUILT** (`crystal guard`, `cmd/guard.go`):
+   a real PreToolUse hook that DENIES `git add -A | . | --all` with a stage-explicit-paths reason,
+   verified end-to-end over the real stdin contract (deny / silent-allow / non-Bash pass-through /
+   `CRYSTAL_GUARD_SKIP=1` override). It ships as a **self-monitoring sub-hybrid-loop**, not a dead
+   rule: a constraint produces no answers to verify, so its drift signal is **override frequency** —
+   the `--state` file counts denied-vs-bypassed and a sustained bypass rate flags `NeedsRevision`
+   (the constraint analog of the categorizer hook's coverage-collapse demote). Wiring:
+   `docs/hooks/guard.settings.snippet.json`. *Still recall-only (the next promotes):* `main`-default
+   via `git config`, Co-Authored-By trailer, `gh repo create` private-default, secrets-to-files
+   linter, end-of-turn `/schedule`-offer Stop-linter.
+   *Forward scope (do NOT defer past a handful of rules):* `guard` and `hook` are one-rule-one-hook
+   **prototypes**. The library is personal/preference-specific now (fine for a personal harness) and
+   may grow to **hundreds or thousands** of rules — at which point one PreToolUse hook *per* rule
+   means N process-forks per Bash call (~5.9ms floor × N = seconds at N=1000). The architecture that
+   scales is a **single dispatcher hook over a rule LIBRARY** (rules as data + per-rule state,
+   evaluated in-process — the `hook` `--rules` pattern generalized), which also cleanly answers the
+   registry question (the library dir IS the registry) and the **public/personal split** (the engine
+   + schema ship publicly; each user grows their own library). Build the dispatcher before either the
+   library grows past a handful or crystal goes public; don't keep adding `crystal <rule>` subcommands.
 
 ## Track B — trust substrate (secondary, ambitious)
 

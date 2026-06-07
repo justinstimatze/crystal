@@ -8,6 +8,34 @@ Prior session added three rungs on top of `triage`: `author` (self-authors the v
 gap: `hook` — a real Claude Code PreToolUse hook serving the deterministic tier live (0 model calls
 on the covered fraction), with demote-on-drift across real process boundaries** (`HOOK_FINDINGS.md`).
 
+## ⇒ STATUS (2026-06-07): vision clarified + crystal swept on its OWN substrate
+
+A conceptual session that produced a sharper statement of what crystal *is*, and a deterministic
+sweep applying it reflexively. **Read `docs/SWEEP_FINDINGS.md` and the new "What crystal is, stated
+clearly" block at the top of `ROADMAP.md`.**
+
+The vision, crisp: crystal is **auto-chunking + shift-left applied to remembering.** Recall is the
+frontier tier (lossy, forgettable, costs standing context every turn); a deterministic artifact (hook
+/ `make` target / git config) is the cheap tier (reliable, fires unconditionally, **zero standing
+context** — the cost axis that does *not* collapse, unlike per-call tokens). The recursion that names
+the target: a memory rule is the first-order "don't make me remember," but applying it is a
+second-order act of remembering — *not having to remember to not have to remember* is the collapse to
+an environmental constraint. **Promotion trigger:** a rule that recurred *despite already being a
+rule*; the deterministic proxy is **re-encoded across N projects**.
+
+**The sweep** (no model calls, no transcript reads — memory-footprint discipline): mined every
+`CLAUDE.md` + `~/.claude/projects/*/memory` under `~/Documents`. **156** feedback memories, **758**
+rule-candidate lines. Verified cross-project recurrences: `git add -A` ban in **4** projects (beads,
+calque, lucida, plancheck); `main`-not-`master` in **3**; secrets-to-files in **3**. `weir` is the
+existence proof — a `which`→`command-v` correction already promoted to a *blocking PreToolUse hook*;
+the promote-set is new rules of weir's shape, not a new system. **Self-illustrating:** the user wrote
+the crystal thesis itself ("auto-fire, stop making me remember") as a standing rule in **≥4** projects.
+
+**Next (decided action, gated on user pick):** build the flagship — a PreToolUse `deny` on
+`git add -A|.|--all` — which would retire its 4 memory encodings and convert the sweep's headline
+finding from a measurement into a *built* artifact. (Still also open: the A5 path below.)
+
+---
 ## ⇒ STATUS (2026-05-29 night): A5 PROBED — negative on this hardware; pick the path next session
 
 A5 is now **plumbed and measured** (`local-probe`, `internal/local` ollama client,
