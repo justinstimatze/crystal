@@ -76,44 +76,52 @@ func (c *LocalProbeCmd) Run() error {
 			len(labeled), src, llm.ModelHaiku, c.Model, local.Host())
 	}
 
+	// Run each tier as ONE pass over the corpus rather than interleaving per
+	// command. Two local models cannot both stay VRAM-resident on a 10GB card, so
+	// interleaving them would force ollama to unload/reload on every call (a reload
+	// storm that dominates wall-clock). A per-model pass keeps each model loaded
+	// for its whole sweep — one load, not N. (Cached calls are free regardless.)
 	var haikuLat, localLat []int64
 	haikuOK, localOK := 0, 0
-	// rows captures each command's labels so the agreement oracle can be computed
-	// honestly after the loop (agreement, abstention coverage, accuracy split).
 	var rows []probeRow
+
+	// Pass H: cloud-cheap (Haiku) baseline.
 	for _, l := range labeled {
 		hCat, hLat := serveModelClassify(ctx, cloud, l.cmd)
-		lCat, lLat, err := localClassify(ctx, lc, c.Model, l.cmd)
-		if err != nil {
-			return usageError{fmt.Errorf("local classify (%s): %w", c.Model, err)}
-		}
 		haikuLat = append(haikuLat, hLat)
-		localLat = append(localLat, lLat)
 		if hCat == l.ref {
 			haikuOK++
 		}
+	}
+	// Pass 1: the first local model.
+	for i, l := range labeled {
+		lCat, lLat, err := localClassify(ctx, lc, c.Model, l.cmd)
+		if err != nil {
+			return usageError{fmt.Errorf("local classify (%s) at %d/%d: %w", c.Model, i, len(labeled), err)}
+		}
+		localLat = append(localLat, lLat)
 		if lCat == l.ref {
 			localOK++
 		}
-		r := probeRow{ref: l.ref, m1: lCat}
-		if c.Model2 != "" {
+		rows = append(rows, probeRow{ref: l.ref, m1: lCat})
+	}
+	// Pass 2: the second local model (agreement oracle), same order, fill rows.
+	if c.Model2 != "" {
+		for i, l := range labeled {
 			m2Cat, _, err := localClassify(ctx, lc, c.Model2, l.cmd)
 			if err != nil {
-				return usageError{fmt.Errorf("local classify (%s): %w", c.Model2, err)}
+				return usageError{fmt.Errorf("local classify (%s) at %d/%d: %w", c.Model2, i, len(labeled), err)}
 			}
-			r.m2 = m2Cat
+			rows[i].m2 = m2Cat
 		}
-		rows = append(rows, r)
-		if c.Verbose {
-			hMark, lMark := "✓", "✓"
-			if hCat != l.ref {
-				hMark = "✗"
-			}
-			if lCat != l.ref {
+	}
+	if c.Verbose {
+		for i, l := range labeled {
+			lMark := "✓"
+			if rows[i].m1 != l.ref {
 				lMark = "✗"
 			}
-			fmt.Printf("  ref=%-13s  haiku %s %-13s  local %s %-13s %5dms  %s\n",
-				l.ref, hMark, hCat, lMark, lCat, lLat, truncate(l.cmd, 40))
+			fmt.Printf("  ref=%-13s  local %s %-13s  %s\n", l.ref, lMark, rows[i].m1, truncate(l.cmd, 40))
 		}
 	}
 
