@@ -36,7 +36,14 @@ type Client struct {
 	host     string
 	cacheDir string
 	http     *http.Client
+	offline  bool // when true, a cache miss is a loud error instead of a live HTTP call
 }
+
+// SetOffline makes the client serve ONLY from the disk cache: a cache miss
+// returns an error rather than calling the (possibly-unreachable) ollama host.
+// Used to re-validate a previously-measured run without the GPU box live — and
+// it fails loud on any miss so a partial cache can never masquerade as a result.
+func (c *Client) SetOffline(v bool) { c.offline = v }
 
 // Host returns the ollama base URL (OLLAMA_HOST or the local default).
 func Host() string {
@@ -91,6 +98,9 @@ func (c *Client) Classify(ctx context.Context, model, system, prompt string, num
 	if r, ok := c.readCache(key); ok {
 		r.Cached = true
 		return r, nil
+	}
+	if c.offline {
+		return Result{}, fmt.Errorf("offline: cache miss for model=%s (no live call; key=%s)", model, key)
 	}
 	body, _ := json.Marshal(genRequest{
 		Model:  model,
