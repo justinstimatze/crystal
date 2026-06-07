@@ -159,15 +159,21 @@ Unifying lens (THESIS "general principle"): every rung is *maximize the cheaply-
    `docs/hooks/guard.settings.snippet.json`. *Still recall-only (the next promotes):* `main`-default
    via `git config`, Co-Authored-By trailer, `gh repo create` private-default, secrets-to-files
    linter, end-of-turn `/schedule`-offer Stop-linter.
-   *Forward scope (do NOT defer past a handful of rules):* `guard` and `hook` are one-rule-one-hook
-   **prototypes**. The library is personal/preference-specific now (fine for a personal harness) and
-   may grow to **hundreds or thousands** of rules — at which point one PreToolUse hook *per* rule
-   means N process-forks per Bash call (~5.9ms floor × N = seconds at N=1000). The architecture that
-   scales is a **single dispatcher hook over a rule LIBRARY** (rules as data + per-rule state,
-   evaluated in-process — the `hook` `--rules` pattern generalized), which also cleanly answers the
-   registry question (the library dir IS the registry) and the **public/personal split** (the engine
-   + schema ship publicly; each user grows their own library). Build the dispatcher before either the
-   library grows past a handful or crystal goes public; don't keep adding `crystal <rule>` subcommands.
+   **Dispatcher BUILT — first cut** (`crystal dispatch`, `cmd/dispatch.go`). The scaling architecture:
+   ONE PreToolUse hook process loads a rule LIBRARY and evaluates every rule in-process (vs one
+   process-fork per rule — ~5.9ms × N, seconds at N=1000). The honest data/code split: a rule is
+   **data** (id, matcher-name, reason, enabled, per-rule self-monitoring state) so the library scales
+   to thousands and is per-user/shareable; each rule references a **named matcher from a small tested
+   registry** (`git_add_all`, …) rather than an arbitrary regex (a regex-per-rule library would
+   reintroduce guard's false-deny risk). Subsumes `guard` (its rule is the default library's first
+   entry). Verified end-to-end: default-library deny, a custom library file with the rule disabled
+   allows (data drives behavior), per-rule state keyed by id, fail-open on disabled/unknown-matcher/
+   broken-library. Wiring: `docs/hooks/dispatch.settings.snippet.json`, `docs/hooks/library.example.json`.
+   This answers the registry question (the library file IS the registry) and the **public/personal
+   split** (engine + matcher vocabulary ship publicly; each user grows their own library). *Still to
+   do:* classifier-type rules in the library (today it's constraint/deny rules — the categorizer
+   `hook` is still its own process); auto-population of the library from the sweep (rung 3 — `crystal
+   sweep`); the remaining promote-set rules added as library entries + matchers, not subcommands.
 
 ## Track B — trust substrate (secondary, ambitious)
 

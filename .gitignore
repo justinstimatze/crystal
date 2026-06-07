@@ -26,3 +26,5 @@
 .crystal-hook-state.json
 # Guard constraint self-monitoring state (fire/override counts — runtime)
 .crystal-guard-state.json
+# Dispatcher per-rule self-monitoring state (runtime)
+.crystal-dispatch-state.json
