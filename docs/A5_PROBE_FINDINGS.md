@@ -1,5 +1,37 @@
 # A5 probe — the local cheap tier (`crystal local-probe`)
 
+## ⇒ UPDATE 2026-06-07: two-model agreement oracle VALIDATED at N=250 (7× the N=37)
+
+The agreement result below (N=37) was directional. Re-ran it on the live `--home` corpus — **250
+unique commands sampled (deterministic stride) from 45,048 deduped reference-covered commands** —
+with `local-probe --model qwen3:8b --model-2 qwen3.6:35b`. The N=37 shape **holds**:
+
+| metric | N=37 | **N=250** |
+|---|---|---|
+| coverage (agree rate) | 0.76 | **0.74** (186/250) |
+| accuracy ON agree | 0.86 | **0.87** (161/186) |
+| accuracy ON disagree (8B / 35B) | 0.11 / 0.44 | **0.19 / 0.47** (12/64, 30/64) |
+| Haiku baseline | 0.78 | **0.77** (193/250) |
+| 8B / 35B solo | 0.68 / 0.76 | **0.69 / 0.76** |
+
+**The claim survives scaling:** on the 74% where 8B and 35B agree, the agreed label is **0.87**
+accurate — above **both** solo models (0.69, 0.76) — and the 26% they disagree on is exactly where
+the errors live (0.19 / 0.47). Agreement is a real abstention oracle that concentrates correctness,
+not a cherry-picked subset. This is the all-local trust signal at scale → it closes `hook-loop`'s
+no-cloud-oracle gap (next step 1b: feed it to the re-author behind the deterministic gate).
+
+**Honest caveats (do not over-read):**
+- **CITE correctness only — NOT latency.** This was a *resumed* run: the first N=250 attempt aborted
+  at 72/250 (a spilling-35B call exceeded the 120s client timeout — RAM-pressure stall; fixed → 300s
+  default + `OLLAMA_TIMEOUT_S`). The resume reused the failed run's cached 35B results. The labels are
+  sound (content-hash cache + temp-0 determinism → cached label == fresh label), but the reported
+  p50/p99 mix timeout regimes. A clean from-scratch N=250 (fresh cache, one policy, clean latency) is
+  a recorded TODO before any N=250 latency number is quoted.
+- **0.55% sample** of the covered pool — enough to confirm the N=37 shape replicates; a larger N would
+  tighten the interval.
+- The `verdict` line still flags the *solo* 8B as too weak (0.69) — correct; the *agreement* oracle
+  (0.87 on 74%) is the proposal, not the solo model.
+
 ## ⇒ UPDATE 2026-06-07: the negative is OVERTURNED on accuracy (GPU + a capable model)
 
 The 2026-05-29 negative below was a **toy-model artifact**, not a local-tier verdict. Re-run against a
