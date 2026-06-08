@@ -23,6 +23,27 @@ classes: few-shot prompting, stronger/larger models, or a cloud *confirm* step o
 on what the oracle was confident about and v2 covered it perfectly); the bottleneck is novel-class label
 COVERAGE, not the gate. Single deterministic run (temp-0, cached).
 
+## ⇒ UPDATE 2026-06-07: local-CONFIRM cascade — targeted cloud spend on the abstained slice lifts recovery
+
+`hook-loop --oracle local-confirm` (commit `7828b50`, nil-fix `d84a746`) adds the FrugalGPT/AutoMix
+cascade: local 8B+35B agreement where the two models agree (zero cloud), escalate ONLY the abstained
+commands to a cloud confirm (Haiku). Live run, full progression on the container drift class:
+
+| oracle | label source | cloud calls | TRUTH recovery (v2 vs containerRef) | served |
+|---|---|---|---|---|
+| reference | provided ground truth | 0 | 8/8 (by construction) | 8/8 |
+| local | 8B+35B agree (3/8) | 0 | **4/8** | 7/8 |
+| **local-confirm** | 3 local + 5 Haiku-confirmed | **5** | **6/8** | **8/8** |
+
+**The cascade works and is honestly bounded.** Paying 5 cloud calls (the abstained slice, NOT all 8)
+lifted truth recovery 4/8→6/8 and served-coverage 7/8→8/8 — half the gap to the perfect-label
+reference, for ~5 cheap calls. The residual 2 truth misses are the honest ceiling: the **gate is 8/8
+but truth is 6/8** because the confirm tier (Haiku) itself mislabels ~2 novel-class commands (e.g.
+`docker build`→build, `kubectl logs`→search), and the deterministic gate can only enforce CONSISTENCY
+with the oracle's labels, not ground truth (the producer-verifier limit). Escalating the confirm tier
+from Haiku to Opus would likely close those 2 at higher per-call cost — the next knob. Single
+deterministic run; agreement labels cached from the 1b run (same 3 agree).
+
 ## ⇒ UPDATE 2026-06-07: two-model agreement oracle VALIDATED at N=250 (7× the N=37)
 
 The agreement result below (N=37) was directional. Re-ran it on the live `--home` corpus — **250

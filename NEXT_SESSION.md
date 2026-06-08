@@ -19,8 +19,13 @@ doesn't surface `--model-2` (35B) latency (small fix); freeze a corpus snapshot 
 **1b DONE** (commit `5f37344`): `hook-loop --oracle local` labels the drift class from 8B+35B agreement
 (no cloud/human), dual-scored (gate on oracle-confident labels; containerRef = reported truth yardstick
 only). See the live-run outcome in this session.
-**Next:** (3) proposer-confidence latency trigger (calibrate first — UCCI); (2) `crystal sweep`; (4) fold
-hook classifier into dispatch. And: surface 35B latency in the probe; consider a frozen `--home` snapshot.
+**local-CONFIRM cascade DONE** (commits `7828b50`, nil-fix `d84a746`): `--oracle local-confirm` pays
+cloud (Haiku) on JUST the abstained slice. Live: reference 8/8 · local 4/8 (0 cloud) · local-confirm
+**6/8 truth + 8/8 served, 5 cloud calls**. Honest ceiling: gate 8/8 but truth 6/8 — the confirm tier
+(Haiku) mislabels ~2 novel-class cmds, and the gate enforces consistency with the oracle not truth.
+**Next knob:** escalate confirm Haiku→Opus to close the last 2 (a one-line model swap + measure).
+**Then:** (3) proposer-confidence latency trigger (calibrate first — UCCI); (2) `crystal sweep`; (4) fold
+hook classifier into dispatch. Probe TODO: surface 35B latency; consider a frozen `--home` snapshot.
 
 ## ⇒ STATUS (2026-06-07 late): local tier DE-RISKED on a real GPU + prior-art swept — next = wire the local agreement oracle
 
