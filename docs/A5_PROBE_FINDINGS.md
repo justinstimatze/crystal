@@ -53,6 +53,25 @@ not auto-reject. This does NOT sink the architecture — it sharpens where the g
 from. The deterministic gate is still right to refuse to trust a noisy producer blindly; the fix is a
 more reliable producer on the contested labels, exactly what the confirm tier is for. Single det run.
 
+**⇒ RESOLVED — gate-time confirm tiebreak (commit `c2bf43f`).** Chosen fix (option 1: confirm overrides
+local). When v2 disagrees with a cheap local-agreement label at gate time, escalate JUST that disputed
+command to the confirm tier as a tiebreak: if the stronger tier backs v2, the agreement label was wrong
+→ OVERRIDE and pass; if it backs the original, v2 is genuinely wrong → real miss. Re-ran Opus-confirm:
+
+| mode | truth | gate | outcome |
+|---|---|---|---|
+| Opus-confirm (no tiebreak) | 8/8 | 7/8 | **REJECT** |
+| **Opus-confirm + tiebreak** | **8/8** | **8/8 (1 override)** | **PROMOTE** ✓ |
+
+The gate found v2 ≠ 1 local-agreement label, escalated it to Opus, Opus backed v2 → overrode the wrong
+cheap label → gate 8/8 → PROMOTE, serve 8/8. The gate now neither rubber-stamps the cheap oracle NOR
+auto-rejects a correction — it ADJUDICATES via the strongest available tier, and only overrides when
+confirm agrees with v2 AND disagrees with the original (not a rubber stamp). Targeted spend preserved
+(tiebreak confirms fire only on conflicts, ~1). Honest residual: the tiebreak inherits the confirm
+tier's own fallibility (it's only as good as the strongest tier you have) and N=8 is small — option 2
+(gate at larger N) stays open. The cascade is the validated shape: zero-cloud where locals agree, cheap
+cloud on the abstained slice, strong-tier adjudication on gate conflicts, det gate deciding throughout.
+
 ## ⇒ UPDATE 2026-06-07: local-CONFIRM cascade — targeted cloud spend on the abstained slice lifts recovery
 
 `hook-loop --oracle local-confirm` (commit `7828b50`, nil-fix `d84a746`) adds the FrugalGPT/AutoMix

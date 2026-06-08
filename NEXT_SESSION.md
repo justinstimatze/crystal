@@ -29,10 +29,13 @@ the ORACLE's labels, and 1 of the 3 LOCAL-agreement labels was confidently WRONG
 residual). v2 generalized past it to truth; the gate penalized v2 for correcting the oracle. **The det
 gate can't tell "v2 wrong" from "oracle wrong" → producer-verifier gating ANTI-CORRELATES with truth at
 the margin when the producer is fallible.** This is the load-bearing tension to chew on next.
-**Decided next work (the design responses to the finding):** (a) let a stronger confirm tier OVERRIDE a
-conflicting local-agreement label; (b) gate at larger N; (c) treat gate-vs-confirm conflict as a
-relabel signal, not auto-reject. **Then:** (3) proposer-confidence latency trigger (calibrate — UCCI);
-(2) `crystal sweep`; (4) fold hook→dispatch. Probe TODO: surface 35B latency; frozen `--home` snapshot.
+**Tension RESOLVED — gate-time confirm tiebreak (commit `c2bf43f`, user picked option 1, open to 2):**
+on a gate conflict (v2 ≠ cheap label), escalate JUST that command to the confirm tier; backs v2 →
+OVERRIDE, backs original → real miss. Re-ran Opus-confirm: gate 7/8 REJECT → **gate 8/8 (1 override)
+PROMOTE, truth 8/8, serve 8/8** — loop closed with full recovery. Honest residual: inherits the confirm
+tier's fallibility; N=8 small → **option 2 (gate at larger N) still open** if you want to revisit.
+**Then (still queued):** (3) proposer-confidence latency trigger (calibrate — UCCI); (2) `crystal sweep`;
+(4) fold hook→dispatch. Probe TODO: surface 35B latency; frozen `--home` snapshot.
 
 ## ⇒ STATUS (2026-06-07 late): local tier DE-RISKED on a real GPU + prior-art swept — next = wire the local agreement oracle
 
