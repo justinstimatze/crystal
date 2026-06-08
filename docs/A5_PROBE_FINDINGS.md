@@ -1,5 +1,40 @@
 # A5 probe — the local cheap tier (`crystal local-probe`)
 
+## ⇒ UPDATE 2026-06-08: INDEPENDENCE pressure test — cross-family agreement is NOT meaningfully better (the concept holds, but barely on independence)
+
+The agreement oracle's premise is **triangulation of independent methods** — agreement is a
+trust signal only if the two models fail INDEPENDENTLY. But the validated pair (`qwen3:8b` +
+`qwen3.6:35b`) is **same-family** (both Qwen), so the 0.85–0.87 on-agree could be inflated by
+*correlated* errors (both wrong the same way → falsely agree). Tested it by varying family.
+`local-probe --model-2-provider publicai` was built for this, but the run was routed to LOCAL
+non-Qwen models (PublicAI's $1 shared-Team spend-budget throttle, issue forpublicai/chat.publicai.co#46;
+cleaner + free anyway — pulled `llama3.1:8b`, `qwen2.5:7b` to the 3080).
+
+| pair | family | N | coverage | on-agree |
+|---|---|---|---|---|
+| qwen3:8b + qwen3.6:35b | same (Qwen) | 250 | 0.74–0.80 | 0.85–0.87 |
+| qwen3:8b + llama3.1:8b | cross (Alibaba+Meta) | 37 | 0.62 | 0.91 |
+| qwen3:8b + llama3.1:8b | cross (Alibaba+Meta) | 250 | 0.73 | **0.88** |
+| qwen3:8b + qwen2.5:7b | **same (Qwen), size-matched** | 250 | 0.75 | **0.86** |
+
+**The controlled comparison** (bottom two rows: N=250, same `--home` pool, both pairs ~8B — only
+FAMILY differs): cross **0.88** vs same **0.86**. That **+2pp is under 1 standard error (~3.5pp on a
+~185-item base) — not statistically significant.** The dramatic +6pp at N=37 (0.91) was small-sample
+noise, caught by firming up.
+
+**Honest verdict:**
+1. The two-model agreement oracle is **valid** — it concentrates correctness for BOTH families
+   (0.86 and 0.88 on-agree both clear the 0.68–0.79 solo accuracies). The concept survives.
+2. The independence worry was **real in direction** (cross ≥ same in all four runs) but **small in
+   magnitude** and within noise once size+pool are controlled. Same-family agreement is **not** badly
+   corrupted by shared bias — the documented 0.85–0.87 was not a mirage.
+3. Cross-family does **not** rescue the residual: on-agree caps ~0.86–0.88 regardless of family, so
+   ~12–14% wrong-when-agreed persists. That residual is **not** an independence problem — it needs the
+   **gate-time confirm tie-break** (escalate disputed/abstained items to a stronger tier), which stays
+   the real lever. (`gemma2:9b` is pulled for an optional 3-way test, but the 2-way already shows the
+   independence effect is small; a 3-way is unlikely to overturn this.)
+
+
 ## ⇒ UPDATE 2026-06-07: 1b WIRED + run live — the loop closes zero-cloud, but the oracle is conservative on a NOVEL class
 
 `hook-loop --oracle local` (commit `5f37344`) replaces the provided `containerRef` with the 8B+35B
