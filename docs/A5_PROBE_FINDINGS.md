@@ -16,18 +16,26 @@ cleaner + free anyway — pulled `llama3.1:8b`, `qwen2.5:7b` to the 3080).
 | qwen3:8b + llama3.1:8b | cross (Alibaba+Meta) | 37 | 0.62 | 0.91 |
 | qwen3:8b + llama3.1:8b | cross (Alibaba+Meta) | 250 | 0.73 | **0.88** |
 | qwen3:8b + qwen2.5:7b | **same (Qwen), size-matched** | 250 | 0.75 | **0.86** |
+| qwen3:8b + EuroLLM-22B | cross (European) | 37 | 0.73 | 0.81 |
 
-**The controlled comparison** (bottom two rows: N=250, same `--home` pool, both pairs ~8B — only
+**The controlled comparison** (the two N=250 rows: same `--home` pool, both pairs ~8B — only
 FAMILY differs): cross **0.88** vs same **0.86**. That **+2pp is under 1 standard error (~3.5pp on a
-~185-item base) — not statistically significant.** The dramatic +6pp at N=37 (0.91) was small-sample
-noise, caught by firming up.
+~185-item base) — not statistically significant.**
+
+**And cross-family does not even point one way.** On the SAME fixed 37 items, the two cross-family
+second models *straddle* the same-family number: llama3.1:8b **0.91** (+6pp), EuroLLM-22B **0.81**
+(−4pp), same-family qwen2.5 **0.85**. So the on-agree tracks the *specific second model's quirks*,
+not its family relationship — the +6pp llama spike was noise, EuroLLM swings the other way, and the
+controlled N=250 confirms the family effect is ~2pp / within noise. (Run via the now throttle-resilient
+PublicAI client; it completed cleanly — backoff in place for when the shared-budget throttle recurs.)
 
 **Honest verdict:**
 1. The two-model agreement oracle is **valid** — it concentrates correctness for BOTH families
    (0.86 and 0.88 on-agree both clear the 0.68–0.79 solo accuracies). The concept survives.
-2. The independence worry was **real in direction** (cross ≥ same in all four runs) but **small in
-   magnitude** and within noise once size+pool are controlled. Same-family agreement is **not** badly
-   corrupted by shared bias — the documented 0.85–0.87 was not a mirage.
+2. The independence worry is **laid to rest as a small effect.** With a third family added
+   (EuroLLM-22B 0.81 *below* same-family 0.85, while llama 0.91 was *above*), cross-family doesn't even
+   point one direction — it tracks the second model's individual quirks, not family. Same-family
+   agreement is **not** corrupted by shared bias; the documented 0.85–0.87 was not a mirage.
 3. Cross-family does **not** rescue the residual: on-agree caps ~0.86–0.88 regardless of family, so
    ~12–14% wrong-when-agreed persists. That residual is **not** an independence problem — it needs the
    **gate-time confirm tie-break** (escalate disputed/abstained items to a stronger tier), which stays
