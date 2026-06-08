@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/justinstimatze/crystal/internal/llm"
@@ -33,6 +34,9 @@ func parseCategoryFrom(text string, cats []string) string {
 // returns the parsed category + real latency (cached after first call). The
 // thinking-free, temp-0 path in internal/local makes it deterministic.
 func localClassifyCats(ctx context.Context, lc *local.Client, model string, cats []string, cmd string) (string, int64, error) {
+	if lc == nil {
+		return "", 0, fmt.Errorf("localClassifyCats: nil local client (an oracle mode needs local setup it didn't get)")
+	}
 	sys := "Classify this shell command into EXACTLY ONE category, reply with only the category word: " +
 		strings.Join(cats, ", ") + "."
 	r, err := lc.Classify(ctx, model, sys, cmd, 16)

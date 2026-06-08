@@ -69,17 +69,17 @@ func (c *HookLoopCmd) Run() error {
 		return usageError{err}
 	}
 	ctx := context.Background()
-	// When the drift-label oracle is the all-local agreement, stand up the local
-	// client up front and fail loud if the box is unreachable — an unreachable
-	// oracle must NOT silently degrade to universal abstention.
+	// When the drift-label oracle uses the local agreement (local OR local-confirm),
+	// stand up the local client up front and fail loud if the box is unreachable —
+	// an unreachable oracle must NOT silently degrade to universal abstention.
 	var lc *local.Client
-	if c.Oracle == "local" {
+	if c.Oracle == "local" || c.Oracle == "local-confirm" {
 		lc, err = local.New(c.CacheDir)
 		if err != nil {
 			return usageError{err}
 		}
 		if err := lc.Reachable(ctx); err != nil {
-			return usageError{fmt.Errorf("oracle=local but the local model host is unreachable: %w", err)}
+			return usageError{fmt.Errorf("oracle=%s but the local model host is unreachable: %w", c.Oracle, err)}
 		}
 	}
 	cmds, src, err := loadBashCommands(c.Corpus, c.Home)
