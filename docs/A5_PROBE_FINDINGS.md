@@ -1,5 +1,28 @@
 # A5 probe — the local cheap tier (`crystal local-probe`)
 
+## ⇒ UPDATE 2026-06-07: 1b WIRED + run live — the loop closes zero-cloud, but the oracle is conservative on a NOVEL class
+
+`hook-loop --oracle local` (commit `5f37344`) replaces the provided `containerRef` with the 8B+35B
+agreement oracle. Ran it live end-to-end (28 hook processes, GPU box, zero cloud oracle):
+
+- Demoted on the container drift → captured 8 → **local agreement labeled only 3/8, abstained on 5.**
+- Gate (oracle-confident set): **3/3 = 1.00** → promoted. Held-out TRUTH: **v2 vs containerRef = 4/8**.
+  Resume: 7/8 *covered* deterministically, but 3 of those are miscategorized (covered ≠ correct; 4/8 is
+  the honest number). The "A5 GAP CLOSED" line correctly did NOT fire (recovery was not 8/8).
+
+**The finding (honest, measured, not oversold):** the WIRING closes autonomously with no cloud and no
+human — demote→local-label→re-author→gate→swap→re-promote→resume — which is what the panel said was
+open. BUT the all-local agreement oracle is far more conservative on a genuinely NEW class than on the
+in-distribution triage corpus: agreement coverage **0.80 on known classes → 0.375 (3/8) on "container"**,
+because the models dispute the new boundary (`docker build` is arguably `build`; `kubectl logs` arguably
+`search`). **Agreement helps least where it's needed most** — novel classes are exactly when the
+re-author needs labels, and that's where the two models stop agreeing. So the local oracle only PARTIALLY
+closes A5 (4/8 truth recovery from 3 sparse labels). Full closure needs higher agreement on novel
+classes: few-shot prompting, stronger/larger models, or a cloud *confirm* step on just the abstained set
+(the abstained 5 is the small, well-targeted slice worth paying cloud for). The gate is sound (it gated
+on what the oracle was confident about and v2 covered it perfectly); the bottleneck is novel-class label
+COVERAGE, not the gate. Single deterministic run (temp-0, cached).
+
 ## ⇒ UPDATE 2026-06-07: two-model agreement oracle VALIDATED at N=250 (7× the N=37)
 
 The agreement result below (N=37) was directional. Re-ran it on the live `--home` corpus — **250
