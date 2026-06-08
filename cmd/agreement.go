@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 
+	"github.com/justinstimatze/crystal/internal/llm"
 	"github.com/justinstimatze/crystal/internal/local"
 )
 
@@ -59,4 +60,19 @@ func agreementLabel(ctx context.Context, lc *local.Client, m1, m2 string, cats [
 		return c1, true, nil
 	}
 	return "", false, nil
+}
+
+// cloudClassifyCats is the CONFIRM tier of the cascade: when the two local models
+// DISAGREE (abstain), escalate just that command to a cloud model over the same
+// expanded category set. This is the targeted-spend pattern (FrugalGPT/AutoMix):
+// pay cloud only on the small uncertain slice the local agreement could not cover,
+// not the whole class. parseCategoryFrom keeps the new class name recognizable.
+func cloudClassifyCats(ctx context.Context, client *llm.Client, model string, cats []string, cmd string) (string, error) {
+	sys := "Classify this shell command into EXACTLY ONE category, reply with only the category word: " +
+		strings.Join(cats, ", ") + "."
+	r, err := client.Classify(ctx, model, sys, cmd, 16)
+	if err != nil {
+		return "", err
+	}
+	return parseCategoryFrom(r.Text, cats), nil
 }

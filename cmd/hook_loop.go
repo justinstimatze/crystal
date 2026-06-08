@@ -57,7 +57,7 @@ type HookLoopCmd struct {
 	Normal    int      `help:"How many real commands to stream before the injected drift." default:"12"`
 	DriftM    int      `help:"Demote after M uncovered commands within the window." default:"3"`
 	DriftW    int      `help:"Sliding window size for the drift trigger." default:"5"`
-	Oracle    string   `help:"Drift-label oracle: 'reference' (the provided containerRef — the documented A5 gap) or 'local' (8B+35B agreement — NO cloud, NO human; the gap closed)." default:"reference" enum:"reference,local"`
+	Oracle    string   `help:"Drift-label oracle: 'reference' (provided containerRef — the documented A5 gap), 'local' (8B+35B agreement, NO cloud), or 'local-confirm' (agreement + a cloud confirm on JUST the abstained slice — targeted spend)." default:"reference" enum:"reference,local,local-confirm"`
 	LocalModel  string `help:"First local model for the agreement oracle (Oracle=local)." default:"qwen3:8b"`
 	LocalModel2 string `help:"Second local model for the agreement oracle (Oracle=local)." default:"qwen3.6:35b"`
 	Verbose   bool     `help:"Print the full hook JSON response for every command."`
@@ -173,37 +173,63 @@ func (c *HookLoopCmd) Run() error {
 		st.DemoteReason, len(st.RecentUncovered))
 	cats2 := append(append([]string{}, triageCategories...), "container")
 	train2 := append([]labeledCmd{}, authorSet...)
-	// LABEL the captured drift commands. Two oracle modes (the A5 fork):
-	//   reference — the provided containerRef (the documented gap: a human/oracle
-	//               supplied the new class's ground truth).
-	//   local     — 8B+35B agreement (NO cloud, NO human): agree→label, disagree→
-	//               abstain. This is the gap closed; containerRef survives ONLY as
-	//               the held-out TRUTH yardstick below, never as the label source.
-	labeledDrift, abstained := 0, 0
+	// oracleLabel resolves one drifted command's label under the chosen oracle (the
+	// A5 fork). It returns (label, source) where source ∈ {reference, agree, confirm,
+	// abstain}; an empty label means abstention (no usable label). The CASCADE:
+	//   reference     — provided containerRef (documented gap: a human supplied truth).
+	//   local         — 8B+35B agreement only; disagree → abstain (no cloud, no human).
+	//   local-confirm — agreement when the models agree (zero cloud), else escalate
+	//                   JUST that command to a cloud confirm (Haiku) — targeted spend
+	//                   on the small uncertain slice (FrugalGPT/AutoMix), not the whole
+	//                   class. containerRef stays a held-out TRUTH yardstick only.
+	confirmModel := llm.ModelHaiku
+	oracleLabel := func(cmd string) (label, source string, err error) {
+		switch c.Oracle {
+		case "local", "local-confirm":
+			l, agreed, e := agreementLabel(ctx, lc, c.LocalModel, c.LocalModel2, cats2, cmd)
+			if e != nil {
+				return "", "", e
+			}
+			if agreed {
+				return l, "agree", nil
+			}
+			if c.Oracle == "local-confirm" {
+				cl, e := cloudClassifyCats(ctx, client, confirmModel, cats2, cmd)
+				if e != nil {
+					return "", "", e
+				}
+				return cl, "confirm", nil
+			}
+			return "", "abstain", nil
+		default: // reference
+			return containerRef(cmd), "reference", nil
+		}
+	}
+
+	// LABEL the captured drift commands.
+	labeledDrift, abstained, confirmed := 0, 0, 0
 	for _, cmd := range st.RecentUncovered {
-		var lab string
-		if c.Oracle == "local" {
-			l, agreed, lerr := agreementLabel(ctx, lc, c.LocalModel, c.LocalModel2, cats2, cmd)
-			if lerr != nil {
-				return usageError{fmt.Errorf("local agreement oracle on %q: %w", cmd, lerr)}
-			}
-			if !agreed {
-				abstained++
-				continue // honest abstention — the loop declines to label what its models dispute
-			}
-			lab = l
-		} else {
-			lab = containerRef(cmd) // provided oracle for the new class (documented gap)
-			if lab == "" {
-				continue
-			}
+		lab, src, lerr := oracleLabel(cmd)
+		if lerr != nil {
+			return usageError{fmt.Errorf("oracle (%s) on %q: %w", c.Oracle, cmd, lerr)}
+		}
+		if lab == "" {
+			abstained++
+			continue // honest abstention — the loop declines to label what it cannot resolve
+		}
+		if src == "confirm" {
+			confirmed++ // a cloud call was spent on this abstained-by-local command
 		}
 		train2 = append(train2, labeledCmd{cmd, lab})
 		labeledDrift++
 	}
-	if c.Oracle == "local" {
-		fmt.Printf("  oracle=LOCAL (8B+35B agreement, no cloud): labeled %d captured drift commands, abstained on %d → re-authoring with the class in scope\n", labeledDrift, abstained)
-	} else {
+	switch c.Oracle {
+	case "local":
+		fmt.Printf("  oracle=LOCAL (8B+35B agreement, no cloud): labeled %d, abstained on %d → re-authoring with the class in scope\n", labeledDrift, abstained)
+	case "local-confirm":
+		fmt.Printf("  oracle=LOCAL+CONFIRM: %d labeled (%d by local agreement + %d by cloud confirm on the abstained slice), %d still abstained → re-authoring\n",
+			labeledDrift, labeledDrift-confirmed, confirmed, abstained)
+	default:
 		fmt.Printf("  oracle=reference: labeled %d of the captured drift commands as 'container' → re-authoring with the class in scope\n", labeledDrift)
 	}
 	if labeledDrift == 0 {
@@ -216,9 +242,9 @@ func (c *HookLoopCmd) Run() error {
 	}
 
 	// DUAL-SCORE the re-authored table over the FULL drift class:
-	//   gate  — what the AUTONOMOUS loop can see: where the oracle is CONFIDENT
-	//           (reference always; local only where the two models agree — some of
-	//           which are NOT in train2, a real holdout), does v2 match it?
+	//   gate  — what the AUTONOMOUS loop can see: where the oracle resolved a label
+	//           (incl. cloud-confirmed ones), does v2 match it? Some are NOT in train2
+	//           (a real holdout). Pure-abstain commands are not gateable.
 	//   truth — the honest yardstick: v2 vs the held-out containerRef ground truth,
 	//           NEVER used to decide the swap (that would smuggle the oracle back).
 	gateMatched, gateN, truthMatched := 0, 0, 0
@@ -226,29 +252,22 @@ func (c *HookLoopCmd) Run() error {
 		if v2.classify(cmd) == containerRef(cmd) {
 			truthMatched++
 		}
-		if c.Oracle == "local" {
-			l, agreed, lerr := agreementLabel(ctx, lc, c.LocalModel, c.LocalModel2, cats2, cmd)
-			if lerr != nil {
-				return usageError{fmt.Errorf("local agreement oracle (gate) on %q: %w", cmd, lerr)}
-			}
-			if !agreed {
-				continue
-			}
-			gateN++
-			if v2.classify(cmd) == l {
-				gateMatched++
-			}
-		} else {
-			gateN++
-			if v2.classify(cmd) == containerRef(cmd) {
-				gateMatched++
-			}
+		lab, _, lerr := oracleLabel(cmd)
+		if lerr != nil {
+			return usageError{fmt.Errorf("oracle (%s, gate) on %q: %w", c.Oracle, cmd, lerr)}
+		}
+		if lab == "" {
+			continue // abstained — not gateable
+		}
+		gateN++
+		if v2.classify(cmd) == lab {
+			gateMatched++
 		}
 	}
 	gateAcc := float64(gateMatched) / float64(max(gateN, 1))
 	truthAcc := float64(truthMatched) / float64(len(driftCommands))
 	fmt.Printf("  re-gate (oracle-confident, %d/%d covered): %d/%d = %.2f (gate %.2f)\n", gateN, len(driftCommands), gateMatched, gateN, gateAcc, c.Threshold)
-	if c.Oracle == "local" {
+	if c.Oracle != "reference" {
 		fmt.Printf("  held-out TRUTH yardstick (NOT used to decide): v2 vs containerRef = %d/%d = %.2f\n", truthMatched, len(driftCommands), truthAcc)
 	}
 	if gateN == 0 || gateAcc < c.Threshold {
@@ -292,14 +311,17 @@ func (c *HookLoopCmd) Run() error {
 	fmt.Printf("  %d separate hook processes, autonomously, with no human re-running `author`.\n", len(stream)+len(driftCommands))
 	if servedNow == len(driftCommands) {
 		fmt.Println("  Terminal demotion is fixed: the tier recovered itself.")
-		if c.Oracle == "local" {
-			fmt.Printf("  ⇒ A5 GAP CLOSED: the new class's labels came from LOCAL 8B+35B agreement — no cloud, no human —\n")
-			fmt.Printf("     and v2 matched the held-out ground truth %d/%d. The deterministic gate decided the swap;\n", truthMatched, len(driftCommands))
-			fmt.Printf("     agreement only PROPOSED labels. (Validated oracle: N=250, coverage 0.74 / on-agree 0.87.)\n")
-		} else {
-			fmt.Println("  (Caveat: the new class's labels came from a provided reference — discovering ground")
-			fmt.Println("   truth with no oracle is the local-agreement path: re-run with --oracle local.)")
-		}
+	}
+	switch c.Oracle {
+	case "local":
+		fmt.Printf("  oracle=local: new-class labels from 8B+35B agreement — NO cloud, NO human; v2 vs held-out truth %d/%d.\n", truthMatched, len(driftCommands))
+		fmt.Printf("  (Agreement abstains heavily on a NOVEL class — try --oracle local-confirm to recover the abstained slice.)\n")
+	case "local-confirm":
+		fmt.Printf("  oracle=local-confirm: labels from local agreement + %d cloud confirm call(s) on JUST the abstained slice;\n", confirmed)
+		fmt.Printf("  v2 vs held-out truth %d/%d. Targeted spend: cloud paid only where the two local models disagreed.\n", truthMatched, len(driftCommands))
+		fmt.Printf("  The deterministic gate still decided the swap; the oracle only PROPOSED labels. (Lead novelty on the gate.)\n")
+	default:
+		fmt.Println("  (oracle=reference: labels came from a provided reference — for no-oracle discovery use --oracle local / local-confirm.)")
 	}
 	return nil
 }
