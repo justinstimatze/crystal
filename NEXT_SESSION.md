@@ -23,9 +23,16 @@ only). See the live-run outcome in this session.
 cloud (Haiku) on JUST the abstained slice. Live: reference 8/8 · local 4/8 (0 cloud) · local-confirm
 **6/8 truth + 8/8 served, 5 cloud calls**. Honest ceiling: gate 8/8 but truth 6/8 — the confirm tier
 (Haiku) mislabels ~2 novel-class cmds, and the gate enforces consistency with the oracle not truth.
-**Next knob:** escalate confirm Haiku→Opus to close the last 2 (a one-line model swap + measure).
-**Then:** (3) proposer-confidence latency trigger (calibrate first — UCCI); (2) `crystal sweep`; (4) fold
-hook classifier into dispatch. Probe TODO: surface 35B latency; consider a frozen `--home` snapshot.
+**Opus-confirm DONE → SHARPEST FINDING** (commit `b536539`, `--confirm-model`): Opus confirm made v2
+truth-PERFECT (**8/8**) but the gate REJECTED it (**7/8=0.88** < 0.90) — because the gate scores v2 vs
+the ORACLE's labels, and 1 of the 3 LOCAL-agreement labels was confidently WRONG (the 0.85-on-agree
+residual). v2 generalized past it to truth; the gate penalized v2 for correcting the oracle. **The det
+gate can't tell "v2 wrong" from "oracle wrong" → producer-verifier gating ANTI-CORRELATES with truth at
+the margin when the producer is fallible.** This is the load-bearing tension to chew on next.
+**Decided next work (the design responses to the finding):** (a) let a stronger confirm tier OVERRIDE a
+conflicting local-agreement label; (b) gate at larger N; (c) treat gate-vs-confirm conflict as a
+relabel signal, not auto-reject. **Then:** (3) proposer-confidence latency trigger (calibrate — UCCI);
+(2) `crystal sweep`; (4) fold hook→dispatch. Probe TODO: surface 35B latency; frozen `--home` snapshot.
 
 ## ⇒ STATUS (2026-06-07 late): local tier DE-RISKED on a real GPU + prior-art swept — next = wire the local agreement oracle
 

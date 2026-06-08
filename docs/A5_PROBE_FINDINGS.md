@@ -23,6 +23,36 @@ classes: few-shot prompting, stronger/larger models, or a cloud *confirm* step o
 on what the oracle was confident about and v2 covered it perfectly); the bottleneck is novel-class label
 COVERAGE, not the gate. Single deterministic run (temp-0, cached).
 
+## ⇒ UPDATE 2026-06-07: the gate can REJECT a truth-PERFECT table (fallible-oracle tension)
+
+Escalating the confirm tier to Opus (`--confirm-model claude-opus-4-8`, commit `b536539`) produced the
+sharpest finding. Full ladder on the container drift class (live):
+
+| confirm tier | labels | TRUTH (v2 vs containerRef) | gate (v2 vs oracle) | outcome |
+|---|---|---|---|---|
+| none (local only) | 3 local | 4/8 | 3/3 ✓ | promote (partial) |
+| Haiku | 3 local + 5 Haiku | 6/8 | 8/8 ✓ | promote (2 Haiku errors baked in) |
+| **Opus** | 3 local + 5 Opus | **8/8** | **7/8 = 0.88 ✗** | **REJECT** |
+
+**Opus confirm produced a truth-PERFECT re-author (8/8) and the gate REJECTED it (0.88 < 0.90 threshold).**
+Why: the gate scores v2 against the ORACLE's labels, not ground truth. With Opus cleaning the abstained 5,
+the only remaining bad label was **1 of the 3 LOCAL-agreement labels — a command where 8B and 35B
+confidently AGREED but were WRONG** (the 0.85-on-agree residual from N=250 made concrete: ~15% of
+agreement labels are wrong → here literally 1 of 3). The Opus-trained v2 generalized PAST that wrong label
+to the correct answer (truth 8/8), and the gate penalized it for disagreeing with the oracle on that one
+command. **The deterministic gate cannot distinguish "v2 is wrong" from "the oracle is wrong," so it
+rejected a perfect table for being more correct than its own labels.**
+
+**The tension (honest, load-bearing for the thesis):** producer-verifier gating assumes the verifier's
+reference is trustworthy. When the label source (oracle) is fallible — and a 2-model agreement is 0.85,
+not 1.0 — **gate-consistency can ANTI-CORRELATE with truth at the margin**: a better re-author is rejected
+because it corrects the oracle. Design implications, not yet built: (a) let a STRONGER confirm tier
+OVERRIDE a conflicting local-agreement label (trust the better producer); (b) gate at larger N so one
+oracle error isn't 12.5% of the score; (c) treat gate-vs-confirm disagreement as a signal to re-label,
+not auto-reject. This does NOT sink the architecture — it sharpens where the gate's reference must come
+from. The deterministic gate is still right to refuse to trust a noisy producer blindly; the fix is a
+more reliable producer on the contested labels, exactly what the confirm tier is for. Single det run.
+
 ## ⇒ UPDATE 2026-06-07: local-CONFIRM cascade — targeted cloud spend on the abstained slice lifts recovery
 
 `hook-loop --oracle local-confirm` (commit `7828b50`, nil-fix `d84a746`) adds the FrugalGPT/AutoMix
