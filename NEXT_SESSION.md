@@ -8,15 +8,19 @@ Prior session added three rungs on top of `triage`: `author` (self-authors the v
 gap: `hook` — a real Claude Code PreToolUse hook serving the deterministic tier live (0 model calls
 on the covered fraction), with demote-on-drift across real process boundaries** (`HOOK_FINDINGS.md`).
 
-## ⇒ TODO (redo cleanly, do NOT skip): clean from-scratch N=250 --home agreement run
-The first N=250 `--home` agreement run ABORTED at 72/250 (qwen3.6:35b blew past the 120s client
-timeout — RAM-pressure stall from the ~70% VRAM spill; fixed → 300s default + `OLLAMA_TIMEOUT_S`,
-commit `ff3ebee`). A resumed run reuses the FAILED run's 71 cached 35B results. That's valid for
-CORRECTNESS (content-hash cache + temp-0 determinism → cached label == fresh label) but a LOOPHOLE
-for discipline + LATENCY (resumed run reports mixed-regime cached timings — do NOT cite p50/p99 from
-it). **Redo later from a clean slate:** clear this corpus's 35B cache entries, run once under one
-consistent policy (300s timeout, or treat timeout-as-abstention — pick one), capture clean latency.
-Only then are the N=250 latency numbers citable. Coverage/on-agree from the resume are fine to cite now.
+## ⇒ DONE (clean rerun + 1b): agreement REPLICATED at N=250, then wired into hook-loop
+**Clean rerun DONE** (loophole closed): cleared the qwen3 cache, re-ran from scratch (300s timeout, no
+concurrent polling). Clean draw — coverage **0.80**, on-agree **0.85**, concentration holds (on-disagree
+8B 0.20 / 35B 0.43); 8B clean latency p50 **225ms**/p99 327ms (~2.5× faster than Haiku 553ms). It does
+NOT match the resumed run digit-for-digit (0.74/0.87) **because the live `--home` corpus GREW between
+runs** (45,048→45,169 covered — this session logs to `~/.claude/projects`), so the stride drew a
+different 250. Two independent draws → SAME shape = replication, stronger than one run. Open: probe
+doesn't surface `--model-2` (35B) latency (small fix); freeze a corpus snapshot for byte-reproducibility.
+**1b DONE** (commit `5f37344`): `hook-loop --oracle local` labels the drift class from 8B+35B agreement
+(no cloud/human), dual-scored (gate on oracle-confident labels; containerRef = reported truth yardstick
+only). See the live-run outcome in this session.
+**Next:** (3) proposer-confidence latency trigger (calibrate first — UCCI); (2) `crystal sweep`; (4) fold
+hook classifier into dispatch. And: surface 35B latency in the probe; consider a frozen `--home` snapshot.
 
 ## ⇒ STATUS (2026-06-07 late): local tier DE-RISKED on a real GPU + prior-art swept — next = wire the local agreement oracle
 

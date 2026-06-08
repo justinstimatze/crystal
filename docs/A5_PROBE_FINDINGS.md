@@ -20,17 +20,25 @@ the errors live (0.19 / 0.47). Agreement is a real abstention oracle that concen
 not a cherry-picked subset. This is the all-local trust signal at scale → it closes `hook-loop`'s
 no-cloud-oracle gap (next step 1b: feed it to the re-author behind the deterministic gate).
 
-**Honest caveats (do not over-read):**
-- **CITE correctness only — NOT latency.** This was a *resumed* run: the first N=250 attempt aborted
-  at 72/250 (a spilling-35B call exceeded the 120s client timeout — RAM-pressure stall; fixed → 300s
-  default + `OLLAMA_TIMEOUT_S`). The resume reused the failed run's cached 35B results. The labels are
-  sound (content-hash cache + temp-0 determinism → cached label == fresh label), but the reported
-  p50/p99 mix timeout regimes. A clean from-scratch N=250 (fresh cache, one policy, clean latency) is
-  a recorded TODO before any N=250 latency number is quoted.
-- **0.55% sample** of the covered pool — enough to confirm the N=37 shape replicates; a larger N would
-  tighten the interval.
-- The `verdict` line still flags the *solo* 8B as too weak (0.69) — correct; the *agreement* oracle
-  (0.87 on 74%) is the proposal, not the solo model.
+**⇒ CLEAN-RERUN DONE (the loophole closed) — and it REPLICATED.** Cleared the qwen3 cache and re-ran
+from scratch under one policy (300s timeout, no concurrent box polling). The clean draw: coverage
+**0.80** (199/250), accuracy-on-agree **0.85** (170/199), concentration holds (on-disagree 8B 0.20 /
+35B 0.43), Haiku 0.78, 8B solo 0.72, 35B solo 0.77. It does NOT match the resumed run digit-for-digit
+(coverage 0.74→0.80, on-agree 0.87→0.85) — **because the live `--home` corpus GREW between runs**
+(45,048→45,169 covered, 373→374 files: this very session logs commands to `~/.claude/projects`), so
+the deterministic stride drew a *different* 250. That's not a bug — it's the honest truth that a
+strided sample over a *growing* corpus isn't time-reproducible. The upshot is stronger than a single
+run: **two independent 250-draws from ~45k both show the same shape** (coverage ~0.74–0.80, on-agree
+~0.85–0.87, concentration every time). The oracle finding replicates across resampling.
+
+- **Clean latency now citable (8B):** p50 **225ms** / p99 **327ms** — fully resident, tight tail; ~2.5×
+  faster than Haiku (p50 553ms). **35B clean latency is NOT surfaced** — the probe only aggregates
+  `--model` (8B) latency, not `--model-2`; surfacing model-2 latency is a small probe fix (TODO) before
+  the 35B side of the latency story is quotable.
+- **For byte-reproducibility**, freeze a corpus snapshot (the live `--home` set moves under you); the
+  small `testdata/corpus` is already frozen and is where N=37 reproduces exactly.
+- The `verdict` line still flags the *solo* 8B as too weak (0.72) — correct; the *agreement* oracle
+  (0.85 on 80%) is the proposal, not the solo model.
 
 ## ⇒ UPDATE 2026-06-07: the negative is OVERTURNED on accuracy (GPU + a capable model)
 
