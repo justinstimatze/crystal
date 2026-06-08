@@ -4,8 +4,11 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
+	"github.com/justinstimatze/crystal/internal/flow"
 	"github.com/justinstimatze/crystal/internal/llm"
 	"github.com/justinstimatze/crystal/internal/local"
 	"github.com/justinstimatze/crystal/internal/publicai"
@@ -65,6 +68,7 @@ type HookLoopCmd struct {
 	BigProvider   string   `help:"Where the agreement oracle's SECOND (big) model runs: 'local' (ollama on the house box, spills past 10GB VRAM) or 'publicai' (cloud-OPEN model, no spill stall)." default:"local" enum:"local,publicai"`
 	PublicaiModel string   `help:"PublicAI big model when --big-provider=publicai." default:"swiss-ai/apertus-70b-instruct"`
 	ConfirmModel  string   `help:"Cloud model that confirms the abstained slice (Oracle=local-confirm). Haiku is cheapest; Opus is the strongest confirm tier." default:"claude-haiku-4-5" enum:"claude-haiku-4-5,claude-sonnet-4-6,claude-opus-4-8"`
+	FlowOut       string   `help:"Write a Sankey-shaped flow record (real request counts from this run) here for the data-driven viz; lucida can watch it. Empty = don't write." default:".crystal-viz/hook-loop-flow.json"`
 	Verbose       bool     `help:"Print the full hook JSON response for every command."`
 }
 
@@ -159,6 +163,7 @@ func (c *HookLoopCmd) Run() error {
 	driftStart := len(normal)
 	fmt.Printf("=== 2/3. drive `crystal hook --rules <artifact>` over %d live events (serve, then container drift) ===\n", len(stream))
 	demotedAt := -1
+	serveDetPhase, deferPhase := 0, 0 // flow tallies: served deterministically vs deferred to the model
 	for i, cmd := range stream {
 		if i == driftStart {
 			fmt.Printf("  --- injected drift: %d container commands the v1 rules never saw ---\n", len(driftCommands))
@@ -168,6 +173,11 @@ func (c *HookLoopCmd) Run() error {
 			return usageError{fmt.Errorf("invoking hook on %q: %w", cmd, err)}
 		}
 		label := labelFor(ctxText)
+		if strings.Contains(ctxText, "category") {
+			serveDetPhase++
+		} else {
+			deferPhase++
+		}
 		if strings.Contains(ctxText, "DEMOTED") && demotedAt < 0 {
 			demotedAt = i
 		}
@@ -380,6 +390,55 @@ func (c *HookLoopCmd) Run() error {
 		fmt.Printf("  The deterministic gate still decided the swap; the oracle only PROPOSED labels. (Lead novelty on the gate.)\n")
 	default:
 		fmt.Println("  (oracle=reference: labels came from a provided reference — for no-oracle discovery use --oracle local / local-confirm.)")
+	}
+
+	// ---- emit the data-driven flow record (real counts) for the viz ----
+	if c.FlowOut != "" {
+		// Derive the captured count from the label splits (labeledDrift already
+		// includes confirmed) — st.RecentUncovered is cleared by re-promote before
+		// this point, so the demote node's in-edge must come from the out-edges.
+		captured := labeledDrift + abstained
+		rec := flow.Record{
+			Run:         "hook-loop",
+			Oracle:      c.Oracle,
+			BigProvider: c.BigProvider,
+			Pair:        fmt.Sprintf("%s + %s", small.name, big.name),
+			Note:        fmt.Sprintf("demoted@%d · v2 vs held-out truth %d/%d", demotedAt, truthMatched, len(driftCommands)),
+			Nodes: []flow.Node{
+				{ID: "stream", Label: "stream", Regime: "fate"},
+				{ID: "served-det", Label: "served-det (0 model)", Regime: "owned-local"},
+				{ID: "deferred-model", Label: "deferred→model", Regime: "vendor"},
+				{ID: "demote", Label: "drift→demote", Regime: "fate"},
+				{ID: "agree-labeled", Label: "agreement-labeled", Regime: "owned-house"},
+				{ID: "cloud-confirm", Label: "cloud-confirm", Regime: "vendor"},
+				{ID: "abstain", Label: "abstained", Regime: "fate"},
+				{ID: "reauthor", Label: "re-authored", Regime: "fate"},
+				{ID: "served-now", Label: "re-served-det", Regime: "owned-local"},
+				{ID: "still-deferred", Label: "still→model", Regime: "vendor"},
+			},
+			Edges: []flow.Edge{
+				{Source: "stream", Target: "served-det", Value: serveDetPhase, Kind: "shift-left"},
+				{Source: "stream", Target: "deferred-model", Value: deferPhase, Kind: "defer"},
+				{Source: "deferred-model", Target: "demote", Value: captured, Kind: "demote"},
+				{Source: "demote", Target: "agree-labeled", Value: labeledDrift - confirmed, Kind: "oracle"},
+				{Source: "demote", Target: "cloud-confirm", Value: confirmed, Kind: "oracle"},
+				{Source: "demote", Target: "abstain", Value: abstained, Kind: "oracle"},
+				{Source: "agree-labeled", Target: "reauthor", Value: labeledDrift - confirmed, Kind: "oracle"},
+				{Source: "cloud-confirm", Target: "reauthor", Value: confirmed, Kind: "oracle"},
+				{Source: "reauthor", Target: "served-now", Value: servedNow, Kind: "shift-left"},
+				{Source: "reauthor", Target: "still-deferred", Value: len(driftCommands) - servedNow, Kind: "defer"},
+			},
+		}
+		if err := rec.WriteFile(c.FlowOut); err != nil {
+			fmt.Printf("  (flow viz: could not write %s: %v)\n", c.FlowOut, err)
+		} else {
+			fmt.Printf("  flow record (real counts) → %s  (data-driven viz source; lucida can watch it)\n", c.FlowOut)
+		}
+		// Accrue the shift-left time series (append-only) for the historical graphs.
+		histPath := filepath.Join(filepath.Dir(c.FlowOut), "history.jsonl")
+		if err := rec.AppendHistory(histPath, time.Now().UTC().Format(time.RFC3339)); err != nil {
+			fmt.Printf("  (flow history: could not append %s: %v)\n", histPath, err)
+		}
 	}
 	return nil
 }

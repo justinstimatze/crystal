@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>crystal · live flow (shift-left across the menu)</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    body { background:#0e1116; color:#e6edf3; font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; margin:0; padding:24px; }
+    h1 { font-size:18px; margin:0 0 4px; font-weight:600; }
+    #meta { color:#8b949e; margin-bottom:16px; }
+    #meta b { color:#e6edf3; }
+    #chart { background:#0e1116; }
+    #status { position:fixed; top:12px; right:16px; color:#8b949e; font-size:12px; }
+    .pulse { color:#2ca02c; }
+    .totals { margin-top:14px; color:#8b949e; }
+    .totals b { color:#2ca02c; }
+  </style>
+</head>
+<body>
+  <h1>crystal — where requests actually went (live)</h1>
+  <div id="meta">waiting for <code>.crystal-viz/hook-loop-flow.json</code> …</div>
+  <div id="chart"></div>
+  <div class="totals" id="totals"></div>
+  <div id="status">●</div>
+
+  <script>
+    const DATA_URL = "/.crystal-viz/hook-loop-flow.json";
+    const STAGE_ORDER = ["stream","deferred-model","demote","agree-labeled","cloud-confirm","reauthor"];
+    const COLOR = {
+      domain: ["served-det","deferred-model","demote","agree-labeled","cloud-confirm","abstain","served-now","still-deferred"],
+      range:  ["#2ca02c","#d62728","#ff7f0e","#1f77b4","#9467bd","#7f7f7f","#2ca02c","#d62728"]
+    };
+
+    function spec(edges) {
+      return {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "width": 720, "height": 320, "background": "#0e1116",
+        "data": { "values": edges },
+        "transform": [
+          { "filter": "datum.value > 0" },
+          { "calculate": "indexof(" + JSON.stringify(STAGE_ORDER) + ", datum.source)", "as": "stageOrder" },
+          { "stack": "value", "groupby": ["source"], "sort": [{ "field": "target" }], "as": ["x0", "x1"] },
+          { "calculate": "(datum.x0 + datum.x1) / 2", "as": "mid" }
+        ],
+        "encoding": {
+          "y": { "field": "source", "type": "nominal", "title": "stage",
+                 "sort": { "field": "stageOrder" },
+                 "axis": { "labelColor": "#e6edf3", "titleColor": "#8b949e" } },
+          "color": { "field": "target", "type": "nominal", "title": "fate", "scale": COLOR,
+                     "legend": { "labelColor": "#e6edf3", "titleColor": "#8b949e" } }
+        },
+        "layer": [
+          { "mark": { "type": "bar", "height": { "band": 0.7 } },
+            "encoding": {
+              "x": { "field": "x0", "type": "quantitative", "title": "requests (count)",
+                     "axis": { "labelColor": "#e6edf3", "titleColor": "#8b949e", "grid": false } },
+              "x2": { "field": "x1" } } },
+          { "mark": { "type": "text", "align": "center", "baseline": "middle",
+                      "fontSize": 16, "fontWeight": "bold", "color": "white" },
+            "encoding": {
+              "x": { "field": "mid", "type": "quantitative" },
+              "text": { "field": "value", "type": "quantitative" },
+              "detail": { "field": "target" },
+              "color": { "value": "white" } } }
+        ],
+        "config": { "view": { "stroke": null } }
+      };
+    }
+
+    let lastSig = "";
+    async function tick() {
+      const dot = document.getElementById("status");
+      try {
+        const r = await fetch(DATA_URL + "?t=" + Date.now(), { cache: "no-store" });
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        const rec = await r.json();
+        const sig = JSON.stringify(rec.edges);
+        if (sig !== lastSig) {                       // only re-render + flash on change
+          lastSig = sig;
+          await vegaEmbed("#chart", spec(rec.edges), { actions: false });
+          const served = (rec.edges.find(e => e.target === "served-det") || {}).value || 0;
+          const deferred = (rec.edges.find(e => e.target === "deferred-model") || {}).value || 0;
+          const reserved = (rec.edges.find(e => e.target === "served-now") || {}).value || 0;
+          document.getElementById("meta").innerHTML =
+            "pair <b>" + rec.pair + "</b> · oracle <b>" + rec.oracle +
+            "</b> · big-provider <b>" + rec.big_provider + "</b> · <span style='color:#8b949e'>" + rec.note + "</span>";
+          document.getElementById("totals").innerHTML =
+            "served deterministically (0 model): <b>" + served + "</b> of " + (served + deferred) +
+            " · re-served after re-author: <b>" + reserved + "</b>";
+          dot.classList.add("pulse");
+          setTimeout(() => dot.classList.remove("pulse"), 600);
+        }
+        dot.title = "last ok " + new Date().toLocaleTimeString();
+      } catch (e) {
+        document.getElementById("meta").innerHTML =
+          "waiting for data (<code>" + DATA_URL + "</code>) — run <code>crystal hook-loop …</code>. " + e;
+      }
+    }
+    tick();
+    setInterval(tick, 1500);
+  </script>
+</body>
+</html>

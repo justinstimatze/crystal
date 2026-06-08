@@ -28,3 +28,6 @@
 .crystal-guard-state.json
 # Dispatcher per-rule self-monitoring state (runtime)
 .crystal-dispatch-state.json
+
+# data-driven viz output (regenerated each run)
+.crystal-viz/
