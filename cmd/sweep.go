@@ -30,17 +30,18 @@ import (
 // TESTED CODE, not arbitrary regex. Authoring+gating the matcher is the next step
 // (the producer-verifier discipline: don't auto-trust a generated matcher).
 type SweepCmd struct {
-	DocsRoot    string `help:"Root holding per-project dirs with CLAUDE.md files." default:"~/Documents"`
-	MemoryRoot  string `help:"Root holding <encoded-project>/memory/*.md files." default:"~/.claude/projects"`
-	MinProjects int    `help:"Constraints: report rules re-encoded across ≥ this many projects. Procedures: across ≥ this many sessions." default:"2"`
-	Top         int    `help:"Show at most this many candidates (0 = all)." default:"0"`
-	Procedures  bool   `help:"Switch to PROCEDURE discovery: mine session transcripts for recurring multi-command sequences (the cupel release-dance pattern) instead of doc constraints."`
-	MinProc     int    `help:"Procedures: a sequence must recur at least this many times to be a candidate." default:"3"`
-	Novel       bool   `help:"Procedures: only show sequences with an UNCOMMON step (filter out generic git add/commit/push churn) — surfaces distinctive ceremonies worth a custom command."`
-	Author      bool   `help:"Procedures: author a draft shell script for the TOP candidate (expensive tier), gated by a no-run structural check (no hallucinated commands). Emits a proposal; never installs or runs it."`
-	CacheDir    string `help:"Disk cache dir for the authoring model call." default:".crystal-cache"`
-	Model       string `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
-	EmitStull   bool   `help:"Constraints: emit the top constraint as a provably-sound stull machine (PreToolUse deny), run stull's static soundness check, and compile a settings.json hook. The formal-proof upgrade to --author's structural gate."`
+	DocsRoot     string `help:"Root holding per-project dirs with CLAUDE.md files." default:"~/Documents"`
+	MemoryRoot   string `help:"Root holding <encoded-project>/memory/*.md files." default:"~/.claude/projects"`
+	MinProjects  int    `help:"Constraints: report rules re-encoded across ≥ this many projects. Procedures: across ≥ this many sessions." default:"2"`
+	Top          int    `help:"Show at most this many candidates (0 = all)." default:"0"`
+	Procedures   bool   `help:"Switch to PROCEDURE discovery: mine session transcripts for recurring multi-command sequences (the cupel release-dance pattern) instead of doc constraints."`
+	MinProc      int    `help:"Procedures: a sequence must recur at least this many times to be a candidate." default:"3"`
+	Novel        bool   `help:"Procedures: only show sequences with an UNCOMMON step (filter out generic git add/commit/push churn) — surfaces distinctive ceremonies worth a custom command."`
+	Author       bool   `help:"Procedures: author a draft shell script for the TOP candidate (expensive tier), gated by a no-run structural check (no hallucinated commands). Emits a proposal; never installs or runs it."`
+	CacheDir     string `help:"Disk cache dir for the authoring model call." default:".crystal-cache"`
+	Model        string `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
+	EmitStull    bool   `help:"Constraints: emit the top constraint as a provably-sound stull machine (PreToolUse deny), run stull's static soundness check, and compile a settings.json hook. The formal-proof upgrade to --author's structural gate."`
+	EmitDispatch bool   `help:"Constraints: author + GATE a data-driven regex matcher for the top NEW constraint and emit a crystal dispatch-library rule (stateless block-every-time serve). The crystal-native complement to --emit-stull."`
 }
 
 // commandPrefix maps the user-Documents path prefix so a memory's encoded dir name
@@ -121,6 +122,18 @@ func (c *SweepCmd) Run() error {
 			return usageError{fmt.Errorf("no constraint reached --min-projects=%d to emit", c.MinProjects)}
 		}
 		return c.emitConstraintStull(ranked[0].signature)
+	}
+
+	// --emit-dispatch: author + gate a regex rule for the top NEW constraint (one
+	// not already served by a registry matcher — that's the case needing a matcher).
+	if c.EmitDispatch {
+		covered := librarySignatures()
+		for _, cl := range ranked {
+			if !covered[cl.signature] {
+				return c.emitDispatchRule(cl.signature, cl.example)
+			}
+		}
+		return usageError{fmt.Errorf("every constraint ≥--min-projects is already covered by a registry matcher; nothing new to author")}
 	}
 
 	covered := librarySignatures()

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"sort"
 )
 
@@ -19,11 +20,14 @@ import (
 // The honest data/code split (the design call): a rule is DATA — id, reason,
 // enabled, and its own self-monitoring state — so the library scales to
 // thousands and is per-user/shareable. But each rule references a MATCHER by
-// name from a small, unit-tested registry (matchGitAddAll, …), NOT an arbitrary
-// regex. A regex-per-rule library would reintroduce the exact false-deny risk
-// guard's typed matcher avoids (matching `git commit -m "add ."`). New rule with
-// an existing matcher = pure data; a genuinely novel match = one tested Go
-// predicate added to the registry (rare). The library is the registry of what's
+// name from a small, unit-tested registry (matchGitAddAll, …). A NAKED
+// regex-per-rule would reintroduce the false-deny risk guard's typed matcher
+// avoids (matching `git commit -m "add ."`) — so a data-driven "regex" matcher
+// is allowed ONLY when emitted behind a producer-verifier GATE (`sweep
+// --emit-dispatch`): the authored pattern must match the bad forms AND reject a
+// benign-command set (the `git commit -m "add ."` false-deny is a gate negative).
+// New rule with an existing matcher = pure data; a novel match = a gated regex,
+// or a tested Go predicate for the registry (rare). The library is the registry of what's
 // crystallized (the dir/file IS the answer to "what have I chunked"); the engine
 // (this dispatcher + the matcher vocabulary + schema) is what ships publicly,
 // each user growing their own library.
@@ -41,8 +45,9 @@ type DispatchCmd struct {
 // libraryRule is one crystallized constraint, as DATA.
 type libraryRule struct {
 	ID      string `json:"id"`
-	Matcher string `json:"matcher"` // a key into the matcher registry
-	Reason  string `json:"reason"`  // deny message (the fix to point the model at)
+	Matcher string `json:"matcher"`           // a key into the matcher registry, or "regex"
+	Pattern string `json:"pattern,omitempty"` // the regex (used iff Matcher == "regex") — a DATA matcher needing no new code
+	Reason  string `json:"reason"`            // deny message (the fix to point the model at)
 	Enabled bool   `json:"enabled"`
 }
 
@@ -58,6 +63,27 @@ type bashMatcher func(command string) (bool, string)
 // reusing an existing matcher are pure data.
 var matcherRegistry = map[string]bashMatcher{
 	"git_add_all": matchGitAddAll,
+}
+
+// resolveMatcher returns the predicate for a rule. Named matchers come from the
+// tested registry; the special "regex" matcher is DATA-driven — it compiles the
+// rule's Pattern, so a newly-crystallized constraint is a pure data row needing
+// no new Go code. An uncompilable pattern resolves to not-ok → fail-open.
+func resolveMatcher(r libraryRule) (bashMatcher, bool) {
+	if r.Matcher == "regex" {
+		re, err := regexp.Compile(r.Pattern)
+		if err != nil {
+			return nil, false
+		}
+		return func(command string) (bool, string) {
+			if loc := re.FindString(command); loc != "" {
+				return true, loc
+			}
+			return false, ""
+		}, true
+	}
+	m, ok := matcherRegistry[r.Matcher]
+	return m, ok
 }
 
 // defaultLibrary is served when no --rules file is given, so the dispatcher works
@@ -124,9 +150,9 @@ func decideDispatch(lib ruleLibrary, st dispatchState, command string, bypass bo
 		if !r.Enabled {
 			continue
 		}
-		m, ok := matcherRegistry[r.Matcher]
+		m, ok := resolveMatcher(r)
 		if !ok {
-			continue // unknown matcher → fail-open (a missing predicate never denies)
+			continue // unknown/uncompilable matcher → fail-open (a missing predicate never denies)
 		}
 		matched, form := m(command)
 		if !matched {
