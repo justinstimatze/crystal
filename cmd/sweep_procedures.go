@@ -42,7 +42,7 @@ func (c *SweepCmd) runProcedures() error {
 		steps    []string
 		count    int
 		sessions map[int]bool
-		example  string
+		examples []string // up to a few real instances (for authoring context)
 	}
 	grams := map[string]*ngram{}
 	for si, sess := range sessions {
@@ -56,11 +56,14 @@ func (c *SweepCmd) runProcedures() error {
 				key := strings.Join(steps, " → ")
 				g := grams[key]
 				if g == nil {
-					g = &ngram{steps: append([]string{}, steps...), sessions: map[int]bool{}, example: strings.Join(sig.examples[i:i+n], "  ;  ")}
+					g = &ngram{steps: append([]string{}, steps...), sessions: map[int]bool{}}
 					grams[key] = g
 				}
 				g.count++
 				g.sessions[si] = true
+				if ex := strings.Join(sig.examples[i:i+n], "\n"); len(g.examples) < 3 && !contains(g.examples, ex) {
+					g.examples = append(g.examples, ex)
+				}
 			}
 		}
 	}
@@ -91,6 +94,18 @@ func (c *SweepCmd) runProcedures() error {
 		return strings.Join(ranked[i].steps, " → ") < strings.Join(ranked[j].steps, " → ")
 	})
 
+	if len(ranked) == 0 {
+		fmt.Printf("crystal sweep --procedures: %d session(s); no sequence reached --min-proc=%d across --min-projects=%d sessions.\n", len(sessions), c.MinProc, c.MinProjects)
+		return nil
+	}
+
+	// --author: crystallize the TOP candidate — expensive tier drafts a script,
+	// gated by a no-run structural check; emit the proposal (never install/run).
+	if c.Author {
+		top := ranked[0]
+		return c.authorProcedure(top.steps, top.examples)
+	}
+
 	fmt.Printf("crystal sweep --procedures: %d session(s); %d recurring procedure(s) (≥%d times across ≥%d sessions)\n",
 		len(sessions), len(ranked), c.MinProc, c.MinProjects)
 	fmt.Printf("(the cupel release-dance pattern: a multi-command sequence executed enough to be worth one command; deterministic, no model)\n\n")
@@ -101,13 +116,15 @@ func (c *SweepCmd) runProcedures() error {
 			fmt.Printf("  … (%d more; raise --top)\n", len(ranked)-shown)
 			break
 		}
+		ex := ""
+		if len(g.examples) > 0 {
+			ex = strings.ReplaceAll(g.examples[0], "\n", "  ;  ")
+		}
 		fmt.Printf("  [%d×, %d sessions] %d-step: %s\n", g.count, len(g.sessions), len(g.steps), strings.Join(g.steps, " → "))
-		fmt.Printf("      example: %s\n\n", truncate(g.example, 120))
+		fmt.Printf("      example: %s\n\n", truncate(ex, 120))
 		shown++
 	}
-	if shown == 0 {
-		fmt.Printf("  (no sequence reached --min-proc=%d across --min-projects=%d sessions; lower the thresholds)\n", c.MinProc, c.MinProjects)
-	}
+	fmt.Printf("  → crystallize the top one: `crystal sweep --procedures --novel --author`\n")
 	return nil
 }
 

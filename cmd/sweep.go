@@ -37,6 +37,9 @@ type SweepCmd struct {
 	Procedures  bool   `help:"Switch to PROCEDURE discovery: mine session transcripts for recurring multi-command sequences (the cupel release-dance pattern) instead of doc constraints."`
 	MinProc     int    `help:"Procedures: a sequence must recur at least this many times to be a candidate." default:"3"`
 	Novel       bool   `help:"Procedures: only show sequences with an UNCOMMON step (filter out generic git add/commit/push churn) — surfaces distinctive ceremonies worth a custom command."`
+	Author      bool   `help:"Procedures: author a draft shell script for the TOP candidate (expensive tier), gated by a no-run structural check (no hallucinated commands). Emits a proposal; never installs or runs it."`
+	CacheDir    string `help:"Disk cache dir for the authoring model call." default:".crystal-cache"`
+	Model       string `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
 }
 
 // commandPrefix maps the user-Documents path prefix so a memory's encoded dir name

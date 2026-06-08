@@ -31,3 +31,4 @@
 
 # data-driven viz output (regenerated each run)
 .crystal-viz/
+.crystal-proposals/
