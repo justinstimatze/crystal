@@ -248,7 +248,7 @@ func (c *HookLoopCmd) Run() error {
 	//           (a real holdout). Pure-abstain commands are not gateable.
 	//   truth — the honest yardstick: v2 vs the held-out containerRef ground truth,
 	//           NEVER used to decide the swap (that would smuggle the oracle back).
-	gateMatched, gateN, truthMatched := 0, 0, 0
+	gateMatched, gateN, truthMatched, overrode := 0, 0, 0, 0
 	for _, cmd := range driftCommands {
 		if v2.classify(cmd) == containerRef(cmd) {
 			truthMatched++
@@ -261,13 +261,36 @@ func (c *HookLoopCmd) Run() error {
 			continue // abstained — not gateable
 		}
 		gateN++
-		if v2.classify(cmd) == lab {
+		vcls := v2.classify(cmd)
+		if vcls == lab {
 			gateMatched++
+			continue
+		}
+		// v2 DISAGREES with the assigned (cheap local-agreement) label. Rather than
+		// auto-reject — which would penalize v2 for CORRECTING a confidently-wrong
+		// agreement label (the 0.85-on-agree residual; the finding that motivated
+		// this) — escalate JUST this disputed command to the stronger confirm tier as
+		// a tiebreak. If the confirm tier backs v2, the cheap label was wrong → trust
+		// the stronger producer and OVERRIDE. If it backs the original label, v2 is
+		// genuinely wrong → a real miss. Targeted: confirm fires only on conflicts.
+		if c.Oracle == "local-confirm" {
+			tb, terr := cloudClassifyCats(ctx, client, confirmModel, cats2, cmd)
+			if terr != nil {
+				return usageError{fmt.Errorf("confirm tiebreak on %q: %w", cmd, terr)}
+			}
+			if tb == vcls && tb != lab {
+				overrode++
+				gateMatched++ // the stronger tier agrees with v2; the cheap label was wrong
+			}
 		}
 	}
 	gateAcc := float64(gateMatched) / float64(max(gateN, 1))
 	truthAcc := float64(truthMatched) / float64(len(driftCommands))
-	fmt.Printf("  re-gate (oracle-confident, %d/%d covered): %d/%d = %.2f (gate %.2f)\n", gateN, len(driftCommands), gateMatched, gateN, gateAcc, c.Threshold)
+	if overrode > 0 {
+		fmt.Printf("  re-gate (oracle-confident, %d/%d covered): %d/%d = %.2f (gate %.2f) — %d cheap label(s) OVERRIDDEN by the confirm tiebreak (v2 corrected the agreement)\n", gateN, len(driftCommands), gateMatched, gateN, gateAcc, c.Threshold, overrode)
+	} else {
+		fmt.Printf("  re-gate (oracle-confident, %d/%d covered): %d/%d = %.2f (gate %.2f)\n", gateN, len(driftCommands), gateMatched, gateN, gateAcc, c.Threshold)
+	}
 	if c.Oracle != "reference" {
 		fmt.Printf("  held-out TRUTH yardstick (NOT used to decide): v2 vs containerRef = %d/%d = %.2f\n", truthMatched, len(driftCommands), truthAcc)
 	}
