@@ -8,6 +8,7 @@ import (
 
 	"github.com/justinstimatze/crystal/internal/llm"
 	"github.com/justinstimatze/crystal/internal/local"
+	"github.com/justinstimatze/crystal/internal/publicai"
 )
 
 // HookLoopCmd is the seam the 2026-05-29 panel exposed, wired shut: the live
@@ -36,32 +37,35 @@ import (
 //     The loop closed, live, across separate processes.
 //
 // The drift-label oracle (the A5 fork, --oracle):
-//   reference (default) — the re-author's labels for the NEW class come from
-//     `containerRef`, a provided oracle (the same fidelity-to-reference caveat
-//     `author` carries). The loop closes the WIRING autonomously, but a human/
-//     oracle supplied the new class's ground truth.
-//   local — the labels come from 8B+35B LOCAL agreement (no cloud, no human):
-//     agree→label, disagree→abstain. This CLOSES the A5 gap the panel left open —
-//     `containerRef` survives only as a held-out TRUTH yardstick (reported, never
-//     used to decide the swap). The deterministic gate still decides; agreement
-//     only proposes labels for the uncovered region (validated N=250: coverage
-//     0.74, accuracy-on-agree 0.87). Lead the novelty on the gate+demote, not the
-//     agreement (tri-training/QBC prior art) — see PRIOR_ART.md.
+//
+//	reference (default) — the re-author's labels for the NEW class come from
+//	  `containerRef`, a provided oracle (the same fidelity-to-reference caveat
+//	  `author` carries). The loop closes the WIRING autonomously, but a human/
+//	  oracle supplied the new class's ground truth.
+//	local — the labels come from 8B+35B LOCAL agreement (no cloud, no human):
+//	  agree→label, disagree→abstain. This CLOSES the A5 gap the panel left open —
+//	  `containerRef` survives only as a held-out TRUTH yardstick (reported, never
+//	  used to decide the swap). The deterministic gate still decides; agreement
+//	  only proposes labels for the uncovered region (validated N=250: coverage
+//	  0.74, accuracy-on-agree 0.87). Lead the novelty on the gate+demote, not the
+//	  agreement (tri-training/QBC prior art) — see PRIOR_ART.md.
 type HookLoopCmd struct {
-	Corpus    string   `help:"Corpus dir of real records (the normal-regime command stream + authoring train set)." default:"testdata/corpus"`
-	Home      []string `help:"Instead of the corpus, scan these home dirs' live transcripts. Repeatable."`
-	CacheDir  string   `help:"Disk cache dir for LLM calls (re-authoring is cached by content hash)." default:".crystal-cache"`
-	Model     string   `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
-	Sample    int      `help:"Cap on labeled examples shown to the author." default:"200"`
-	Threshold float64  `help:"Re-gate: the re-authored table must cover ≥ this fraction of the drift class to re-promote." default:"0.9"`
-	Normal    int      `help:"How many real commands to stream before the injected drift." default:"12"`
-	DriftM    int      `help:"Demote after M uncovered commands within the window." default:"3"`
-	DriftW    int      `help:"Sliding window size for the drift trigger." default:"5"`
-	Oracle    string   `help:"Drift-label oracle: 'reference' (provided containerRef — the documented A5 gap), 'local' (8B+35B agreement, NO cloud), or 'local-confirm' (agreement + a cloud confirm on JUST the abstained slice — targeted spend)." default:"reference" enum:"reference,local,local-confirm"`
-	LocalModel  string `help:"First local model for the agreement oracle (Oracle=local)." default:"qwen3:8b"`
-	LocalModel2 string `help:"Second local model for the agreement oracle (Oracle=local)." default:"qwen3.6:35b"`
-	ConfirmModel string `help:"Cloud model that confirms the abstained slice (Oracle=local-confirm). Haiku is cheapest; Opus is the strongest confirm tier." default:"claude-haiku-4-5" enum:"claude-haiku-4-5,claude-sonnet-4-6,claude-opus-4-8"`
-	Verbose   bool     `help:"Print the full hook JSON response for every command."`
+	Corpus        string   `help:"Corpus dir of real records (the normal-regime command stream + authoring train set)." default:"testdata/corpus"`
+	Home          []string `help:"Instead of the corpus, scan these home dirs' live transcripts. Repeatable."`
+	CacheDir      string   `help:"Disk cache dir for LLM calls (re-authoring is cached by content hash)." default:".crystal-cache"`
+	Model         string   `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
+	Sample        int      `help:"Cap on labeled examples shown to the author." default:"200"`
+	Threshold     float64  `help:"Re-gate: the re-authored table must cover ≥ this fraction of the drift class to re-promote." default:"0.9"`
+	Normal        int      `help:"How many real commands to stream before the injected drift." default:"12"`
+	DriftM        int      `help:"Demote after M uncovered commands within the window." default:"3"`
+	DriftW        int      `help:"Sliding window size for the drift trigger." default:"5"`
+	Oracle        string   `help:"Drift-label oracle: 'reference' (provided containerRef — the documented A5 gap), 'local' (8B+35B agreement, NO cloud), or 'local-confirm' (agreement + a cloud confirm on JUST the abstained slice — targeted spend)." default:"reference" enum:"reference,local,local-confirm"`
+	LocalModel    string   `help:"First (small) model for the agreement oracle — always local (Oracle=local)." default:"qwen3:8b"`
+	LocalModel2   string   `help:"Second (big) model for the agreement oracle when --big-provider=local." default:"qwen3.6:35b"`
+	BigProvider   string   `help:"Where the agreement oracle's SECOND (big) model runs: 'local' (ollama on the house box, spills past 10GB VRAM) or 'publicai' (cloud-OPEN model, no spill stall)." default:"local" enum:"local,publicai"`
+	PublicaiModel string   `help:"PublicAI big model when --big-provider=publicai." default:"swiss-ai/apertus-70b-instruct"`
+	ConfirmModel  string   `help:"Cloud model that confirms the abstained slice (Oracle=local-confirm). Haiku is cheapest; Opus is the strongest confirm tier." default:"claude-haiku-4-5" enum:"claude-haiku-4-5,claude-sonnet-4-6,claude-opus-4-8"`
+	Verbose       bool     `help:"Print the full hook JSON response for every command."`
 }
 
 func (c *HookLoopCmd) Run() error {
@@ -74,6 +78,7 @@ func (c *HookLoopCmd) Run() error {
 	// stand up the local client up front and fail loud if the box is unreachable —
 	// an unreachable oracle must NOT silently degrade to universal abstention.
 	var lc *local.Client
+	var pc *publicai.Client
 	if c.Oracle == "local" || c.Oracle == "local-confirm" {
 		lc, err = local.New(c.CacheDir)
 		if err != nil {
@@ -81,6 +86,17 @@ func (c *HookLoopCmd) Run() error {
 		}
 		if err := lc.Reachable(ctx); err != nil {
 			return usageError{fmt.Errorf("oracle=%s but the local model host is unreachable: %w", c.Oracle, err)}
+		}
+		// The agreement pair's BIG model can run in the cloud (PublicAI) instead of
+		// the spilling local 35B — fail loud up front if its gateway/key is bad.
+		if c.BigProvider == "publicai" {
+			pc, err = publicai.New(c.CacheDir)
+			if err != nil {
+				return usageError{err}
+			}
+			if err := pc.Reachable(ctx); err != nil {
+				return usageError{fmt.Errorf("oracle=%s big-provider=publicai but the gateway is unreachable: %w", c.Oracle, err)}
+			}
 		}
 	}
 	cmds, src, err := loadBashCommands(c.Corpus, c.Home)
@@ -184,10 +200,19 @@ func (c *HookLoopCmd) Run() error {
 	//                   on the small uncertain slice (FrugalGPT/AutoMix), not the whole
 	//                   class. containerRef stays a held-out TRUTH yardstick only.
 	confirmModel := c.ConfirmModel
+	// Build the agreement pair once: small model is always local; the big model's
+	// PLACEMENT is the --big-provider switch (local ollama, or cloud-open PublicAI).
+	small := localClassifier(lc, c.LocalModel)
+	var big classifier
+	if c.BigProvider == "publicai" {
+		big = publicaiClassifier(pc, c.PublicaiModel)
+	} else {
+		big = localClassifier(lc, c.LocalModel2)
+	}
 	oracleLabel := func(cmd string) (label, source string, err error) {
 		switch c.Oracle {
 		case "local", "local-confirm":
-			l, agreed, e := agreementLabel(ctx, lc, c.LocalModel, c.LocalModel2, cats2, cmd)
+			l, agreed, e := agreementOf(ctx, small, big, cats2, cmd)
 			if e != nil {
 				return "", "", e
 			}
@@ -224,12 +249,17 @@ func (c *HookLoopCmd) Run() error {
 		train2 = append(train2, labeledCmd{cmd, lab})
 		labeledDrift++
 	}
+	pair := fmt.Sprintf("%s + %s", small.name, big.name)
+	noCloud := "no cloud"
+	if c.BigProvider == "publicai" {
+		noCloud = "cloud-open big model, no spill"
+	}
 	switch c.Oracle {
 	case "local":
-		fmt.Printf("  oracle=LOCAL (8B+35B agreement, no cloud): labeled %d, abstained on %d → re-authoring with the class in scope\n", labeledDrift, abstained)
+		fmt.Printf("  oracle=AGREEMENT (%s, %s): labeled %d, abstained on %d → re-authoring with the class in scope\n", pair, noCloud, labeledDrift, abstained)
 	case "local-confirm":
-		fmt.Printf("  oracle=LOCAL+CONFIRM (%s): %d labeled (%d by local agreement + %d by cloud confirm on the abstained slice), %d still abstained → re-authoring\n",
-			confirmModel, labeledDrift, labeledDrift-confirmed, confirmed, abstained)
+		fmt.Printf("  oracle=AGREEMENT+CONFIRM (%s; confirm=%s): %d labeled (%d by agreement + %d by cloud confirm on the abstained slice), %d still abstained → re-authoring\n",
+			pair, confirmModel, labeledDrift, labeledDrift-confirmed, confirmed, abstained)
 	default:
 		fmt.Printf("  oracle=reference: labeled %d of the captured drift commands as 'container' → re-authoring with the class in scope\n", labeledDrift)
 	}
