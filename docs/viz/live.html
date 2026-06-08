@@ -7,29 +7,61 @@
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
   <style>
-    body { background:#0e1116; color:#e6edf3; font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; margin:0; padding:24px; }
-    h1 { font-size:18px; margin:0 0 4px; font-weight:600; }
-    #meta { color:#8b949e; margin-bottom:16px; }
+    body { background:#0e1116; color:#e6edf3; font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace; margin:0; padding:24px 32px; }
+    h1 { font-size:16px; margin:0 0 18px; font-weight:600; color:#8b949e; }
+    .hero { display:flex; gap:48px; align-items:flex-end; margin-bottom:6px; }
+    .hero .big { font-size:64px; font-weight:800; line-height:1; color:#2ca02c; }
+    .hero .pct { font-size:30px; font-weight:700; color:#2ca02c; margin-left:6px; }
+    .hero .cap { font-size:15px; color:#e6edf3; margin-top:8px; }
+    .hero .cap span { color:#8b949e; }
+    .hero .sub .big { font-size:40px; color:#1f77b4; }
+    .hero .sub .cap b { color:#1f77b4; }
+    #meta { color:#8b949e; margin:18px 0 6px; font-size:13px; }
     #meta b { color:#e6edf3; }
+    #explain { color:#8b949e; font-size:13px; max-width:980px; margin:0 0 14px; line-height:1.6; }
+    #explain b { color:#e6edf3; }
     #chart { background:#0e1116; }
     #status { position:fixed; top:12px; right:16px; color:#8b949e; font-size:12px; }
     .pulse { color:#2ca02c; }
-    .totals { margin-top:14px; color:#8b949e; }
-    .totals b { color:#2ca02c; }
   </style>
 </head>
 <body>
-  <h1>crystal — where requests actually went (live)</h1>
-  <div id="meta">waiting for <code>.crystal-viz/hook-loop-flow.json</code> …</div>
+  <h1>crystal — how much work skipped the AI model (live)</h1>
+  <div class="hero" id="hero">
+    <div><div class="cap">waiting for a run — <code>crystal hook-loop …</code></div></div>
+  </div>
+  <div id="meta"></div>
+  <div id="explain">
+    <b>How the rules get rebuilt without a human:</b> when commands start missing the rules
+    (<span style="color:#ff7f0e">rule fell behind</span>), two small models each label the new
+    commands. Where they <span style="color:#1f77b4">agree</span>, that's the answer key; where
+    they <span style="color:#7f7f7f">disagree</span> we skip it (a stronger model can tie-break).
+    A new rule is written from those labels and only kept if it passes a check — then it serves the
+    commands that used to need the model.
+  </div>
   <div id="chart"></div>
-  <div class="totals" id="totals"></div>
   <div id="status">●</div>
 
   <script>
     const DATA_URL = "/.crystal-viz/hook-loop-flow.json";
-    const STAGE_ORDER = ["stream","deferred-model","demote","agree-labeled","cloud-confirm","reauthor"];
+    // Display labels: data ids stay stable (history / lucida bind to them); the
+    // dashboard maps id -> plain English for new readers (see docs/GLOSSARY.md).
+    const LABEL = {
+      "stream": "all commands",
+      "served-det": "handled by rule",
+      "deferred-model": "sent to model",
+      "demote": "rule fell behind",
+      "agree-labeled": "models agreed",
+      "cloud-confirm": "cloud tie-break",
+      "abstain": "models unsure",
+      "reauthor": "rules rebuilt",
+      "served-now": "now by rule",
+      "still-deferred": "still to model"
+    };
+    const lab = id => LABEL[id] || id;
+    const STAGE_ORDER = ["all commands","sent to model","rule fell behind","models agreed","cloud tie-break","rules rebuilt"];
     const COLOR = {
-      domain: ["served-det","deferred-model","demote","agree-labeled","cloud-confirm","abstain","served-now","still-deferred"],
+      domain: ["handled by rule","sent to model","rule fell behind","models agreed","cloud tie-break","models unsure","now by rule","still to model"],
       range:  ["#2ca02c","#d62728","#ff7f0e","#1f77b4","#9467bd","#7f7f7f","#2ca02c","#d62728"]
     };
 
@@ -45,10 +77,10 @@
           { "calculate": "(datum.x0 + datum.x1) / 2", "as": "mid" }
         ],
         "encoding": {
-          "y": { "field": "source", "type": "nominal", "title": "stage",
+          "y": { "field": "source", "type": "nominal", "title": "at each step",
                  "sort": { "field": "stageOrder" },
                  "axis": { "labelColor": "#e6edf3", "titleColor": "#8b949e" } },
-          "color": { "field": "target", "type": "nominal", "title": "fate", "scale": COLOR,
+          "color": { "field": "target", "type": "nominal", "title": "what happened", "scale": COLOR,
                      "legend": { "labelColor": "#e6edf3", "titleColor": "#8b949e" } }
         },
         "layer": [
@@ -79,16 +111,25 @@
         const sig = JSON.stringify(rec.edges);
         if (sig !== lastSig) {                       // only re-render + flash on change
           lastSig = sig;
-          await vegaEmbed("#chart", spec(rec.edges), { actions: false });
+          const shown = rec.edges.map(e => ({ source: lab(e.source), target: lab(e.target), value: e.value }));
+          await vegaEmbed("#chart", spec(shown), { actions: false });
           const served = (rec.edges.find(e => e.target === "served-det") || {}).value || 0;
           const deferred = (rec.edges.find(e => e.target === "deferred-model") || {}).value || 0;
           const reserved = (rec.edges.find(e => e.target === "served-now") || {}).value || 0;
+          const total = served + deferred;
+          const pct = total ? Math.round((served / total) * 100) : 0;
+          document.getElementById("hero").innerHTML =
+            "<div>" +
+              "<div><span class='big'>" + served + "</span><span class='pct'>/ " + total + " &nbsp;" + pct + "%</span></div>" +
+              "<div class='cap'>commands <b style='color:#2ca02c'>handled by a plain rule — no AI model call</b> <span>(the shift-left win)</span></div>" +
+            "</div>" +
+            "<div class='sub'>" +
+              "<div><span class='big'>" + reserved + "</span></div>" +
+              "<div class='cap'>once-failing commands <b>now handled by a rebuilt rule</b> <span>(the loop healed itself)</span></div>" +
+            "</div>";
           document.getElementById("meta").innerHTML =
-            "pair <b>" + rec.pair + "</b> · oracle <b>" + rec.oracle +
-            "</b> · big-provider <b>" + rec.big_provider + "</b> · <span style='color:#8b949e'>" + rec.note + "</span>";
-          document.getElementById("totals").innerHTML =
-            "served deterministically (0 model): <b>" + served + "</b> of " + (served + deferred) +
-            " · re-served after re-author: <b>" + reserved + "</b>";
+            "small + big model: <b>" + rec.pair + "</b> · answer key: <b>" + rec.oracle +
+            "</b> · big model runs on: <b>" + rec.big_provider + "</b>";
           dot.classList.add("pulse");
           setTimeout(() => dot.classList.remove("pulse"), 600);
         }
