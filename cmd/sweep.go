@@ -32,8 +32,11 @@ import (
 type SweepCmd struct {
 	DocsRoot    string `help:"Root holding per-project dirs with CLAUDE.md files." default:"~/Documents"`
 	MemoryRoot  string `help:"Root holding <encoded-project>/memory/*.md files." default:"~/.claude/projects"`
-	MinProjects int    `help:"Only report rules re-encoded across at least this many distinct projects." default:"2"`
+	MinProjects int    `help:"Constraints: report rules re-encoded across ≥ this many projects. Procedures: across ≥ this many sessions." default:"2"`
 	Top         int    `help:"Show at most this many candidates (0 = all)." default:"0"`
+	Procedures  bool   `help:"Switch to PROCEDURE discovery: mine session transcripts for recurring multi-command sequences (the cupel release-dance pattern) instead of doc constraints."`
+	MinProc     int    `help:"Procedures: a sequence must recur at least this many times to be a candidate." default:"3"`
+	Novel       bool   `help:"Procedures: only show sequences with an UNCOMMON step (filter out generic git add/commit/push churn) — surfaces distinctive ceremonies worth a custom command."`
 }
 
 // commandPrefix maps the user-Documents path prefix so a memory's encoded dir name
@@ -51,6 +54,9 @@ type ruleOccurrence struct {
 }
 
 func (c *SweepCmd) Run() error {
+	if c.Procedures {
+		return c.runProcedures()
+	}
 	docsRoot := expandHome(c.DocsRoot)
 	memRoot := expandHome(c.MemoryRoot)
 

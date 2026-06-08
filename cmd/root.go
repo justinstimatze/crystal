@@ -39,7 +39,7 @@ type CLI struct {
 	Dispatch      DispatchCmd      `cmd:"" help:"The scaling architecture: ONE PreToolUse hook over a rule LIBRARY (rules as data + named tested matchers), evaluated in-process. Subsumes guard; the fix for one-fork-per-rule at hundreds/thousands of rules. Per-rule self-monitoring state."`
 	PublicaiProbe PublicAIProbeCmd `cmd:"" name:"publicai-probe" help:"Smoke-test the Public AI Gateway tier (open/sovereign models, OpenAI-compatible): one cheap chat completion confirms key, gateway reachability, response decode, and disk cache. A cloud-cheap OPEN-model rung between Haiku and local ollama."`
 	Viz           VizCmd           `cmd:"" help:"Serve the live flow dashboard (docs/viz/live.html) over HTTP so a second monitor can watch requests shift left across the menu in realtime; re-rendered from the real counts a hook-loop run emits."`
-	Sweep         SweepCmd         `cmd:"" help:"The autonomous DISCOVERY front-end (the vision's first verb): mine CLAUDE.md + memories for rules RE-ENCODED across N projects, clustered by command signature, and propose dispatch-library candidates. Deterministic, no model. The manual SWEEP_FINDINGS, automated."`
+	Sweep         SweepCmd         `cmd:"" help:"The autonomous DISCOVERY front-end (the vision's first verb). Default: CONSTRAINTS — rules RE-ENCODED across N projects' docs, clustered by command signature. --procedures: recurring multi-command SEQUENCES from session transcripts (the cupel release-dance pattern; add --novel to skip generic git churn). Deterministic, no model."`
 }
 
 // Exit codes: 0 ok, 2 input/usage error, 1 fatal.
