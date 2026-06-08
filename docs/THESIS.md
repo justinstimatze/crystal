@@ -135,6 +135,18 @@ flagged as a framing to test rather than a measured result:
    verifier*, which then licenses cheap or deterministic production. Tools, constrained menus,
    schemas, types, and retrieval are all the same technique: enlarge the verifiable fraction, shrink
    the irreducible free-generation residual.
+   *Caveat (the verifier's reference must itself be trustworthy — measured, `A5_PROBE_FINDINGS.md`):*
+   a gate only verifies *consistency with its reference labels*, not ground truth. When that reference
+   is a **fallible producer** — e.g. a two-local-model agreement oracle, which is 0.85-accurate, not
+   1.0 — gate-consistency can **anti-correlate with truth at the margin**: a re-authored table that
+   *corrects* a confidently-wrong oracle label is penalized by the gate for disagreeing with it
+   (observed: an Opus-confirmed, truth-perfect table was *rejected* 7/8). The fix is not to trust the
+   cheap reference blindly, nor to drop the gate, but to **adjudicate conflicts by escalating just the
+   disputed item to the strongest available tier** (a gate-time confirm tiebreak: the strong tier
+   either backs the table — override the cheap label — or backs the original — a real miss). The gate
+   stays the decider; its *reference* on contested items is sourced from the most reliable producer
+   you can afford, only where the cheap one is in doubt. Producer-verifier needs a trust-ordered
+   producer stack, not a single oracle.
 2. **The operation is specialization / partial evaluation.** The expensive model is a slow general
    interpreter of intent; crystallizing a recurring chore to a hook is *partial evaluation* —
    specialize the general capability against the actually-recurring input to get a fast residual
