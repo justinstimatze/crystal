@@ -185,6 +185,16 @@ the altitude to test next, not a claim of priority.
 
 ## How far down does shift-left go? The compute-substrate gradient (vision — untested)
 
+> **Refinement (2026-06-08, see `EXECUTION_MENU.md`):** the gradient below is drawn as **one
+> axis**, which undersells it. It's really a **menu over two orthogonal axes** — *executor* (what
+> does the work) × *placement* (where it runs / who operates it) — plus *openness* as a modifier
+> (relocatability, not privacy). And it is **not a ladder you descend**: a loop is *composed* from
+> the menu under a **gravitational pull left** (prefer the leftmost cell that still covers + clears
+> the privacy constraint), with demote-on-drift as the *"while it still works"* clamp. Adding a tier
+> (e.g. the PublicAI cloud-open models) **widens the menu**, it doesn't insert a rung. Privacy is
+> governed by **operator/jurisdiction**, not open/closed (the DeepSeek-hosted case proves they're
+> independent). Read the single-axis gradient below as the executor column of that fuller menu.
+
 The model-tier gradient (frontier → cheap → local model) is one axis. The deeper one is the
 **compute substrate** — the same principle (lower a recurring chore onto the cheapest mechanism that
 covers it; author once; amortize; demote on drift) applied all the way down:

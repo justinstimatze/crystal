@@ -368,7 +368,11 @@ func (c *HookLoopCmd) Run() error {
 	}
 	switch c.Oracle {
 	case "local":
-		fmt.Printf("  oracle=local: new-class labels from 8B+35B agreement — NO cloud, NO human; v2 vs held-out truth %d/%d.\n", truthMatched, len(driftCommands))
+		egress := "NO cloud, NO human"
+		if c.BigProvider == "publicai" {
+			egress = "small model local + big model cloud-OPEN (no spill), NO human" // the big model egresses to PublicAI; still no closed-frontier, no human label
+		}
+		fmt.Printf("  oracle=agreement (%s + %s): new-class labels from agreement — %s; v2 vs held-out truth %d/%d.\n", small.name, big.name, egress, truthMatched, len(driftCommands))
 		fmt.Printf("  (Agreement abstains heavily on a NOVEL class — try --oracle local-confirm to recover the abstained slice.)\n")
 	case "local-confirm":
 		fmt.Printf("  oracle=local-confirm: labels from local agreement + %d cloud confirm call(s) on JUST the abstained slice;\n", confirmed)
