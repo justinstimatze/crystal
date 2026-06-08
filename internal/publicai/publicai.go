@@ -28,9 +28,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -69,10 +71,11 @@ type Result struct {
 
 // Client wraps the gateway's OpenAI-compatible API with a disk cache.
 type Client struct {
-	baseURL  string
-	apiKey   string
-	cacheDir string
-	http     *http.Client
+	baseURL    string
+	apiKey     string
+	cacheDir   string
+	http       *http.Client
+	maxRetries int // generous retries for transient throttles (budget window, 429, 5xx)
 }
 
 // BaseURL returns PUBLICAI_BASE_URL or the gateway default.
@@ -96,11 +99,23 @@ func New(cacheDir string) (*Client, error) {
 		return nil, err
 	}
 	return &Client{
-		baseURL:  BaseURL(),
-		apiKey:   key,
-		cacheDir: cacheDir,
-		http:     &http.Client{Timeout: 120 * time.Second},
+		baseURL:    BaseURL(),
+		apiKey:     key,
+		cacheDir:   cacheDir,
+		http:       &http.Client{Timeout: 120 * time.Second},
+		maxRetries: maxRetries(),
 	}, nil
+}
+
+// maxRetries reads PUBLICAI_MAX_RETRIES (default 6 — with the exponential backoff
+// that is willing to wait through a multi-minute budget window before giving up).
+func maxRetries() int {
+	if s := os.Getenv("PUBLICAI_MAX_RETRIES"); s != "" {
+		if n, err := strconv.Atoi(s); err == nil && n >= 0 {
+			return n
+		}
+	}
+	return 6
 }
 
 // Reachable returns nil if the gateway answers the models endpoint (auth ok).
@@ -166,9 +181,38 @@ func (c *Client) Classify(ctx context.Context, model, system, prompt string, max
 	msgs = append(msgs, chatMessage{Role: "user", Content: prompt})
 	body, _ := json.Marshal(chatRequest{Model: model, Messages: msgs, Temperature: 0, MaxTokens: maxTokens})
 
+	// Retry transient conditions with generous backoff. PublicAI's shared-Team
+	// spend-budget throttle returns a 400 "Budget has been exceeded" that is
+	// actually TRANSIENT (a windowed budget that refills — issue #46: "best effort
+	// service … try again in a few minutes"), so we treat it like a 529/overload
+	// rather than a hard error. Also retries 429 and 5xx. A genuine 400 (bad model),
+	// 401 (auth), or empty-choices is NOT retried.
+	var lastErr error
+	for attempt := 0; attempt <= c.maxRetries; attempt++ {
+		if attempt > 0 {
+			if err := sleepCtx(ctx, backoff(attempt)); err != nil {
+				return Result{}, err // context cancelled while backing off
+			}
+		}
+		r, retryable, err := c.attempt(ctx, key, model, body)
+		if err == nil {
+			return r, nil
+		}
+		lastErr = err
+		if !retryable {
+			return Result{}, err
+		}
+	}
+	return Result{}, fmt.Errorf("publicai: gave up after %d retries: %w", c.maxRetries, lastErr)
+}
+
+// attempt makes one HTTP call. retryable is true for transient conditions
+// (transport error, 429, 5xx, or the budget-exceeded throttle) so the caller backs
+// off and tries again; false for terminal errors (bad request, auth, no choices).
+func (c *Client) attempt(ctx context.Context, key, model string, body []byte) (r Result, retryable bool, err error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL+"/chat/completions", bytes.NewReader(body))
 	if err != nil {
-		return Result{}, err
+		return Result{}, false, err
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+c.apiKey)
@@ -177,29 +221,27 @@ func (c *Client) Classify(ctx context.Context, model, system, prompt string, max
 	start := time.Now()
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return Result{}, fmt.Errorf("publicai chat: %w", err)
+		return Result{}, true, fmt.Errorf("publicai chat: %w", err) // transport error: retryable
 	}
 	defer resp.Body.Close()
 	latency := time.Since(start).Milliseconds()
-
 	raw, _ := io.ReadAll(resp.Body)
-	// Non-2xx bodies are often NOT the success schema — a 504 returns an HTML/text
-	// gateway-timeout page, a 429 a problem+json doc. Surface status + a body
-	// snippet instead of a misleading JSON-decode error.
+
 	if resp.StatusCode >= 300 {
-		return Result{}, fmt.Errorf("publicai HTTP %d for model=%s: %s", resp.StatusCode, model, snippet(raw))
+		retryable = resp.StatusCode == 429 || resp.StatusCode >= 500 || isBudgetThrottle(resp.StatusCode, raw)
+		return Result{}, retryable, fmt.Errorf("publicai HTTP %d for model=%s: %s", resp.StatusCode, model, snippet(raw))
 	}
 	var cr chatResponse
 	if err := json.Unmarshal(raw, &cr); err != nil {
-		return Result{}, fmt.Errorf("decoding publicai response (HTTP %d): %w: %s", resp.StatusCode, err, snippet(raw))
+		return Result{}, false, fmt.Errorf("decoding publicai response (HTTP %d): %w: %s", resp.StatusCode, err, snippet(raw))
 	}
 	if cr.Error != nil {
-		return Result{}, fmt.Errorf("publicai error (HTTP %d): %s", resp.StatusCode, cr.Error.Message)
+		return Result{}, false, fmt.Errorf("publicai error (HTTP %d): %s", resp.StatusCode, cr.Error.Message)
 	}
 	if len(cr.Choices) == 0 {
-		return Result{}, fmt.Errorf("publicai returned no choices for model=%s", model)
+		return Result{}, false, fmt.Errorf("publicai returned no choices for model=%s", model)
 	}
-	r := Result{
+	r = Result{
 		Text:         cr.Choices[0].Message.Content,
 		Model:        model,
 		InputTokens:  cr.Usage.PromptTokens,
@@ -207,7 +249,39 @@ func (c *Client) Classify(ctx context.Context, model, system, prompt string, max
 		LatencyMS:    latency,
 	}
 	c.writeCache(key, r)
-	return r, nil
+	return r, false, nil
+}
+
+// isBudgetThrottle reports whether a non-2xx response is PublicAI's transient
+// shared-budget throttle (a 400 whose body names the budget) rather than a real
+// bad request — so it is retried with backoff like an overload.
+func isBudgetThrottle(status int, body []byte) bool {
+	return status == http.StatusBadRequest && strings.Contains(string(body), "Budget has been exceeded")
+}
+
+// backoff is the generous wait before retry attempt n (1-based): exponential from
+// a base with jitter, capped — willing to wait through a multi-minute budget window.
+func backoff(attempt int) time.Duration {
+	base := 3 * time.Second
+	d := base << (attempt - 1) // 3s, 6s, 12s, 24s, 48s, …
+	if d > 60*time.Second {
+		d = 60 * time.Second
+	}
+	// +0–25% jitter so concurrent callers don't synchronize on the budget window.
+	j := time.Duration(rand.Int63n(int64(d) / 4))
+	return d + j
+}
+
+// sleepCtx sleeps for d unless ctx is cancelled first.
+func sleepCtx(ctx context.Context, d time.Duration) error {
+	t := time.NewTimer(d)
+	defer t.Stop()
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-t.C:
+		return nil
+	}
 }
 
 // snippet returns a one-line, length-capped view of a response body for errors.
