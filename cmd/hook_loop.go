@@ -60,6 +60,7 @@ type HookLoopCmd struct {
 	Oracle    string   `help:"Drift-label oracle: 'reference' (provided containerRef — the documented A5 gap), 'local' (8B+35B agreement, NO cloud), or 'local-confirm' (agreement + a cloud confirm on JUST the abstained slice — targeted spend)." default:"reference" enum:"reference,local,local-confirm"`
 	LocalModel  string `help:"First local model for the agreement oracle (Oracle=local)." default:"qwen3:8b"`
 	LocalModel2 string `help:"Second local model for the agreement oracle (Oracle=local)." default:"qwen3.6:35b"`
+	ConfirmModel string `help:"Cloud model that confirms the abstained slice (Oracle=local-confirm). Haiku is cheapest; Opus is the strongest confirm tier." default:"claude-haiku-4-5" enum:"claude-haiku-4-5,claude-sonnet-4-6,claude-opus-4-8"`
 	Verbose   bool     `help:"Print the full hook JSON response for every command."`
 }
 
@@ -182,7 +183,7 @@ func (c *HookLoopCmd) Run() error {
 	//                   JUST that command to a cloud confirm (Haiku) — targeted spend
 	//                   on the small uncertain slice (FrugalGPT/AutoMix), not the whole
 	//                   class. containerRef stays a held-out TRUTH yardstick only.
-	confirmModel := llm.ModelHaiku
+	confirmModel := c.ConfirmModel
 	oracleLabel := func(cmd string) (label, source string, err error) {
 		switch c.Oracle {
 		case "local", "local-confirm":
@@ -227,8 +228,8 @@ func (c *HookLoopCmd) Run() error {
 	case "local":
 		fmt.Printf("  oracle=LOCAL (8B+35B agreement, no cloud): labeled %d, abstained on %d → re-authoring with the class in scope\n", labeledDrift, abstained)
 	case "local-confirm":
-		fmt.Printf("  oracle=LOCAL+CONFIRM: %d labeled (%d by local agreement + %d by cloud confirm on the abstained slice), %d still abstained → re-authoring\n",
-			labeledDrift, labeledDrift-confirmed, confirmed, abstained)
+		fmt.Printf("  oracle=LOCAL+CONFIRM (%s): %d labeled (%d by local agreement + %d by cloud confirm on the abstained slice), %d still abstained → re-authoring\n",
+			confirmModel, labeledDrift, labeledDrift-confirmed, confirmed, abstained)
 	default:
 		fmt.Printf("  oracle=reference: labeled %d of the captured drift commands as 'container' → re-authoring with the class in scope\n", labeledDrift)
 	}
