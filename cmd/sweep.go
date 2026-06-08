@@ -40,6 +40,7 @@ type SweepCmd struct {
 	Author      bool   `help:"Procedures: author a draft shell script for the TOP candidate (expensive tier), gated by a no-run structural check (no hallucinated commands). Emits a proposal; never installs or runs it."`
 	CacheDir    string `help:"Disk cache dir for the authoring model call." default:".crystal-cache"`
 	Model       string `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
+	EmitStull   bool   `help:"Constraints: emit the top constraint as a provably-sound stull machine (PreToolUse deny), run stull's static soundness check, and compile a settings.json hook. The formal-proof upgrade to --author's structural gate."`
 }
 
 // commandPrefix maps the user-Documents path prefix so a memory's encoded dir name
@@ -113,6 +114,14 @@ func (c *SweepCmd) Run() error {
 		}
 		return ranked[i].signature < ranked[j].signature
 	})
+
+	// --emit-stull: crystallize the top constraint as a provably-sound stull machine.
+	if c.EmitStull {
+		if len(ranked) == 0 {
+			return usageError{fmt.Errorf("no constraint reached --min-projects=%d to emit", c.MinProjects)}
+		}
+		return c.emitConstraintStull(ranked[0].signature)
+	}
 
 	covered := librarySignatures()
 	fmt.Printf("crystal sweep: %d command-anchored rule occurrences → %d signatures re-encoded across ≥%d projects\n",
