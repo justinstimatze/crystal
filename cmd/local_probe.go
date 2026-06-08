@@ -3,10 +3,10 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/justinstimatze/crystal/internal/llm"
 	"github.com/justinstimatze/crystal/internal/local"
+	"github.com/justinstimatze/crystal/internal/publicai"
 )
 
 // LocalProbeCmd is the A5 probe (the sovereignty rung, de-risked before any full
@@ -25,14 +25,15 @@ import (
 // local model is too weak for this chore (and the residual, which is HARDER than
 // the covered fraction, would be worse still).
 type LocalProbeCmd struct {
-	Corpus   string   `help:"Corpus dir of real records." default:"testdata/corpus"`
-	Home     []string `help:"Instead of the corpus, scan these home dirs' live transcripts. Repeatable."`
-	CacheDir string   `help:"Disk cache dir (shared with the cloud cache; local keys are namespaced)." default:".crystal-cache"`
-	Model    string   `help:"Local ollama model (the cheap tier under test)." default:"qwen2:1.5b"`
-	Model2   string   `help:"Second local model. When set, run the TWO-MODEL AGREEMENT oracle: agree→trust, disagree→abstain/escalate. Reports abstention COVERAGE, not just accuracy-on-agree."`
-	N        int      `help:"Cap the covered sample (0 = all covered; local CPU inference is the bottleneck)." default:"0"`
-	Offline  bool     `help:"Serve local results ONLY from the disk cache (no GPU box needed); a cache miss is a loud error. Re-validates a prior measured run."`
-	Verbose  bool     `help:"Per-command reference / Haiku / local categories and the local latency."`
+	Corpus         string   `help:"Corpus dir of real records." default:"testdata/corpus"`
+	Home           []string `help:"Instead of the corpus, scan these home dirs' live transcripts. Repeatable."`
+	CacheDir       string   `help:"Disk cache dir (shared with the cloud cache; local keys are namespaced)." default:".crystal-cache"`
+	Model          string   `help:"Local ollama model (the cheap tier under test)." default:"qwen2:1.5b"`
+	Model2         string   `help:"Second model. When set, run the TWO-MODEL AGREEMENT oracle: agree→trust, disagree→abstain/escalate. Reports abstention COVERAGE, not just accuracy-on-agree."`
+	Model2Provider string   `help:"Where Model2 runs: 'local' (ollama, same family as Model1) or 'publicai' (cloud-OPEN, e.g. a CROSS-family apertus-70b — the independence pressure test)." default:"local" enum:"local,publicai"`
+	N              int      `help:"Cap the covered sample (0 = all covered; local CPU inference is the bottleneck)." default:"0"`
+	Offline        bool     `help:"Serve local results ONLY from the disk cache (no GPU box needed); a cache miss is a loud error. Re-validates a prior measured run."`
+	Verbose        bool     `help:"Per-command reference / Haiku / local categories and the local latency."`
 }
 
 func (c *LocalProbeCmd) Run() error {
@@ -50,6 +51,21 @@ func (c *LocalProbeCmd) Run() error {
 		lc.SetOffline(true)
 	} else if err := lc.Reachable(ctx); err != nil {
 		return usageError{err}
+	}
+	// Cross-family agreement: Model2 can run on the Public AI Gateway (a different
+	// model family from the local Model1) — the independence pressure test, since
+	// agreement only means something if the two models fail INDEPENDENTLY.
+	var pc *publicai.Client
+	if c.Model2 != "" && c.Model2Provider == "publicai" {
+		pc, err = publicai.New(c.CacheDir)
+		if err != nil {
+			return usageError{err}
+		}
+		if !c.Offline {
+			if err := pc.Reachable(ctx); err != nil {
+				return usageError{fmt.Errorf("model2-provider=publicai but the gateway is unreachable: %w", err)}
+			}
+		}
 	}
 
 	cmds, src, err := loadBashCommands(c.Corpus, c.Home)
@@ -75,8 +91,12 @@ func (c *LocalProbeCmd) Run() error {
 	}
 
 	if c.Model2 != "" {
-		fmt.Printf("local-probe: %d reference-covered commands%s (%s); cloud=%s local=%s + %s (agreement) @ %s\n\n",
-			len(labeled), sampled, src, llm.ModelHaiku, c.Model, c.Model2, local.Host())
+		m2where := local.Host()
+		if c.Model2Provider == "publicai" {
+			m2where = publicai.BaseURL() + " (cross-family)"
+		}
+		fmt.Printf("local-probe: %d reference-covered commands%s (%s); cloud=%s local=%s + %s [%s] (agreement) @ %s\n\n",
+			len(labeled), sampled, src, llm.ModelHaiku, c.Model, c.Model2, c.Model2Provider, m2where)
 	} else {
 		fmt.Printf("local-probe: %d reference-covered commands%s (%s); cloud=%s local=%s @ %s\n\n",
 			len(labeled), sampled, src, llm.ModelHaiku, c.Model, local.Host())
@@ -111,12 +131,13 @@ func (c *LocalProbeCmd) Run() error {
 		}
 		rows = append(rows, probeRow{ref: l.ref, m1: lCat})
 	}
-	// Pass 2: the second local model (agreement oracle), same order, fill rows.
+	// Pass 2: the second model (agreement oracle), same order, fill rows. Model2 may
+	// run locally (same family) or on PublicAI (cross-family) — the independence test.
 	if c.Model2 != "" {
 		for i, l := range labeled {
-			m2Cat, _, err := localClassify(ctx, lc, c.Model2, l.cmd)
+			m2Cat, _, err := classifyModel2(ctx, lc, pc, c.Model2, c.Model2Provider, l.cmd)
 			if err != nil {
-				return usageError{fmt.Errorf("local classify (%s) at %d/%d: %w", c.Model2, i, len(labeled), err)}
+				return usageError{fmt.Errorf("model2 classify (%s/%s) at %d/%d: %w", c.Model2Provider, c.Model2, i, len(labeled), err)}
 			}
 			rows[i].m2 = m2Cat
 		}
@@ -196,7 +217,7 @@ type probeRow struct{ ref, m1, m2 string }
 
 func reportAgreement(m1, m2 string, rows []probeRow) {
 	n := len(rows)
-	agree, agreeOK := 0, 0   // agree: both models emitted the SAME label; agreeOK: that label == det reference
+	agree, agreeOK := 0, 0 // agree: both models emitted the SAME label; agreeOK: that label == det reference
 	disagree, disagreeM1OK, disagreeM2OK := 0, 0, 0
 	m1OK, m2OK := 0, 0
 	for _, r := range rows {
@@ -255,11 +276,26 @@ func ratio(num, den int) float64 {
 // localClassify runs the local cheap-model baseline for one command and returns
 // its parsed category plus the REAL measured latency (cached after first call).
 func localClassify(ctx context.Context, lc *local.Client, model, cmd string) (string, int64, error) {
-	sys := "Classify this shell command into EXACTLY ONE category, reply with only the category word: " +
-		strings.Join(triageCategories, ", ") + "."
-	r, err := lc.Classify(ctx, model, sys, cmd, 16)
+	r, err := lc.Classify(ctx, model, classifySys(triageCategories), cmd, 16)
 	if err != nil {
 		return "", 0, err
 	}
 	return parseCategory(r.Text), r.LatencyMS, nil
+}
+
+// classifyModel2 routes the agreement oracle's second model to its provider —
+// local ollama (same family as model1) or the Public AI Gateway (cross-family).
+// Identical system prompt either way (classifySys), so agreement is apples-to-apples.
+func classifyModel2(ctx context.Context, lc *local.Client, pc *publicai.Client, model, provider, cmd string) (string, int64, error) {
+	if provider == "publicai" {
+		if pc == nil {
+			return "", 0, fmt.Errorf("classifyModel2: nil publicai client")
+		}
+		r, err := pc.Classify(ctx, model, classifySys(triageCategories), cmd, 16)
+		if err != nil {
+			return "", 0, err
+		}
+		return parseCategory(r.Text), r.LatencyMS, nil
+	}
+	return localClassify(ctx, lc, model, cmd)
 }

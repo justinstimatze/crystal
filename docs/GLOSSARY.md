@@ -25,7 +25,7 @@ it's been introduced, and fine internally.
 | defer / deferred-to-model | **escalate to the model** (only call the model when the rule can't) | lazy / pay-only-when-needed |
 | demote / demote-on-drift | **fall back to the model when the rule stops working** | — |
 | re-author | **rebuild the rules** | — |
-| served deterministically / served-det | **handled by a rule (no model call)** | — |
+| served deterministically / served-det | **answered by generated code — a lookup/matcher the model wrote once, run at zero cost, no model call** | — |
 | covered / coverage | **the share a rule can handle on its own** | — |
 | gate / verifier | **the check** (does the cheap output match the answer key?) | producer-verifier asymmetry |
 | drift | (keep — widely understood) **the pattern changed, the rule fell behind** | — |

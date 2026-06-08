@@ -36,8 +36,9 @@
     (<span style="color:#ff7f0e">rule fell behind</span>), two small models each label the new
     commands. Where they <span style="color:#1f77b4">agree</span>, that's the answer key; where
     they <span style="color:#7f7f7f">disagree</span> we skip it (a stronger model can tie-break).
-    A new rule is written from those labels and only kept if it passes a check — then it serves the
-    commands that used to need the model.
+    A new rule (a small lookup/matcher — generated code, not hand-written) is authored from those
+    labels by the expensive model, kept only if it passes a check, and then runs for free on every
+    command that used to need the model.
   </div>
   <div id="chart"></div>
   <div id="status">●</div>
@@ -121,7 +122,7 @@
           document.getElementById("hero").innerHTML =
             "<div>" +
               "<div><span class='big'>" + served + "</span><span class='pct'>/ " + total + " &nbsp;" + pct + "%</span></div>" +
-              "<div class='cap'>commands <b style='color:#2ca02c'>handled by a plain rule — no AI model call</b> <span>(the shift-left win)</span></div>" +
+              "<div class='cap'>commands <b style='color:#2ca02c'>answered by generated code — zero AI calls at runtime</b> <span>(the model wrote the rule once; now it runs free)</span></div>" +
             "</div>" +
             "<div class='sub'>" +
               "<div><span class='big'>" + reserved + "</span></div>" +
