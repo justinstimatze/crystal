@@ -1,3 +1,35 @@
+# NEXT SESSION — crystal handoff (2026-06-08)
+
+Clean tree, all committed, `go build ./... && go test ./...` green. HEAD `4ea75ed`.
+
+## What this session shipped
+
+**Discovery → crystallization, end to end (the headline).** `crystal sweep` is now the autonomous
+front-end the vision's first verb called for, with three GATED crystallization paths:
+- `sweep` (default) — CONSTRAINTS re-encoded across N projects' docs, clustered by command signature (`dffdf6d`).
+- `sweep --procedures [--novel] [--author]` — recurring multi-command CEREMONIES from session transcripts (frequent N-grams); `--author` drafts a shell script gated by a NO-RUN structural check (bash -n, hallucination guard, order) (`ddf81c6`, `73a206a`).
+- `sweep --emit-stull` — emit the top constraint as a stull machine, formally PROVEN sound by stull's checker, compiled to a hook (`c54b25d`).
+- `sweep --emit-dispatch` — author + GATE a data-driven regex rule (compile + coverage + false-deny guard) → a dispatch rule that SERVES standing constraints block-every-time (`4ea75ed`). Verified live end to end.
+
+**Independence pressure test — SETTLED** (`bfc13d0`/`82c4f76`/`ff5ce5f`, `docs/A5_PROBE_FINDINGS.md`): the two-model agreement oracle is valid, but cross-family vs same-family agreement is within noise at the controlled N=250 (0.88 vs 0.86; three families straddle). Family is NOT the lever; the gate tie-break is. Ran free+local on the 3080 (llama3.1:8b, qwen2.5:7b, gemma2:9b pulled).
+
+**Execution-menu reframe** (`2851f49`, `docs/EXECUTION_MENU.md`): the cost gradient is a 2-D menu (executor × placement) + openness modifier, composed under a gravitational shift-left pull, not a ladder. Privacy = operator/jurisdiction, not open/closed. Live flow dashboard (`docs/viz/live.html`, served by `crystal viz`).
+
+**PublicAI tier** (`5230c30`, `2d20cca`, `d6abc6a`, `internal/publicai`): cloud-open models as oracle big-model + throttle-resilient (backoff). RESOLVED the account saga: the "$1 Team budget" throttle is platform-wide best-effort (proven across two accounts), NOT user error; inference currently free, wallet not yet billed. **`.env` now uses the proton key.** Support email sent to hello@publicai.co.
+
+## Open threads (pick up here)
+
+1. **stull collaboration — waiting on stull's call.** crystal is stull's first consumer (dispatch thread `crystal-stull-userfeedback` to agent stull-2542418). The `--emit-stull` MVP works but is block-ONCE: a standing constraint has no reachable terminal (trips stull's E-HALT), so the only sound shape halts after one block. I asked stull to relax E-HALT when Fuel guarantees totality (fuel-bounded self-loop). When stull ships that, `--emit-stull` becomes block-every-time with a formal proof. See [[crystal-stull-complementarity]]. Division of labor: crystal serves stateless standing constraints (dispatch); stull serves stateful loops (formal proof).
+2. **Constraint dispatch path is the working stateless serve** — `--emit-dispatch` proposals land in `.crystal-proposals/`; consider auto-folding accepted ones into the default library / a user library file.
+3. **Carried from before:** larger-N gate hardening (option-2, harden producer-verifier past N=8); fold hook→dispatch.
+
+## Standing notes
+- crystal now IMPORTS stull via a local `replace => ../stull` directive (both sibling projects). Breaks if stull absent at ../stull.
+- `.crystal-proposals/`, `.crystal-viz/` are gitignored (emitted artifacts).
+- Don't hard-wrap copy-paste deliverables (see [[no-hardwrap-copy-paste-content]]).
+
+---
+
 # NEXT SESSION — crystal handoff (2026-05-29)
 
 Resume cleanly from here. HEAD at the `hook` commit (or later); `go build ./...` + `go test ./...` +
