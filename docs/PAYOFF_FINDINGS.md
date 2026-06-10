@@ -94,7 +94,7 @@ experiment re-introduced an already-retracted artifact is the point, not an emba
 - **Same 14-item synthetic corpus** as the uncover/depth arc; one tool/chore type. The gradient's
   far end — **local models** (the brief's `frontier → local+LoRA → deterministic hook`) — is
   unmeasured; cloud Sonnet/Haiku are the cheap-tier stand-ins for now. Local-hybrid work in sibling
-  projects (cupel, lexicon) is the likely reuse path when that rung is built (`ROADMAP.md` Track A4).
+  projects (cupel and a private sibling) is the likely reuse path when that rung is built (`ROADMAP.md` Track A4).
 
 ## Bottom line
 

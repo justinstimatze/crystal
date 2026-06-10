@@ -26,10 +26,10 @@ Verified counts (`rg -l` across all `~/.claude/projects/*/memory` + every `CLAUD
 
 | recurring rule | projects that independently re-encoded it | mechanizable? |
 |---|---|---|
-| ban `git add -A` / `git add .` (stage explicit paths) | **4** — beads, calque, lucida, plancheck | yes — PreToolUse deny |
-| `main` not `master` as default branch | **3** — numchord, pearl, plancheck (+ global `CLAUDE.md`) | yes — one global git config |
+| ban `git add -A` / `git add .` (stage explicit paths) | **4** — a private project, calque, lucida, plancheck | yes — PreToolUse deny |
+| `main` not `master` as default branch | **3** — two private projects, plancheck (+ global `CLAUDE.md`) | yes — one global git config |
 | never write secrets to files / source another project's `.env` | **3** — be-my-geminis, cupel, slimemold | yes — secret-write linter |
-| estimate cost / confirm before paid or batch ops | **3–4** — cupel, lucida, patter (+ root) | partial — hook on batch launch |
+| estimate cost / confirm before paid or batch ops | **3–4** — cupel, lucida, a private project (+ root) | partial — hook on batch launch |
 
 Corpus size: **156** `type: feedback` memory atoms and **758** rule-candidate lines across 18
 `CLAUDE.md` files. The four above are the cleanest multi-project recurrences; the long tail is
@@ -59,7 +59,7 @@ and determinism (fires unconditionally).
    `--private` or denies a public create without explicit override.
 5. **Secrets-to-files refusal** (3× re-encoded) — a write-time linter (gitleaks-style patterns) of
    weir's shape; the redaction discipline already lives in `internal/redact`.
-6. **End-of-turn `/schedule` offer ban** (crowdwork + global) — a Stop-hook output linter, exactly
+6. **End-of-turn `/schedule` offer ban** (a project-local rule + global) — a Stop-hook output linter, exactly
    the `which`-lint pattern applied to *my* output instead of a Bash command.
 
 ## The self-illustrating finding
@@ -67,8 +67,8 @@ and determinism (fires unconditionally).
 The user has written **the crystal thesis itself** as a standing memory rule in **≥4 projects**:
 - [hindcast] "does not want to remember to run diagnostic commands… anything that benefits from
   regular running" should fire on its own;
-- [lexicon] "wants … tools to fire automatically via hooks/triggers, not require manual CLI";
-- [lexicon] "feels friction having to volunteer everything; wants Claude to detect under-specified
+- [memory] "wants … tools to fire automatically via hooks/triggers, not require manual CLI";
+- [memory] "feels friction having to volunteer everything; wants Claude to detect under-specified
   requests";
 - [plancheck] "wants continuous work without being asked to stop or regroup."
 

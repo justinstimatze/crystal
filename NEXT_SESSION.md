@@ -132,8 +132,8 @@ rule*; the deterministic proxy is **re-encoded across N projects**.
 
 **The sweep** (no model calls, no transcript reads — memory-footprint discipline): mined every
 `CLAUDE.md` + `~/.claude/projects/*/memory` under `~/Documents`. **156** feedback memories, **758**
-rule-candidate lines. Verified cross-project recurrences: `git add -A` ban in **4** projects (beads,
-calque, lucida, plancheck); `main`-not-`master` in **3**; secrets-to-files in **3**. `weir` is the
+rule-candidate lines. Verified cross-project recurrences: `git add -A` ban in **4** projects (a
+private project, calque, lucida, plancheck); `main`-not-`master` in **3**; secrets-to-files in **3**. `weir` is the
 existence proof — a `which`→`command-v` correction already promoted to a *blocking PreToolUse hook*;
 the promote-set is new rules of weir's shape, not a new system. **Self-illustrating:** the user wrote
 the crystal thesis itself ("auto-fire, stop making me remember") as a standing rule in **≥4** projects.
@@ -193,7 +193,7 @@ sovereignty/determinism pitch is real, not aspirational; (2) a local judge is a 
 oracle** — the missing label source that would let `hook-loop`'s re-author discover a new class's
 ground truth without a human/cloud call (closing evasion 3, confidently-wrong-is-invisible, too).
 *Scope a probe first* (one local call through the gate, mirroring how `probe` de-risked the cloud
-tier). *Reuse candidates:* sibling projects **cupel** / **lexicon** — verify what's actually there
+tier). *Reuse candidates:* sibling projects **cupel** / a private sibling — verify what's actually there
 before assuming. *Done when:* a chore is served from local hardware with the gate intact.
 
 ## The thesis, current (read `docs/THESIS.md` for the full version)
@@ -289,7 +289,7 @@ far end:
 - **Local small model (+LoRA) on owned hardware** (RTX 3080, per the brief). Swap the residual's
   cheap tier from cloud Haiku to a local model behind the same gate; re-measure latency + held
   quality. *Proves:* the sovereignty/determinism pitch is real, not aspirational. *Reuse candidates:*
-  sibling projects **cupel** / **lexicon** (verify what's actually there first — don't assume).
+  sibling projects **cupel** / a private sibling (verify what's actually there first — don't assume).
   *Watch:* this is the first rung needing real local-inference plumbing; scope a probe (one local
   call through the gate) before the full slice, mirroring how `probe` de-risked the cloud tier.
 
@@ -300,8 +300,8 @@ far end:
   erodes"; payoff exact-match-gold; support 8-token-truncation default). Always `--verbose` per-item;
   exclude parse-fails from accuracy (never default a class); use `llm.Client.Classify`
   (thinking-disabled) + a real token budget (≥16–24) for tiny verdicts.
-- **Never name private projects in public docs**: `publicrecord`, `stope` (lamina/poc/dense) are NOT
-  public — anonymize as "a claim-verification agent" / "an auditing agent". `weir` IS citable. Don't
+- **Never name private projects in public docs**: several private siblings are NOT
+  public — anonymize them (e.g. "a claim-verification agent" / "an auditing agent"). `weir` IS citable. Don't
   cite Bostrom / the Oracle-AI strand (TESCREAL; dropped — use Russell's provably-beneficial).
 - **`weir` lints the word "which" in prose** as the `which CMD` antipattern and BLOCKS commits —
   reword ("that"/"and that") or `WEIR_SUGGEST_SKIP=1`.

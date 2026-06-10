@@ -10,8 +10,8 @@ import (
 
 // GuardCmd is crystal's first CONSTRAINT-type crystallization — the reflexive
 // rung (ROADMAP rung 6, SWEEP_FINDINGS.md). The sweep found one standing rule
-// independently re-encoded in FOUR projects' memories (beads, calque, lucida,
-// plancheck): "never `git add -A` / `git add .` — stage explicit paths." A rule
+// independently re-encoded in FOUR projects' memories (a private project, calque,
+// lucida, plancheck): "never `git add -A` / `git add .` — stage explicit paths." A rule
 // re-written four times is recall failing to chunk; the fix is to mint the
 // artifact once and retire the four memory encodings. weir already proves the
 // shape (a `which`→`command-v` correction promoted to a blocking PreToolUse

@@ -4,8 +4,8 @@ Crystal's vocabulary drifted into insider shorthand (`served-det`, `demote`,
 `oracle`, `re-author`, `shift-left`). This is the alignment key: each insider term
 → a plain-English phrase a new reader understands, plus the **established name** for
 the underlying move where one exists (so we borrow a recognized term instead of
-inventing). Derived with `calque` (drift detection) + `lexicon` (established
-pattern names) — see the bottom for how.
+inventing). Derived with `calque` (drift detection) + a private pattern-substrate
+tool (established names) — see the bottom for how.
 
 **Rule of thumb:** lead with the plain phrase in anything a new reader sees (the
 dashboard, the README intro, the first use in a doc). The shorthand is fine *after*
@@ -13,7 +13,7 @@ it's been introduced, and fine internally.
 
 ## Core concepts
 
-| insider term | say this instead | established name (lexicon) |
+| insider term | say this instead | established name |
 |---|---|---|
 | shift-left | **hand each task to the cheapest handler that still gets it right** | cheapest-adequate; contradiction-resolution by decomposition (cheap where cheap works, expensive where it doesn't) |
 | tier | **handler** (model, rule, or cache that does the work) | — |
