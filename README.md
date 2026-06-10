@@ -70,7 +70,19 @@ So the honest claim is **automatic, drift-surviving shift-left with loud degrada
 quality* on the verifier-covered (and tool-covered) fraction, *detection + demotion* (not guaranteed
 reproduction) on the uncovered residual.
 
-## Try it (on your own data)
+## Try it (30 seconds, no API key)
+
+The fastest "it's real": `guard` is a crystallized constraint — a deterministic PreToolUse hook that
+denies `git add -A`. Pipe it a tool event; it denies the indiscriminate stage and allows an explicit one:
+
+```sh
+echo '{"tool_name":"Bash","tool_input":{"command":"git add -A"}}'      | go run . guard   # → permissionDecision: deny
+echo '{"tool_name":"Bash","tool_input":{"command":"git add main.go"}}' | go run . guard   # → permissionDecision: allow
+```
+
+No key, no data, exactly reproducible — that's the deterministic tier, and the whole point.
+
+### On your own data
 
 `crystallize` is the humble shift-left, end to end, no LLM in the loop: it scans your Claude Code
 transcripts, finds the dominant repetitive deterministic command, proposes a static hook,
@@ -80,8 +92,12 @@ and writes a redacted deployable artifact.
 ```sh
 go run . crystallize --home ~ --match "git status"
 # discover → propose (modal hook) → gate (PROMOTE/REFUSE) → serve+drift-monitor → demote
-# → writes crystallized/<pattern>.json   (refuses loudly if the command isn't deterministic enough)
 ```
+
+Heads-up: `git status` output isn't deterministic (it depends on working-tree state), so this
+example **REFUSES** — and that's the gate working, not a failure. crystal won't silently crystallize a
+command whose output varies. Point `--match` at a stable-output command (a `--version`, a fixed
+query) to see a PROMOTE write `crystallized/<pattern>.json`. The loud refusal is the feature.
 
 This is the v0 (deterministic-tier) slice; the LLM/local-model tiers are the roadmap
 ([`docs/ROADMAP.md`](docs/ROADMAP.md)).
@@ -149,15 +165,19 @@ honest positioning in [`docs/THESIS.md`](docs/THESIS.md); original charter in
 
 ## Building and running
 
-Go 1.26, [kong](https://github.com/alecthomas/kong) CLI. Live experiments need `ANTHROPIC_API_KEY`
+Go 1.25, [kong](https://github.com/alecthomas/kong) CLI. Live experiments need `ANTHROPIC_API_KEY`
 in `.env` (or the environment); every LLM call is disk-cached by content hash, so re-runs are free.
 
 ```sh
 go build ./...        # or: go run . <subcommand>
 go test ./...         # internal/eval/eval_test.go is the Phase-1 go/no-go gate
 
+# the everyday surface:
+go run . guard                                       # the deterministic constraint hook (see "Try it" above)
 go run . triage --verbose                            # v1 slice: map-reduce + verifier on a real chore (your Bash usage), 0 frontier calls
-go run . crystallize --home ~ --match "git status"   # the shift-left lifecycle on your own data
+go run . crystallize --home ~ --match "git status"   # the shift-left lifecycle on your own data (REFUSES on non-deterministic input — that's the gate)
+
+# the grounding experiments (research probes behind the findings docs):
 go run . payoff       --verbose    # the value prop: latency saved vs quality held, Opus→Haiku behind a gate
 go run . ground-hop   --verbose    # g and per-hop λ on real byte-exact drift
 go run . uncover-hop  --verbose    # the g<1 regime + fuzzy recovery of the residual
@@ -165,8 +185,11 @@ go run . depth-sweep  --verbose    # detection recall vs relay depth
 go run . content-sweep --verbose   # corrective-content fidelity vs relay depth
 ```
 
-Other offline subcommands (no API): `extract`, `eval`, `measure`, `drift`, `lattice`. `probe` is a
-one-call plumbing check. `go run . --help` for the full list.
+The committed `testdata/corpus` is synthetic (`go run . synth-corpus`, no real content); run
+`go run . extract --home ~` to build fixtures from your *own* transcripts. Other offline subcommands
+(no API): `eval`, `measure`, `drift`, `lattice`, `sweep`, `dispatch`. `probe` is a one-call plumbing
+check. `go run . --help` for the full list (most subcommands beyond the everyday surface are
+research probes).
 
 ## Why the numbers are trustworthy
 
