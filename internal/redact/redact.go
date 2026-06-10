@@ -18,6 +18,7 @@ package redact
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -43,6 +44,36 @@ var secretPatterns = []*regexp.Regexp{
 // (paths become host-independent for replay).
 var homePath = regexp.MustCompile(`/home/[A-Za-z0-9._-]+`)
 
+// userRe masks bare username tokens that the home-path normalizer cannot
+// reach: `ls -la` ownership columns ("alice alice"), the encoded
+// project-dir basenames Claude Code uses ("-home-alice-Documents-foo"),
+// and any other free-standing occurrence. Configured via SetUsernames;
+// defaults to the running user so extraction on this host self-cleans.
+var userRe *regexp.Regexp
+
+func init() {
+	if u := filepath.Base(os.Getenv("HOME")); u != "" && u != "." && u != string(filepath.Separator) {
+		SetUsernames([]string{u})
+	}
+}
+
+// SetUsernames configures bare-username masking. Pass every username whose
+// bare token should be scrubbed (e.g. both the current host's user and any
+// user that appears in historical transcripts from another machine). Idempotent.
+func SetUsernames(users []string) {
+	quoted := make([]string, 0, len(users))
+	for _, u := range users {
+		if u != "" {
+			quoted = append(quoted, regexp.QuoteMeta(u))
+		}
+	}
+	if len(quoted) == 0 {
+		userRe = nil
+		return
+	}
+	userRe = regexp.MustCompile(`\b(` + strings.Join(quoted, "|") + `)\b`)
+}
+
 // mask replaces the matched secret with same-length 'x' runes, preserving
 // any leading scheme token so the shape stays recognizable as redacted.
 func mask(s string) string {
@@ -56,6 +87,9 @@ func scrubString(s string) string {
 		s = re.ReplaceAllStringFunc(s, mask)
 	}
 	s = homePath.ReplaceAllString(s, "$$HOME")
+	if userRe != nil {
+		s = userRe.ReplaceAllStringFunc(s, mask)
+	}
 	return s
 }
 
@@ -64,6 +98,8 @@ func scrubString(s string) string {
 // surrounding Context/Followup. Args values that are strings are scrubbed
 // too (commands and file paths live there).
 func Record(r *record.Record) {
+	r.Repo = scrubString(r.Repo)
+	r.GitBranch = scrubString(r.GitBranch)
 	r.Context = scrubString(r.Context)
 	r.Followup = scrubString(r.Followup)
 	for _, p := range r.Result.TextFields() {

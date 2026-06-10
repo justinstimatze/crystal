@@ -1,32 +1,32 @@
 [
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-20T23:53:27.536Z",
     "context": "bootstrap from @antiphon.md",
     "tool": "Bash",
     "args": {
-      "command": "ls -la $HOME/Documents/antiphon/ \u0026\u0026 ls $HOME/.claude/projects/-home-gas6amus-Documents-antiphon/memory/ 2\u003e/dev/null",
+      "command": "ls -la $HOME/Documents/antiphon/ \u0026\u0026 ls $HOME/.claude/projects/-home-xxxxxxxx-Documents-antiphon/memory/ 2\u003e/dev/null",
       "description": "List antiphon dir and check memory"
     },
     "result": {
       "raw": {
-        "stdout": "total 32\ndrwxrwxr-x   3 gas6amus gas6amus  4096 May 20 16:53 .\ndrwxr-xr-x+ 85 gas6amus gas6amus  4096 May 20 16:50 ..\ndrwxr-xr-x   3 gas6amus gas6amus  4096 May 20 16:53 .defn\n-rw-rw-r--   1 gas6amus gas6amus 16490 May 20 16:51 antiphon.md",
+        "stdout": "total 32\ndrwxrwxr-x   3 xxxxxxxx xxxxxxxx  4096 May 20 16:53 .\ndrwxr-xr-x+ 85 xxxxxxxx xxxxxxxx  4096 May 20 16:50 ..\ndrwxr-xr-x   3 xxxxxxxx xxxxxxxx  4096 May 20 16:53 .defn\n-rw-rw-r--   1 xxxxxxxx xxxxxxxx 16490 May 20 16:51 antiphon.md",
         "stderr": "",
         "interrupted": false,
         "isImage": false,
         "noOutputExpected": false
       },
       "is_error": false,
-      "stdout": "total 32\ndrwxrwxr-x   3 gas6amus gas6amus  4096 May 20 16:53 .\ndrwxr-xr-x+ 85 gas6amus gas6amus  4096 May 20 16:50 ..\ndrwxr-xr-x   3 gas6amus gas6amus  4096 May 20 16:53 .defn\n-rw-rw-r--   1 gas6amus gas6amus 16490 May 20 16:51 antiphon.md"
+      "stdout": "total 32\ndrwxrwxr-x   3 xxxxxxxx xxxxxxxx  4096 May 20 16:53 .\ndrwxr-xr-x+ 85 xxxxxxxx xxxxxxxx  4096 May 20 16:50 ..\ndrwxr-xr-x   3 xxxxxxxx xxxxxxxx  4096 May 20 16:53 .defn\n-rw-rw-r--   1 xxxxxxxx xxxxxxxx 16490 May 20 16:51 antiphon.md"
     },
     "followup": "The repo has only the design sketch — no code, no git yet. \"Bootstrap\" could mean a few different things here, and the answer shapes the next hour of work materially.",
     "tool_use_id": "toolu_01FRb27139fYnfEnEYoxpJsU"
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-20T23:53:31.536Z",
     "context": "bootstrap from @antiphon.md",
@@ -37,21 +37,21 @@
     },
     "result": {
       "raw": {
-        "stdout": "total 16\ndrwxr-xr-x  3 gas6amus gas6amus 4096 May 20 16:53 .\ndrwxrwxr-x  3 gas6amus gas6amus 4096 May 20 16:53 ..\ndrwxrwxr-x  3 gas6amus gas6amus 4096 May 20 16:53 defn\n-rw-r--r--  1 gas6amus gas6amus   65 May 20 16:53 serve.pid\n-home-gas6amus\n-home-gas6amus-Documents\n-home-gas6amus-Documents-adhd\n-home-gas6amus-Documents-antimony\n-home-gas6amus-Documents-antiphon\n-home-gas6amus-Documents-ballast\n-home-gas6amus-Documents-be-my-geminis\n-home-gas6amus-Documents-benchwork\n-home-gas6amus-Documents-buddy\n-home-gas6amus-Documents-ccc\n-home-gas6amus-Documents-claude-mv\n-home-gas6amus-Documents-crowdwork\n-home-gas6amus-Documents-drivermap\n-home-gas6amus-Documents-effigy\n-home-gas6amus-Documents-game\n-home-gas6amus-Documents-gozim\n-home-gas6amus-Documents-groupchat\n-home-gas6amus-Documents-hard\n-home-gas6amus-Documents-hindcast\n-home-gas6amus-Documents-hybrid",
+        "stdout": "total 16\ndrwxr-xr-x  3 xxxxxxxx xxxxxxxx 4096 May 20 16:53 .\ndrwxrwxr-x  3 xxxxxxxx xxxxxxxx 4096 May 20 16:53 ..\ndrwxrwxr-x  3 xxxxxxxx xxxxxxxx 4096 May 20 16:53 defn\n-rw-r--r--  1 xxxxxxxx xxxxxxxx   65 May 20 16:53 serve.pid\n-home-xxxxxxxx\n-home-xxxxxxxx-Documents\n-home-xxxxxxxx-Documents-adhd\n-home-xxxxxxxx-Documents-antimony\n-home-xxxxxxxx-Documents-antiphon\n-home-xxxxxxxx-Documents-ballast\n-home-xxxxxxxx-Documents-be-my-geminis\n-home-xxxxxxxx-Documents-benchwork\n-home-xxxxxxxx-Documents-buddy\n-home-xxxxxxxx-Documents-ccc\n-home-xxxxxxxx-Documents-claude-mv\n-home-xxxxxxxx-Documents-crowdwork\n-home-xxxxxxxx-Documents-drivermap\n-home-xxxxxxxx-Documents-effigy\n-home-xxxxxxxx-Documents-game\n-home-xxxxxxxx-Documents-gozim\n-home-xxxxxxxx-Documents-groupchat\n-home-xxxxxxxx-Documents-hard\n-home-xxxxxxxx-Documents-hindcast\n-home-xxxxxxxx-Documents-hybrid",
         "stderr": "",
         "interrupted": false,
         "isImage": false,
         "noOutputExpected": false
       },
       "is_error": false,
-      "stdout": "total 16\ndrwxr-xr-x  3 gas6amus gas6amus 4096 May 20 16:53 .\ndrwxrwxr-x  3 gas6amus gas6amus 4096 May 20 16:53 ..\ndrwxrwxr-x  3 gas6amus gas6amus 4096 May 20 16:53 defn\n-rw-r--r--  1 gas6amus gas6amus   65 May 20 16:53 serve.pid\n-home-gas6amus\n-home-gas6amus-Documents\n-home-gas6amus-Documents-adhd\n-home-gas6amus-Documents-antimony\n-home-gas6amus-Documents-antiphon\n-home-gas6amus-Documents-ballast\n-home-gas6amus-Documents-be-my-geminis\n-home-gas6amus-Documents-benchwork\n-home-gas6amus-Documents-buddy\n-home-gas6amus-Documents-ccc\n-home-gas6amus-Documents-claude-mv\n-home-gas6amus-Documents-crowdwork\n-home-gas6amus-Documents-drivermap\n-home-gas6amus-Documents-effigy\n-home-gas6amus-Documents-game\n-home-gas6amus-Documents-gozim\n-home-gas6amus-Documents-groupchat\n-home-gas6amus-Documents-hard\n-home-gas6amus-Documents-hindcast\n-home-gas6amus-Documents-hybrid"
+      "stdout": "total 16\ndrwxr-xr-x  3 xxxxxxxx xxxxxxxx 4096 May 20 16:53 .\ndrwxrwxr-x  3 xxxxxxxx xxxxxxxx 4096 May 20 16:53 ..\ndrwxrwxr-x  3 xxxxxxxx xxxxxxxx 4096 May 20 16:53 defn\n-rw-r--r--  1 xxxxxxxx xxxxxxxx   65 May 20 16:53 serve.pid\n-home-xxxxxxxx\n-home-xxxxxxxx-Documents\n-home-xxxxxxxx-Documents-adhd\n-home-xxxxxxxx-Documents-antimony\n-home-xxxxxxxx-Documents-antiphon\n-home-xxxxxxxx-Documents-ballast\n-home-xxxxxxxx-Documents-be-my-geminis\n-home-xxxxxxxx-Documents-benchwork\n-home-xxxxxxxx-Documents-buddy\n-home-xxxxxxxx-Documents-ccc\n-home-xxxxxxxx-Documents-claude-mv\n-home-xxxxxxxx-Documents-crowdwork\n-home-xxxxxxxx-Documents-drivermap\n-home-xxxxxxxx-Documents-effigy\n-home-xxxxxxxx-Documents-game\n-home-xxxxxxxx-Documents-gozim\n-home-xxxxxxxx-Documents-groupchat\n-home-xxxxxxxx-Documents-hard\n-home-xxxxxxxx-Documents-hindcast\n-home-xxxxxxxx-Documents-hybrid"
     },
     "followup": "The repo has only the design sketch — no code, no git yet. \"Bootstrap\" could mean a few different things here, and the answer shapes the next hour of work materially.",
     "tool_use_id": "toolu_01AtHaeS8zwiUnc1qmYGZGjM"
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-20T23:55:30.879Z",
     "context": "bootstrap from @antiphon.md",
@@ -62,21 +62,21 @@
     },
     "result": {
       "raw": {
-        "stdout": "total 32\ndrwxrwxr-x   8 gas6amus gas6amus 4096 May 20 16:55 .\ndrwxr-xr-x+ 85 gas6amus gas6amus 4096 May 20 16:50 ..\ndrwxr-xr-x   3 gas6amus gas6amus 4096 May 20 16:53 .defn\ndrwxrwxr-x   4 gas6amus gas6amus 4096 May 20 16:55 cmd\ndrwxrwxr-x   5 gas6amus gas6amus 4096 May 20 16:55 docs\ndrwxrwxr-x   7 gas6amus gas6amus 4096 May 20 16:55 internal\ndrwxrwxr-x   4 gas6amus gas6amus 4096 May 20 16:55 prototypes\ndrwxrwxr-x   2 gas6amus gas6amus 4096 May 20 16:55 scripts\n---\nantiphon.md\ndecisions\nliterature\nopen-questions",
+        "stdout": "total 32\ndrwxrwxr-x   8 xxxxxxxx xxxxxxxx 4096 May 20 16:55 .\ndrwxr-xr-x+ 85 xxxxxxxx xxxxxxxx 4096 May 20 16:50 ..\ndrwxr-xr-x   3 xxxxxxxx xxxxxxxx 4096 May 20 16:53 .defn\ndrwxrwxr-x   4 xxxxxxxx xxxxxxxx 4096 May 20 16:55 cmd\ndrwxrwxr-x   5 xxxxxxxx xxxxxxxx 4096 May 20 16:55 docs\ndrwxrwxr-x   7 xxxxxxxx xxxxxxxx 4096 May 20 16:55 internal\ndrwxrwxr-x   4 xxxxxxxx xxxxxxxx 4096 May 20 16:55 prototypes\ndrwxrwxr-x   2 xxxxxxxx xxxxxxxx 4096 May 20 16:55 scripts\n---\nantiphon.md\ndecisions\nliterature\nopen-questions",
         "stderr": "",
         "interrupted": false,
         "isImage": false,
         "noOutputExpected": false
       },
       "is_error": false,
-      "stdout": "total 32\ndrwxrwxr-x   8 gas6amus gas6amus 4096 May 20 16:55 .\ndrwxr-xr-x+ 85 gas6amus gas6amus 4096 May 20 16:50 ..\ndrwxr-xr-x   3 gas6amus gas6amus 4096 May 20 16:53 .defn\ndrwxrwxr-x   4 gas6amus gas6amus 4096 May 20 16:55 cmd\ndrwxrwxr-x   5 gas6amus gas6amus 4096 May 20 16:55 docs\ndrwxrwxr-x   7 gas6amus gas6amus 4096 May 20 16:55 internal\ndrwxrwxr-x   4 gas6amus gas6amus 4096 May 20 16:55 prototypes\ndrwxrwxr-x   2 gas6amus gas6amus 4096 May 20 16:55 scripts\n---\nantiphon.md\ndecisions\nliterature\nopen-questions"
+      "stdout": "total 32\ndrwxrwxr-x   8 xxxxxxxx xxxxxxxx 4096 May 20 16:55 .\ndrwxr-xr-x+ 85 xxxxxxxx xxxxxxxx 4096 May 20 16:50 ..\ndrwxr-xr-x   3 xxxxxxxx xxxxxxxx 4096 May 20 16:53 .defn\ndrwxrwxr-x   4 xxxxxxxx xxxxxxxx 4096 May 20 16:55 cmd\ndrwxrwxr-x   5 xxxxxxxx xxxxxxxx 4096 May 20 16:55 docs\ndrwxrwxr-x   7 xxxxxxxx xxxxxxxx 4096 May 20 16:55 internal\ndrwxrwxr-x   4 xxxxxxxx xxxxxxxx 4096 May 20 16:55 prototypes\ndrwxrwxr-x   2 xxxxxxxx xxxxxxxx 4096 May 20 16:55 scripts\n---\nantiphon.md\ndecisions\nliterature\nopen-questions"
     },
     "followup": "Pausing to address the Zoom SDK question first, since it could redirect the spike work.\n\n**Zoom SDK landscape (no Go bindings exist anywhere):**\n\n- **Zoom Apps SDK** (in-meeting side panel): JS only. Runs inside Zoom's webview. JS/TS forced.\n- **Zoom Meeting SDK** (native client embed): C++/.NET/iOS/Android/macOS + a web JS SDK. No Go.\n- **Zoom Meeting Bot SDK** (Linux headless bot — joins as participant): C++ only. People who want this without writing C++ pay Recall.ai to wrap it.\n- **Zoom REST API / webhooks**: HTTP, language-agnostic. Go fine.\n\nMapped to the three deployment shapes from the design doc:\n\n| Shape | What it needs | Go viable? |\n|---|---|---|\n| (a) AI is the host (bot joins) | Meeting Bot SDK or Recall.ai | **No bot in Go.** C++ wrapper or Recall.ai service |\n| (b) Build outside Zoom (v2) | Whatever WebRTC + UI stack we pick | Yes for backend; UI is browser anyway |\n| (c) Audio relay in front of Zoom (v1) | OS audio plumbing (PipeWire/Pulse), control socket | **Yes — pure Go** |\n\nSo Go is correct for the v1 wedge and any backend (allocator, policy engine, REST/webhooks). The in-Zoom UI panel (if we ever build one) is JS-mandatory. A participant bot is C++ or Recall.ai — not Go.\n\nGoing to capture that as an ADR and proceed with Go for the v1 audio relay + a TS prototype for the bid-heatmap UI. Writing the foundational files now in parallel.",
     "tool_use_id": "toolu_013r1vPBZhawNKq7Gio5yomS"
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-20T23:59:03.352Z",
     "context": "bootstrap from @antiphon.md",
@@ -101,7 +101,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:00:38.329Z",
     "context": "bootstrap from @antiphon.md",
@@ -126,7 +126,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:01:50.837Z",
     "context": "bootstrap from @antiphon.md",
@@ -150,7 +150,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:02:03.654Z",
     "context": "bootstrap from @antiphon.md",
@@ -175,7 +175,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:02:07.548Z",
     "context": "bootstrap from @antiphon.md",
@@ -200,7 +200,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:02:15.262Z",
     "context": "bootstrap from @antiphon.md",
@@ -225,7 +225,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:02:39.974Z",
     "context": "bootstrap from @antiphon.md",
@@ -250,7 +250,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:06:28.228Z",
     "context": "bootstrap from @antiphon.md",
@@ -275,7 +275,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:07:05.319Z",
     "context": "bootstrap from @antiphon.md",
@@ -300,7 +300,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:09:45.864Z",
     "context": "bootstrap from @antiphon.md",
@@ -325,7 +325,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:10:15.115Z",
     "context": "bootstrap from @antiphon.md",
@@ -350,7 +350,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:10:25.266Z",
     "context": "bootstrap from @antiphon.md",
@@ -375,7 +375,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:10:30.211Z",
     "context": "bootstrap from @antiphon.md",
@@ -400,7 +400,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:16:18.025Z",
     "context": "make a private repo",
@@ -425,7 +425,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:16:25.374Z",
     "context": "make a private repo",
@@ -450,7 +450,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:17:18.714Z",
     "context": "make a private repo",
@@ -474,7 +474,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:17:36.289Z",
     "context": "make a private repo",
@@ -500,7 +500,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:17:41.986Z",
     "context": "make a private repo",
@@ -525,7 +525,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:17:51.512Z",
     "context": "make a private repo",
@@ -549,7 +549,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:18:24.209Z",
     "context": "make a private repo",
@@ -574,7 +574,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:18:50.952Z",
     "context": "make a private repo",
@@ -599,7 +599,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:19:02.407Z",
     "context": "make a private repo",
@@ -624,7 +624,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:19:29.912Z",
     "context": "make a private repo",
@@ -649,7 +649,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:19:44.349Z",
     "context": "make a private repo",
@@ -675,7 +675,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:19:47.883Z",
     "context": "make a private repo",
@@ -700,7 +700,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:20:02.809Z",
     "context": "make a private repo",
@@ -725,7 +725,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:42:44.738Z",
     "context": "start patching and realigning to this feedback",
@@ -750,7 +750,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:43:28.944Z",
     "context": "start patching and realigning to this feedback",
@@ -775,7 +775,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:43:53.208Z",
     "context": "start patching and realigning to this feedback",
@@ -799,7 +799,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:44:54.053Z",
     "context": "start patching and realigning to this feedback",
@@ -824,7 +824,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:46:42.516Z",
     "context": "start patching and realigning to this feedback",
@@ -849,7 +849,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:47:08.423Z",
     "context": "start patching and realigning to this feedback",
@@ -874,7 +874,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:57:26.901Z",
     "context": "both I think, I think I'd prefer mouse personally but for a11y and general support I think keyboard support is also imporrant",
@@ -898,7 +898,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:58:24.775Z",
     "context": "both I think, I think I'd prefer mouse personally but for a11y and general support I think keyboard support is also imporrant",
@@ -922,7 +922,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T01:02:31.445Z",
     "context": "both I think, I think I'd prefer mouse personally but for a11y and general support I think keyboard support is also imporrant",
@@ -947,7 +947,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T01:07:39.42Z",
     "context": "fix the ux first, then dm stuff",
@@ -972,7 +972,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T01:07:53.596Z",
     "context": "fix the ux first, then dm stuff",
@@ -997,7 +997,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-21T01:45:57.744Z",
     "context": "Also CI is failing codeql",
@@ -1016,7 +1016,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-21T23:22:43.591Z",
     "context": "I put the key in the file can you do the rest of it for me",
@@ -1035,7 +1035,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:57:07.688Z",
     "context": "push",
@@ -1054,7 +1054,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:57:29.942Z",
     "context": "push",
@@ -1073,7 +1073,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "main",
     "timestamp": "2026-05-22T15:44:50.904Z",
     "context": "Push and what’s next",
@@ -1092,7 +1092,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "main",
     "timestamp": "2026-05-22T15:46:45.231Z",
     "context": "Push and what’s next",
@@ -1111,7 +1111,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T19:54:57.07Z",
     "context": "continue",
@@ -1130,7 +1130,7 @@
   },
   {
     "session_id": "7a58523e-198a-4a6d-8b82-ade6115bce53",
-    "repo": "/home/gas6amus/Documents/be-my-geminis",
+    "repo": "$HOME/Documents/be-my-geminis",
     "git_branch": "HEAD",
     "timestamp": "2026-05-04T09:01:55.001Z",
     "context": "just set it for me bro you know where the key is",
@@ -1149,7 +1149,7 @@
   },
   {
     "session_id": "7a58523e-198a-4a6d-8b82-ade6115bce53",
-    "repo": "/home/gas6amus/Documents/be-my-geminis",
+    "repo": "$HOME/Documents/be-my-geminis",
     "git_branch": "main",
     "timestamp": "2026-05-19T23:12:35.316Z",
     "context": "a",
@@ -1168,7 +1168,7 @@
   },
   {
     "session_id": "7a58523e-198a-4a6d-8b82-ade6115bce53",
-    "repo": "/home/gas6amus/Documents/be-my-geminis",
+    "repo": "$HOME/Documents/be-my-geminis",
     "git_branch": "main",
     "timestamp": "2026-05-19T23:15:08.275Z",
     "context": "good plan do it",

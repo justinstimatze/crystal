@@ -13,7 +13,7 @@
 > fluent, confidently-quoted, plausible-but-wrong result, caught only by checking the
 > raw source. See `THESIS.md` for the framing that supersedes this whole exercise.
 
-Run 2026-05-28 via `crystal measure --home /home/justin --home /home/gas6amus`
+Run 2026-05-28 via `crystal measure --home ~`
 over **217,184** registered-tool records from 160 main sessions (subagents excluded).
 
 A pattern is *crystallizable* when an input-signature group is both **frequent**

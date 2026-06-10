@@ -1,7 +1,7 @@
 [
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:09:49.395Z",
     "context": "bootstrap from @antiphon.md",
@@ -28,7 +28,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:43:35.676Z",
     "context": "start patching and realigning to this feedback",
@@ -57,7 +57,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T00:56:31.697Z",
     "context": "both I think, I think I'd prefer mouse personally but for a11y and general support I think keyboard support is also imporrant",
@@ -86,7 +86,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T01:04:38.614Z",
     "context": "fix the ux first, then dm stuff",
@@ -113,7 +113,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T01:07:57.683Z",
     "context": "fix the ux first, then dm stuff",
@@ -142,7 +142,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T01:07:58.766Z",
     "context": "fix the ux first, then dm stuff",
@@ -171,7 +171,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "HEAD",
     "timestamp": "2026-05-21T01:13:53.173Z",
     "context": "fix the ux first, then dm stuff",
@@ -200,7 +200,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-21T21:45:40.033Z",
     "context": "exercise your best design judgment/skills",
@@ -229,7 +229,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-21T21:45:45.689Z",
     "context": "exercise your best design judgment/skills",
@@ -258,7 +258,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-21T21:46:59.74Z",
     "context": "exercise your best design judgment/skills",
@@ -287,7 +287,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-21T21:47:12.322Z",
     "context": "exercise your best design judgment/skills",
@@ -316,7 +316,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "main",
     "timestamp": "2026-05-21T22:33:03.199Z",
     "context": "better but could be even friendlier and simpler I think",
@@ -345,7 +345,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "main",
     "timestamp": "2026-05-21T22:33:04.048Z",
     "context": "better but could be even friendlier and simpler I think",
@@ -374,7 +374,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-21T23:13:00.386Z",
     "context": "A now but let's get to C later",
@@ -401,7 +401,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "main",
     "timestamp": "2026-05-21T23:19:34.869Z",
     "context": "key set",
@@ -430,7 +430,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "main",
     "timestamp": "2026-05-21T23:19:54.084Z",
     "context": "key set",
@@ -459,7 +459,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon/prototypes/bid-heatmap-ui",
+    "repo": "$HOME/Documents/antiphon/prototypes/bid-heatmap-ui",
     "git_branch": "main",
     "timestamp": "2026-05-21T23:36:50.384Z",
     "context": "fix all robustly and retry test run",
@@ -488,19 +488,19 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T01:36:30.06Z",
     "context": "continue",
     "tool": "Read",
     "args": {
-      "file_path": "$HOME/.claude/projects/-home-gas6amus-Documents-antiphon/memory/MEMORY.md"
+      "file_path": "$HOME/.claude/projects/-home-xxxxxxxx-Documents-antiphon/memory/MEMORY.md"
     },
     "result": {
       "raw": {
         "type": "text",
         "file": {
-          "filePath": "$HOME/.claude/projects/-home-gas6amus-Documents-antiphon/memory/MEMORY.md",
+          "filePath": "$HOME/.claude/projects/-home-xxxxxxxx-Documents-antiphon/memory/MEMORY.md",
           "content": "- [Persona-driver dep-array trap](feedback_persona_driver_dep_trap.md) — long-running async useEffects + setParticipants on a fast interval = cancelled-loop hell\n- [Verify before claiming](feedback_verify_before_claiming.md) — screenshot/inspect, don't commit-and-claim; the topology fluency-trap warnings were correct all session\n- [Antiphon visual design language](project_visual_design.md) — friendly corporate (Linear/Krisp refs); aborted detours through mission-control HUD and stripped-back-too-far\n- [Antiphon spike testing flow](project_spike_testing.md) — env layout, dev panel levers, simulation flavors, where the spike is up to\n",
           "numLines": 5,
           "startLine": 1,
@@ -508,14 +508,14 @@
         }
       },
       "is_error": false,
-      "file": "{\"content\":\"- [Persona-driver dep-array trap](feedback_persona_driver_dep_trap.md) — long-running async useEffects + setParticipants on a fast interval = cancelled-loop hell\\n- [Verify before claiming](feedback_verify_before_claiming.md) — screenshot/inspect, don't commit-and-claim; the topology fluency-trap warnings were correct all session\\n- [Antiphon visual design language](project_visual_design.md) — friendly corporate (Linear/Krisp refs); aborted detours through mission-control HUD and stripped-back-too-far\\n- [Antiphon spike testing flow](project_spike_testing.md) — env layout, dev panel levers, simulation flavors, where the spike is up to\\n\",\"filePath\":\"$HOME/.claude/projects/-home-gas6amus-Documents-antiphon/memory/MEMORY.md\",\"numLines\":5,\"startLine\":1,\"totalLines\":5}"
+      "file": "{\"content\":\"- [Persona-driver dep-array trap](feedback_persona_driver_dep_trap.md) — long-running async useEffects + setParticipants on a fast interval = cancelled-loop hell\\n- [Verify before claiming](feedback_verify_before_claiming.md) — screenshot/inspect, don't commit-and-claim; the topology fluency-trap warnings were correct all session\\n- [Antiphon visual design language](project_visual_design.md) — friendly corporate (Linear/Krisp refs); aborted detours through mission-control HUD and stripped-back-too-far\\n- [Antiphon spike testing flow](project_spike_testing.md) — env layout, dev panel levers, simulation flavors, where the spike is up to\\n\",\"filePath\":\"$HOME/.claude/projects/-home-xxxxxxxx-Documents-antiphon/memory/MEMORY.md\",\"numLines\":5,\"startLine\":1,\"totalLines\":5}"
     },
     "followup": "**Driver pass complete.** 135s run, clean stop. The fix from `f393e50` holds — no cancelled-loop regression, no orphan API calls.\n\n**Confirmed working** (full list in `project_persona_tuning_findings.md`):\n- Bid rationales reference prior actions by name → real threading\n- Substantive content emerges (Devraj quotes \"CVSS 8.1 — high severity\")\n- Floor cession dynamics — Mei passes when Devraj has 92-intensity bid + direct ask; Tom cedes explicitly (\"Devraj, go ahead\")\n- `CALLED ON` / `CALLED ON YOU` surfaces fire\n- WRAP UP tier escalation: \"others are waiting\" → \"wrap up soon\"\n- Vibe channel used emergently (Tom reacts `I` to CVSS answer)\n\n**Four tuning candidates for next round** (ordered by expected delta):\n1. **Time-check over-rotation** — ~40-50% of bids are floor-policing not substance. The \"CRITICAL FLOOR RULES\" section in the persona prompt is dominating; dial down or gate to when speaker is genuinely past cap.\n2. **Bid floor too high** — bids cluster 50-92, no low-intensity passive presence. Add \"prefer pass/vibe over low bid\" guidance.\n3. **Station differentiation thin** — Aida/Sara/Mei produce structurally similar rationales. The `Persona.tendencies` field exists but isn't biting hard enough.\n4. **Rationale UI truncation** — log cuts at ~80 chars mid-word (`…remediation tim`). Hover-tooltip or word-boundary ellipsis.",
     "tool_use_id": "toolu_01EGepYmiUJbDPTxZEH6o9xg"
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T01:44:34.924Z",
     "context": "ok keep running tests",
@@ -542,7 +542,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T01:44:44.804Z",
     "context": "ok keep running tests",
@@ -571,7 +571,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T01:48:28.749Z",
     "context": "ok keep running tests",
@@ -600,7 +600,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T01:48:42.905Z",
     "context": "ok keep running tests",
@@ -629,7 +629,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T02:20:45.825Z",
     "context": "yep 1",
@@ -658,7 +658,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T02:20:56.786Z",
     "context": "yep 1",
@@ -687,7 +687,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T02:21:10.875Z",
     "context": "yep 1",
@@ -716,7 +716,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T02:22:16.87Z",
     "context": "yep 1",
@@ -745,7 +745,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T02:22:48.16Z",
     "context": "yep 1",
@@ -774,7 +774,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T02:23:18.575Z",
     "context": "yep 1",
@@ -803,7 +803,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T02:23:49.271Z",
     "context": "yep 1",
@@ -832,7 +832,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:08:03.557Z",
     "context": "push then move on",
@@ -861,7 +861,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:09:20.67Z",
     "context": "push then move on",
@@ -890,7 +890,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:10:05.356Z",
     "context": "push then move on",
@@ -919,7 +919,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:43:38.166Z",
     "context": "push",
@@ -948,7 +948,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:43:42.951Z",
     "context": "push",
@@ -977,7 +977,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:43:54.098Z",
     "context": "push",
@@ -1006,7 +1006,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:44:49.794Z",
     "context": "push",
@@ -1035,7 +1035,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T03:45:09.235Z",
     "context": "push",
@@ -1064,7 +1064,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T15:05:58.216Z",
     "context": "the dev window is slowly growing rightward until it’s off the edge of the screen, I think because the log lines are getting very long and not wrapping",
@@ -1093,7 +1093,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T17:09:17.837Z",
     "context": "check our roadmap and vision",
@@ -1120,7 +1120,7 @@
   },
   {
     "session_id": "abc0d0d1-0d1c-49a3-b402-6ba9a5d52383",
-    "repo": "/home/gas6amus/Documents/antiphon",
+    "repo": "$HOME/Documents/antiphon",
     "git_branch": "main",
     "timestamp": "2026-05-22T17:15:24.353Z",
     "context": "check our roadmap and vision",
@@ -1147,13 +1147,13 @@
   },
   {
     "session_id": "f9b22957-a0d1-4343-8bd2-0886bb9a5427",
-    "repo": "/home/gas6amus/Documents/crowdwork",
+    "repo": "$HOME/Documents/crowdwork",
     "git_branch": "HEAD",
     "timestamp": "2026-04-29T23:23:37.573Z",
-    "context": "This session is being continued from a previous conversation that ran out of context. The summary below covers the earlier portion of the conversation.\n\nSummary:\n1. Primary Request and Intent:\nThe user is building \"crowdwork\" — a system that makes Claude funny in conversations (but only when truly very funny), combining three existing projects: groupchat (ambient meme deployment), slimemold (ambient conversation structure backend), and plancheck (pre-simulation/gap detection). The approach is corpus-based: transcribe YouTube clips, annotate with named structural patterns, eventually build a behavioral contract for Claude. Reference comedians: Jeff Arcuri, Gianmarco Soresi, Eddie Izzard, Norm Macdonald, Brennan Lee Mulligan/Dropout, and Whose Line performers.\n\nIn this session: (1) answered the pending commitment_humor design constraint question; (2) ran a large batch transcription session adding 40 new clips; (3) annotated 9 new clip JSON files covering new categories (anti-drop calibration, heckler response, improv game_frame, Game Changer frame_collision); (4) updated schema to v0.3 and CONTENT_LIST.md; (5) began reading remaining unannotated clips (user said \"keep going\").\n\n2. Key Technical Concepts:\n- **commitment_humor deploy conditions for Claude**: flat delivery doesn't transfer to text; announced_premise_collapse is the safe variant; structural variation (same premise, different formats) proves active holding; conversation-bounded; announced_premise_collapse is verbal not tonal intentionality signal\n- **anti-drop calibration**: zero anti-drop examples → now 4 documented (Kill Tony ×2, Richards, Chappelle/Musk); Kill Tony format is ideal because working comedian names the failure mechanism on-camera\n- **heckler_response as format**: adversarial crowdwork; valid_target rule changes (heckler opted in); authority_reassertion is a distinct move from wit-based reframe; transparent prep reveal defuses \"unfair advantage\" objection\n- **failure_mode taxonomy**: opening_attack, punchline_absent, false_audience_mindread, setup_without_transition, wrong_topic_selected, hostile_setup_primes_rejection, setup:punchline_ratio, valid_target_violation, pattern_collapse_under_pressure, imported_third_party_misfire, reframe_misses_source, excuse_making_on_failure\n- **Kill Tony format**: amateur 60-second set → host critique; critique_given field; Tony names structural failures in real time\n- **improv game_frame** (Colin Press Conference): dual-reading structure created by game format; simultaneous multi-frame resolution; spontaneous convergence is structurally guaranteed unplanned — resolves the commitment_humor intentionality problem for improv\n- **Brennan's frame_collision**: two registers maintained simultaneously with structural bridges (puberty × dark fantasy; wedding × funeral × bar mitzvah × trial × stump speech)\n- **Game Changer format**: game_show competitive improv; comedians face absurd prompts; Brennan's theatrical escalation instinct conflicts with simple game answers\n- **faster-whisper**: small model, CPU, int8; sequential batching required (parallel crashes from memory exhaustion)\n- **valid_target rule**: situation/self/shared_frustration/abstract = allowed; identity/unchosen = never; heckler = special case (opted in by disrupting)\n\n3. Files and Code Sections:\n\n- `$HOME/Documents/crowdwork/corpus/schema.json` (updated to v0.3)\n  - Added format_types: \"heckler_response\", \"improv (game)\", \"game_show (competitive improv)\", \"stand-up (open mic + host critique)\"\n  - Added reframe variant: \"heckler_reframe\"\n  - Added annotation fields: commitment_type (for commitment_humor), failure_mode (for anti_drop), critique_given boolean (for Kill Tony-style clips)\n\n- `$HOME/Documents/crowdwork/corpus/CONTENT_LIST.md`\n  - Added Brennan (2 annotated + [~] 15 transcribed), Colin (1 annotated + [~] 8 transcribed), Troy Bond (2 annotated + [~] 7 transcribed), Kill Tony ×2, Richards, Chappelle/Musk, Soresi Furry Convention\n  - Added \"Heckler response\" section\n\n- `$HOME/Documents/crowdwork/corpus/clips/anti-drop-killtony-1.json` (NEW)\n  - Source: Kill Tony 84UoEjnIHWI — 3 acts\n  - Act 1 (Psy): failure_modes: opening_attack + distraction + punchline_absent + false_audience_mindread. Tony's critique names all four explicitly.\n  - Act 2 (Juanita): setup_without_transition; accidental self-proving honest_observation (\"painfully shy, taking forever to get to the point\" = describes herself)\n  - Act 3 (Mike Thielacker): wrong_topic_selected; interesting life (Black Hawk crew chief, medically retired, ex-wife) vs. chosen material (fart story)\n\n- `$HOME/Documents/crowdwork/corpus/clips/anti-drop-killtony-2.json` (NEW)\n  - Source: Kill Tony PS3kLyyMI0Y — 3 acts\n  - Act 1 (Wayne McCracken): excuse_making_on_failure; \"standing ovation\" wordplay technically correct but flat-lined; Tony shuts down each excuse\n  - Act 2 (Keenan McKenna): hostile_setup_primes_rejection; deaf school joke structurally sound but \"I love gun violence\" setup made audience hostile before punchline; Tony: \"I thought you were great\" — separates craft from room response\n  - Act 3 (Stephanie Robertson): setup:punchline_ratio + wrong_topic_selected; Tony's workshop names exact edits; \"shorter is better\" principle; \"stay with me\" as room-hostility signal; Tony offers to deliver punchline himself\n\n- `$HOME/Documents/crowdwork/corpus/clips/anti-drop-richards.json` (NEW)\n  - Source: amjUNF_R_PY — Laugh Factory 2006\n  - failure_mode: valid_target_violation + pattern_collapse_under_pressure\n  - Wit-based reframe collapsed under pressure → identity attack substituted\n  - Heckler wins: \"never had a show, never had a movie\" is clean honest_observation on Richards' career; Richards capitulates\n\n- `$HOME/Documents/crowdwork/corpus/clips/anti-drop-chappelle-musk.json` (NEW)\n  - Source: BdBga225HBk — Chase Center Dec 2022\n  - failure_mode: imported_third_party_misfire + reframe_misses_source\n  - Three recovery attempts all address wrong source of hostility: (1) \"people you fired\" — wrong source; (2) \"terrible seats\" — most absurd; (3) \"oh fuck it\" — correct abort, too late\n  - Rule: when room is hostile about the imported third party, only (a) name the actual hostility or (b) immediate abort works; reframing extends/deepens the breach\n\n- `$HOME/Documents/crowdwork/corpus/clips/troy-bond-spider-man.json` (NEW)\n  - Source: 18drJ1fdANc\n  - format: heckler_response; variant: heckler_reframe\n  - Heckler's own prop (Spider-Man shirt) used as vehicle for condemnation; \"where great power comes great responsibility / where pink blazer comes annoying cunt\"\n  - \"I learned that from Uncle Ben\" — fictional third party recruited from heckler's own shirt\n  - \"Don't try to jump in, Robin\" — pre-empts friend; assigns subordinate role using same universe\n  - \"Don't ever attack a nerd\" — self_aware_failure weaponized: owns the nerd identity\n\n- `$HOME/Documents/crowdwork/corpus/clips/troy-bond-incredibles.json` (NEW)\n  - Source: 2gAPKVEx9zg\n  - format: heckler_response; variant: authority_reassertion\n  - \"I got like a hundred of them ready to go\" — transparent prep reveal defuses objection preemptively\n  - \"Me too. You're killing it.\" — apparent_validation redefining \"killing it\"\n  - \"You think I got into comedy for overwhelming majority opinion? No!\" — authority_reassertion: comedian redefines social contract of performance; stage is not democratic\n  - Note: authority_reassertion only works after comedian has already won the exchange\n\n- `$HOME/Documents/crowdwork/corpus/clips/colin-press-conference.json` (NEW)\n  - Source: ARoCpelSF70 — Whose Line Press Conference game\n  - variant: game_frame; pattern: callback_window\n  - Game creates dual-reading structure: every question works as Batman AND coming-out question simultaneously\n  - \"I'm not sure but I may want to rephrase that later\" → \"you might want to rephrase that now\" — live self_aware_failure\n  - Final answer: \"Batman who's declaring that he's coming out of the closet\" resolves both frames simultaneously\n  - Key insight: improv format guarantees spontaneous convergence is unplanned → solves commitment_humor intentionality problem for improv context\n\n- `$HOME/Documents/crowdwork/corpus/clips/soresi-furry-convention.json` (NEW)\n  - Source: wa4syN0bBbw — Furpocalypse convention set, ~25 min\n  - 5 annotated entries:\n  - (1) solidarity_reframe opener: theater kid / furry community\n  - (2) fursona vote game_frame (game_frame running full 25 min; \"Don't say it yet\")\n  - (3) \"we're on the same train\" — Nazi/Jewish solidarity_reframe with Holocaust resonance\n  - (4) Beanie baby ominous poem: \"I'll be there with you at the end\" — precise_property_isolation (truncation + ominousness simultaneous)\n  - (5) IT furries → planes → ISIS logical_escalation chain\n\n- `$HOME/Documents/crowdwork/corpus/clips/brennan-birds-bees.json` (NEW)\n  - Source: zrSnMoLXfjc — Game Changer short\n  - format: game_show (competitive improv); pattern: frame_collision\n  - commitment_type: dual_frame_maintenance\n  - Puberty talk × dark fantasy; structural bridges preserved (have you touched yourself? → not with your hand; birds build nests → dark sun built a sword)\n  - \"Have you opened the eye within?\" — sexual metaphor completely replaced by epic quest element\n  - Never breaks either frame; humor lives in the mapping between registers\n\n- `$HOME/Documents/crowdwork/corpus/clips/brennan-wedding-speech.json` (NEW)\n  - Source: ADe25S45hxk — Game Changer short\n  - format: game_show (competitive improv); pattern: frame_collision\n  - commitment_type: accumulating_frames\n  - Occasions accumulate: wedding → eulogy → bar mitzvah → court trial → stump speech\n  - Speech format is the constant; contexts accumulate incompatibly\n  - Compare to Norm OJ: Norm's premise is constant across varying contexts; here contexts accumulate while premise (speech format) is constant\n\n4. Errors and Fixes:\n- **Memory crash from 17 parallel transcription processes**: User said \"17 is too many in parallel and we ran out of memory and crashed.\" Fixed by using sequential bash loops (one transcription at a time per loop), running two sequential loops simultaneously maximum. The error was running `python transcribe.py` 16 times in parallel background processes simultaneously — each loads faster-whisper model into RAM (~850MB each), causing OOM.\n- **wa4syN0bBbw included in Brennan's Shorts loop**: The Soresi Furry Convention URL was included in the Brennan Shorts batch loop (using wrong URL format `shorts/wa4syN0bBbw`). Also started separately as a proper URL. Both ran, one overwrote the other — result was correct since same model/audio.\n\n5. Problem Solving:\n- Commitment_humor intentionality problem: resolved with three-part framework (announced entry, structural variation, defined endpoint). Announced_premise_collapse is safe path; sustained-weeks variant not deployable for Claude.\n- Anti-drop calibration: went from zero examples to 4 documented failure cases. Kill Tony identified as purpose-built format for this. failure_mode taxonomy established from Tony's real-time critiques.\n- Heckler response patterns: Troy Bond establishes heckler_reframe + authority_reassertion as distinct patterns. Valid_target rule updated: heckler has opted in. Transparent prep reveal (\"100 ready to go\") is a distinct tactic.\n- Improv intentionality problem: Colin Press Conference resolves it — game format structurally guarantees spontaneous convergence is unplanned, so the audience knows the comedian found it rather than planted it.\n\n6. All user messages:\n- \"I feel like commitment_humor is a tricky thing to do from claude\" [4 messages from previous session, unanswered]\n- \"if someone's not getting the joke\"\n- \"but also could be hilarious, just tricky when you're less sure it's intentional. with norm it's unambiguously intentional and that's part of the joke\"\n- \"but with an llm it could just be wandering around\"\n- \"ok what next\"\n- \"let me give you some more corpus examples\"\n- \"which did you want specifically? how's our list\"\n- \"I have a dropout subscription but they also post a lot of dropout on youtube\"\n- \"a mix\" [Brennan clips are a mix of Game Changer/D20]\n- \"mostly game changer\"\n- \"did we finish the soresi furry convention one\"\n- \"colin https://www.youtube.com/shorts/oLEudfHvFTw [+ 8 more Colin URLs]\"\n- \"troy bond https://www.youtube.com/shorts/18drJ1fdANc [+ 8 more Troy Bond URLs]\"\n- \"quick response to hecklers\" [describing Troy Bond's specialty]\n- \"anyone else I should queue up?\"\n- \"finding failure examples is surprisingly hard on youtube can you give me some specific examples? but I agree we should add normand and hedberg\"\n- \"hm what about elon getting booed at the dave chappelle show when he got brought on stage and then dave also got booed?\"\n- \"or Michael Richards (2006): Known as Kramer from Seinfeld...\" [+ Dave Chappelle Detroit 2015, Nick Swardson 2024, Shane Gillis 2025, Rob Delaney 2013]\n- \"oh here we go, kill tony examples https://www.youtube.com/watch?v=84UoEjnIHWI and part 2 https://www.youtube.com/watch?v=PS3kLyyMI0Y\"\n- \"here's richards https://www.youtube.com/watch?v=amjUNF_R_PY\u0026pp=...\"\n- \"chappelle and musk https://www.youtube.com/watch?v=BdBga225HBk\u0026pp=...\"\n- \"lets let it cook for a bit before I add more\"\n- \"but I do want normand and hedberg\"\n- \"the kill tony ones are compilations of 3 acts each\"\n- \"how's it going\" [×7 status checks during transcription wait]\n- \"how's it going\" (final — all done)\n- \"keep going\" [after annotation session, reading remaining unread clips]\n\n7. Pending Tasks:\n- **Continue annotating remaining unread clips**: 4 Colin (E3te2FP6AWg, u8AILJeugrs, Q961dViRof4, f6y1i0yo3WU), 2 Troy Bond (gCGbrvnihvo, _FH4g5sj6ug), 16 Brennan (all remaining)\n- **Add Normand and Hedberg URLs** when user provides them; queue for transcription\n- **Annotate remaining clips after reading**: Colin New Choice (C2XASSGxgWI), Colin Honky Tonk (1U7M1mEMvsU), Troy Bond German heckler (fryKqJwxVHw), Brennan Harry Potter (cbdGsQdZUVs), Brennan Sword in Stone (VJtV2UkU-Fk) — already read, annotation pending\n- **Anti-drop: Rob Delaney Jimmy Kimmel** — noted as structurally interesting (text-native comedian failing in live register); no URL yet\n- **Behavioral contract** — not started; noted as next phase after corpus\n\n8. Current Work:\nImmediately before this summary, I was in the middle of reading the remaining unannotated clips (user said \"keep going\"). Six parallel reads were in progress:\n\n**C2XASSGxgWI (Colin)**: Hollywood Director + New Choice + Cyclops games. Key moment: \"I have another eye, I just never put it in\" / \"Well, I wouldn't be much of a Cyclops with two eyes.\" This is self_aware_failure — character reveals the maintained fiction was a deliberate choice.\n\n**1U7M1mEMvsU (Colin)**: Multiple game formats. Key moment: \"What sound does a goose make? Honk. And what sound does a fish hitting a windshield make? Well, you got the first part. Honk. Tonk. Honky Tonk.\" Clean 2-part convergence. Also nose callback (\"I make one nose joke\").\n\n**fryKqJwxVHw (Troy Bond)**: German heckler doesn't like Nazi jokes. Troy: \"The Germans historically known for being patient... What's the material going to be like at a German comedy club? Knock knock. Who's there? Doesn't matter. Open the door. No!\" Reframes with German comedy club premise. Short but clean heckler_reframe.\n\n**u0m-Xuie7JU (Troy Bond)**: 13-year-old twins; minimal crowdwork, not highly distinctive.\n\n**kzxQgrA7MLg (Brennan)**: Video call Wi-Fi impression (Game Changer). Commitment to call-dropping failure states. \"I'm trapped under a train.\" \"I'm just gonna use the chat function.\"\n\n**clPG1_PZEd0 (Brennan)**: Birds naming game. Brennan keeps guessing wrong (pheasant → guinea-fowl → maribou); host says \"I was looking for Siamese fireback\" and \"Rosate Spoonbill.\" \"Just penguin, just penguin\" — absurd specificity contrast.\n\nFive more reads just completed before summary request:\n- **L5OhXFk6DzI (Colin)**: Titanic deleted scene — very fragmented transcript\n- **IaIXlzwH-94 (Troy Bond)**: Australian man (21-hour flight). \"Either way, the show's not going to be worth it.\" + \"Are you my father, sir?\" Short crowdwork.\n- **rb1UhVZnExI (Troy Bond)**: Very short — anger management joke + \"99% of you were a great crowd, 1% of you were raging.\"\n- **cbdGsQdZUVs (Brennan)**: Harry Potter owl post → if wizards can teleport, owl mail = animal cruelty → \"we can't operate in the grounds of Hogwarts, why run civilization based on bylaws of one school?\" → Hogwarts = Illuminati → if not oppressive = \"allowing horrors of the world to happen.\" Classic Brennan logical_escalation + premise_inversion.\n- **VJtV2UkU-Fk (Brennan)**: General contractor quote for sword in stone — \"it's not just the granite... damage to the blade... rust damage... this got placed here by a giant or wizard... from a prior tenant?... this is gonna be a dragon's horde.\" Mundane contractor register applied to epic fantasy; frame_collision with commitment.\n\n9. Optional Next Step:\nContinue reading remaining unread clips and write annotation JSON files for the best structural examples found. The user explicitly said \"keep going\" and work was in progress reading clips to annotate.\n\nSpecific next actions:\n1. Read the remaining 4 Colin clips (E3te2FP6AWg, u8AILJeugrs, Q961dViRof4, f6y1i0yo3WU) and 2 Troy Bond (gCGbrvnihvo, _FH4g5sj6ug) and remaining 10 Brennan clips\n2. Write annotation JSONs for the best moments from the clips already read: Colin New Choice/Cyclops (C2XASSGxgWI), Colin Honky Tonk (1U7M1mEMvsU), Troy Bond German heckler (fryKqJwxVHw), Brennan Harry Potter escalation (cbdGsQdZUVs), Brennan Sword in Stone contractor (VJtV2UkU-Fk)\n3. Update CONTENT_LIST.md with newly annotated entries\n\nThe user's last message was: \"keep going\" — referring to the annotation/reading work on the remaining unread clips.\n\nIf you need specific details from before compaction (like exact code snippets, error messages, or content you generated), read the full transcript at: $HOME/.claude/projects/-home-gas6amus-Documents-crowdwork/f9b22957-a0d1-4343-8bd2-0886bb9a5427.jsonl\nContinue the conversation from where it left off without asking the user any further questions. Resume directly — do not acknowledge the summary, do not recap what was happening, do not preface with \"I'll continue\" or similar. Pick up the last task as if the break never happened.",
+    "context": "This session is being continued from a previous conversation that ran out of context. The summary below covers the earlier portion of the conversation.\n\nSummary:\n1. Primary Request and Intent:\nThe user is building \"crowdwork\" — a system that makes Claude funny in conversations (but only when truly very funny), combining three existing projects: groupchat (ambient meme deployment), slimemold (ambient conversation structure backend), and plancheck (pre-simulation/gap detection). The approach is corpus-based: transcribe YouTube clips, annotate with named structural patterns, eventually build a behavioral contract for Claude. Reference comedians: Jeff Arcuri, Gianmarco Soresi, Eddie Izzard, Norm Macdonald, Brennan Lee Mulligan/Dropout, and Whose Line performers.\n\nIn this session: (1) answered the pending commitment_humor design constraint question; (2) ran a large batch transcription session adding 40 new clips; (3) annotated 9 new clip JSON files covering new categories (anti-drop calibration, heckler response, improv game_frame, Game Changer frame_collision); (4) updated schema to v0.3 and CONTENT_LIST.md; (5) began reading remaining unannotated clips (user said \"keep going\").\n\n2. Key Technical Concepts:\n- **commitment_humor deploy conditions for Claude**: flat delivery doesn't transfer to text; announced_premise_collapse is the safe variant; structural variation (same premise, different formats) proves active holding; conversation-bounded; announced_premise_collapse is verbal not tonal intentionality signal\n- **anti-drop calibration**: zero anti-drop examples → now 4 documented (Kill Tony ×2, Richards, Chappelle/Musk); Kill Tony format is ideal because working comedian names the failure mechanism on-camera\n- **heckler_response as format**: adversarial crowdwork; valid_target rule changes (heckler opted in); authority_reassertion is a distinct move from wit-based reframe; transparent prep reveal defuses \"unfair advantage\" objection\n- **failure_mode taxonomy**: opening_attack, punchline_absent, false_audience_mindread, setup_without_transition, wrong_topic_selected, hostile_setup_primes_rejection, setup:punchline_ratio, valid_target_violation, pattern_collapse_under_pressure, imported_third_party_misfire, reframe_misses_source, excuse_making_on_failure\n- **Kill Tony format**: amateur 60-second set → host critique; critique_given field; Tony names structural failures in real time\n- **improv game_frame** (Colin Press Conference): dual-reading structure created by game format; simultaneous multi-frame resolution; spontaneous convergence is structurally guaranteed unplanned — resolves the commitment_humor intentionality problem for improv\n- **Brennan's frame_collision**: two registers maintained simultaneously with structural bridges (puberty × dark fantasy; wedding × funeral × bar mitzvah × trial × stump speech)\n- **Game Changer format**: game_show competitive improv; comedians face absurd prompts; Brennan's theatrical escalation instinct conflicts with simple game answers\n- **faster-whisper**: small model, CPU, int8; sequential batching required (parallel crashes from memory exhaustion)\n- **valid_target rule**: situation/self/shared_frustration/abstract = allowed; identity/unchosen = never; heckler = special case (opted in by disrupting)\n\n3. Files and Code Sections:\n\n- `$HOME/Documents/crowdwork/corpus/schema.json` (updated to v0.3)\n  - Added format_types: \"heckler_response\", \"improv (game)\", \"game_show (competitive improv)\", \"stand-up (open mic + host critique)\"\n  - Added reframe variant: \"heckler_reframe\"\n  - Added annotation fields: commitment_type (for commitment_humor), failure_mode (for anti_drop), critique_given boolean (for Kill Tony-style clips)\n\n- `$HOME/Documents/crowdwork/corpus/CONTENT_LIST.md`\n  - Added Brennan (2 annotated + [~] 15 transcribed), Colin (1 annotated + [~] 8 transcribed), Troy Bond (2 annotated + [~] 7 transcribed), Kill Tony ×2, Richards, Chappelle/Musk, Soresi Furry Convention\n  - Added \"Heckler response\" section\n\n- `$HOME/Documents/crowdwork/corpus/clips/anti-drop-killtony-1.json` (NEW)\n  - Source: Kill Tony 84UoEjnIHWI — 3 acts\n  - Act 1 (Psy): failure_modes: opening_attack + distraction + punchline_absent + false_audience_mindread. Tony's critique names all four explicitly.\n  - Act 2 (Juanita): setup_without_transition; accidental self-proving honest_observation (\"painfully shy, taking forever to get to the point\" = describes herself)\n  - Act 3 (Mike Thielacker): wrong_topic_selected; interesting life (Black Hawk crew chief, medically retired, ex-wife) vs. chosen material (fart story)\n\n- `$HOME/Documents/crowdwork/corpus/clips/anti-drop-killtony-2.json` (NEW)\n  - Source: Kill Tony PS3kLyyMI0Y — 3 acts\n  - Act 1 (Wayne McCracken): excuse_making_on_failure; \"standing ovation\" wordplay technically correct but flat-lined; Tony shuts down each excuse\n  - Act 2 (Keenan McKenna): hostile_setup_primes_rejection; deaf school joke structurally sound but \"I love gun violence\" setup made audience hostile before punchline; Tony: \"I thought you were great\" — separates craft from room response\n  - Act 3 (Stephanie Robertson): setup:punchline_ratio + wrong_topic_selected; Tony's workshop names exact edits; \"shorter is better\" principle; \"stay with me\" as room-hostility signal; Tony offers to deliver punchline himself\n\n- `$HOME/Documents/crowdwork/corpus/clips/anti-drop-richards.json` (NEW)\n  - Source: amjUNF_R_PY — Laugh Factory 2006\n  - failure_mode: valid_target_violation + pattern_collapse_under_pressure\n  - Wit-based reframe collapsed under pressure → identity attack substituted\n  - Heckler wins: \"never had a show, never had a movie\" is clean honest_observation on Richards' career; Richards capitulates\n\n- `$HOME/Documents/crowdwork/corpus/clips/anti-drop-chappelle-musk.json` (NEW)\n  - Source: BdBga225HBk — Chase Center Dec 2022\n  - failure_mode: imported_third_party_misfire + reframe_misses_source\n  - Three recovery attempts all address wrong source of hostility: (1) \"people you fired\" — wrong source; (2) \"terrible seats\" — most absurd; (3) \"oh fuck it\" — correct abort, too late\n  - Rule: when room is hostile about the imported third party, only (a) name the actual hostility or (b) immediate abort works; reframing extends/deepens the breach\n\n- `$HOME/Documents/crowdwork/corpus/clips/troy-bond-spider-man.json` (NEW)\n  - Source: 18drJ1fdANc\n  - format: heckler_response; variant: heckler_reframe\n  - Heckler's own prop (Spider-Man shirt) used as vehicle for condemnation; \"where great power comes great responsibility / where pink blazer comes annoying cunt\"\n  - \"I learned that from Uncle Ben\" — fictional third party recruited from heckler's own shirt\n  - \"Don't try to jump in, Robin\" — pre-empts friend; assigns subordinate role using same universe\n  - \"Don't ever attack a nerd\" — self_aware_failure weaponized: owns the nerd identity\n\n- `$HOME/Documents/crowdwork/corpus/clips/troy-bond-incredibles.json` (NEW)\n  - Source: 2gAPKVEx9zg\n  - format: heckler_response; variant: authority_reassertion\n  - \"I got like a hundred of them ready to go\" — transparent prep reveal defuses objection preemptively\n  - \"Me too. You're killing it.\" — apparent_validation redefining \"killing it\"\n  - \"You think I got into comedy for overwhelming majority opinion? No!\" — authority_reassertion: comedian redefines social contract of performance; stage is not democratic\n  - Note: authority_reassertion only works after comedian has already won the exchange\n\n- `$HOME/Documents/crowdwork/corpus/clips/colin-press-conference.json` (NEW)\n  - Source: ARoCpelSF70 — Whose Line Press Conference game\n  - variant: game_frame; pattern: callback_window\n  - Game creates dual-reading structure: every question works as Batman AND coming-out question simultaneously\n  - \"I'm not sure but I may want to rephrase that later\" → \"you might want to rephrase that now\" — live self_aware_failure\n  - Final answer: \"Batman who's declaring that he's coming out of the closet\" resolves both frames simultaneously\n  - Key insight: improv format guarantees spontaneous convergence is unplanned → solves commitment_humor intentionality problem for improv context\n\n- `$HOME/Documents/crowdwork/corpus/clips/soresi-furry-convention.json` (NEW)\n  - Source: wa4syN0bBbw — Furpocalypse convention set, ~25 min\n  - 5 annotated entries:\n  - (1) solidarity_reframe opener: theater kid / furry community\n  - (2) fursona vote game_frame (game_frame running full 25 min; \"Don't say it yet\")\n  - (3) \"we're on the same train\" — Nazi/Jewish solidarity_reframe with Holocaust resonance\n  - (4) Beanie baby ominous poem: \"I'll be there with you at the end\" — precise_property_isolation (truncation + ominousness simultaneous)\n  - (5) IT furries → planes → ISIS logical_escalation chain\n\n- `$HOME/Documents/crowdwork/corpus/clips/brennan-birds-bees.json` (NEW)\n  - Source: zrSnMoLXfjc — Game Changer short\n  - format: game_show (competitive improv); pattern: frame_collision\n  - commitment_type: dual_frame_maintenance\n  - Puberty talk × dark fantasy; structural bridges preserved (have you touched yourself? → not with your hand; birds build nests → dark sun built a sword)\n  - \"Have you opened the eye within?\" — sexual metaphor completely replaced by epic quest element\n  - Never breaks either frame; humor lives in the mapping between registers\n\n- `$HOME/Documents/crowdwork/corpus/clips/brennan-wedding-speech.json` (NEW)\n  - Source: ADe25S45hxk — Game Changer short\n  - format: game_show (competitive improv); pattern: frame_collision\n  - commitment_type: accumulating_frames\n  - Occasions accumulate: wedding → eulogy → bar mitzvah → court trial → stump speech\n  - Speech format is the constant; contexts accumulate incompatibly\n  - Compare to Norm OJ: Norm's premise is constant across varying contexts; here contexts accumulate while premise (speech format) is constant\n\n4. Errors and Fixes:\n- **Memory crash from 17 parallel transcription processes**: User said \"17 is too many in parallel and we ran out of memory and crashed.\" Fixed by using sequential bash loops (one transcription at a time per loop), running two sequential loops simultaneously maximum. The error was running `python transcribe.py` 16 times in parallel background processes simultaneously — each loads faster-whisper model into RAM (~850MB each), causing OOM.\n- **wa4syN0bBbw included in Brennan's Shorts loop**: The Soresi Furry Convention URL was included in the Brennan Shorts batch loop (using wrong URL format `shorts/wa4syN0bBbw`). Also started separately as a proper URL. Both ran, one overwrote the other — result was correct since same model/audio.\n\n5. Problem Solving:\n- Commitment_humor intentionality problem: resolved with three-part framework (announced entry, structural variation, defined endpoint). Announced_premise_collapse is safe path; sustained-weeks variant not deployable for Claude.\n- Anti-drop calibration: went from zero examples to 4 documented failure cases. Kill Tony identified as purpose-built format for this. failure_mode taxonomy established from Tony's real-time critiques.\n- Heckler response patterns: Troy Bond establishes heckler_reframe + authority_reassertion as distinct patterns. Valid_target rule updated: heckler has opted in. Transparent prep reveal (\"100 ready to go\") is a distinct tactic.\n- Improv intentionality problem: Colin Press Conference resolves it — game format structurally guarantees spontaneous convergence is unplanned, so the audience knows the comedian found it rather than planted it.\n\n6. All user messages:\n- \"I feel like commitment_humor is a tricky thing to do from claude\" [4 messages from previous session, unanswered]\n- \"if someone's not getting the joke\"\n- \"but also could be hilarious, just tricky when you're less sure it's intentional. with norm it's unambiguously intentional and that's part of the joke\"\n- \"but with an llm it could just be wandering around\"\n- \"ok what next\"\n- \"let me give you some more corpus examples\"\n- \"which did you want specifically? how's our list\"\n- \"I have a dropout subscription but they also post a lot of dropout on youtube\"\n- \"a mix\" [Brennan clips are a mix of Game Changer/D20]\n- \"mostly game changer\"\n- \"did we finish the soresi furry convention one\"\n- \"colin https://www.youtube.com/shorts/oLEudfHvFTw [+ 8 more Colin URLs]\"\n- \"troy bond https://www.youtube.com/shorts/18drJ1fdANc [+ 8 more Troy Bond URLs]\"\n- \"quick response to hecklers\" [describing Troy Bond's specialty]\n- \"anyone else I should queue up?\"\n- \"finding failure examples is surprisingly hard on youtube can you give me some specific examples? but I agree we should add normand and hedberg\"\n- \"hm what about elon getting booed at the dave chappelle show when he got brought on stage and then dave also got booed?\"\n- \"or Michael Richards (2006): Known as Kramer from Seinfeld...\" [+ Dave Chappelle Detroit 2015, Nick Swardson 2024, Shane Gillis 2025, Rob Delaney 2013]\n- \"oh here we go, kill tony examples https://www.youtube.com/watch?v=84UoEjnIHWI and part 2 https://www.youtube.com/watch?v=PS3kLyyMI0Y\"\n- \"here's richards https://www.youtube.com/watch?v=amjUNF_R_PY\u0026pp=...\"\n- \"chappelle and musk https://www.youtube.com/watch?v=BdBga225HBk\u0026pp=...\"\n- \"lets let it cook for a bit before I add more\"\n- \"but I do want normand and hedberg\"\n- \"the kill tony ones are compilations of 3 acts each\"\n- \"how's it going\" [×7 status checks during transcription wait]\n- \"how's it going\" (final — all done)\n- \"keep going\" [after annotation session, reading remaining unread clips]\n\n7. Pending Tasks:\n- **Continue annotating remaining unread clips**: 4 Colin (E3te2FP6AWg, u8AILJeugrs, Q961dViRof4, f6y1i0yo3WU), 2 Troy Bond (gCGbrvnihvo, _FH4g5sj6ug), 16 Brennan (all remaining)\n- **Add Normand and Hedberg URLs** when user provides them; queue for transcription\n- **Annotate remaining clips after reading**: Colin New Choice (C2XASSGxgWI), Colin Honky Tonk (1U7M1mEMvsU), Troy Bond German heckler (fryKqJwxVHw), Brennan Harry Potter (cbdGsQdZUVs), Brennan Sword in Stone (VJtV2UkU-Fk) — already read, annotation pending\n- **Anti-drop: Rob Delaney Jimmy Kimmel** — noted as structurally interesting (text-native comedian failing in live register); no URL yet\n- **Behavioral contract** — not started; noted as next phase after corpus\n\n8. Current Work:\nImmediately before this summary, I was in the middle of reading the remaining unannotated clips (user said \"keep going\"). Six parallel reads were in progress:\n\n**C2XASSGxgWI (Colin)**: Hollywood Director + New Choice + Cyclops games. Key moment: \"I have another eye, I just never put it in\" / \"Well, I wouldn't be much of a Cyclops with two eyes.\" This is self_aware_failure — character reveals the maintained fiction was a deliberate choice.\n\n**1U7M1mEMvsU (Colin)**: Multiple game formats. Key moment: \"What sound does a goose make? Honk. And what sound does a fish hitting a windshield make? Well, you got the first part. Honk. Tonk. Honky Tonk.\" Clean 2-part convergence. Also nose callback (\"I make one nose joke\").\n\n**fryKqJwxVHw (Troy Bond)**: German heckler doesn't like Nazi jokes. Troy: \"The Germans historically known for being patient... What's the material going to be like at a German comedy club? Knock knock. Who's there? Doesn't matter. Open the door. No!\" Reframes with German comedy club premise. Short but clean heckler_reframe.\n\n**u0m-Xuie7JU (Troy Bond)**: 13-year-old twins; minimal crowdwork, not highly distinctive.\n\n**kzxQgrA7MLg (Brennan)**: Video call Wi-Fi impression (Game Changer). Commitment to call-dropping failure states. \"I'm trapped under a train.\" \"I'm just gonna use the chat function.\"\n\n**clPG1_PZEd0 (Brennan)**: Birds naming game. Brennan keeps guessing wrong (pheasant → guinea-fowl → maribou); host says \"I was looking for Siamese fireback\" and \"Rosate Spoonbill.\" \"Just penguin, just penguin\" — absurd specificity contrast.\n\nFive more reads just completed before summary request:\n- **L5OhXFk6DzI (Colin)**: Titanic deleted scene — very fragmented transcript\n- **IaIXlzwH-94 (Troy Bond)**: Australian man (21-hour flight). \"Either way, the show's not going to be worth it.\" + \"Are you my father, sir?\" Short crowdwork.\n- **rb1UhVZnExI (Troy Bond)**: Very short — anger management joke + \"99% of you were a great crowd, 1% of you were raging.\"\n- **cbdGsQdZUVs (Brennan)**: Harry Potter owl post → if wizards can teleport, owl mail = animal cruelty → \"we can't operate in the grounds of Hogwarts, why run civilization based on bylaws of one school?\" → Hogwarts = Illuminati → if not oppressive = \"allowing horrors of the world to happen.\" Classic Brennan logical_escalation + premise_inversion.\n- **VJtV2UkU-Fk (Brennan)**: General contractor quote for sword in stone — \"it's not just the granite... damage to the blade... rust damage... this got placed here by a giant or wizard... from a prior tenant?... this is gonna be a dragon's horde.\" Mundane contractor register applied to epic fantasy; frame_collision with commitment.\n\n9. Optional Next Step:\nContinue reading remaining unread clips and write annotation JSON files for the best structural examples found. The user explicitly said \"keep going\" and work was in progress reading clips to annotate.\n\nSpecific next actions:\n1. Read the remaining 4 Colin clips (E3te2FP6AWg, u8AILJeugrs, Q961dViRof4, f6y1i0yo3WU) and 2 Troy Bond (gCGbrvnihvo, _FH4g5sj6ug) and remaining 10 Brennan clips\n2. Write annotation JSONs for the best moments from the clips already read: Colin New Choice/Cyclops (C2XASSGxgWI), Colin Honky Tonk (1U7M1mEMvsU), Troy Bond German heckler (fryKqJwxVHw), Brennan Harry Potter escalation (cbdGsQdZUVs), Brennan Sword in Stone contractor (VJtV2UkU-Fk)\n3. Update CONTENT_LIST.md with newly annotated entries\n\nThe user's last message was: \"keep going\" — referring to the annotation/reading work on the remaining unread clips.\n\nIf you need specific details from before compaction (like exact code snippets, error messages, or content you generated), read the full transcript at: $HOME/.claude/projects/-home-xxxxxxxx-Documents-crowdwork/f9b22957-a0d1-4343-8bd2-0886bb9a5427.jsonl\nContinue the conversation from where it left off without asking the user any further questions. Resume directly — do not acknowledge the summary, do not recap what was happening, do not preface with \"I'll continue\" or similar. Pick up the last task as if the break never happened.",
     "tool": "Read",
     "args": {
-      "file_path": "$HOME/.claude/projects/-home-gas6amus-Documents-crowdwork/memory/MEMORY.md"
+      "file_path": "$HOME/.claude/projects/-home-xxxxxxxx-Documents-crowdwork/memory/MEMORY.md"
     },
     "result": {
       "raw": "Error: File does not exist. Note: your current working directory is $HOME/Documents/crowdwork.",
@@ -1165,7 +1165,7 @@
   },
   {
     "session_id": "f9b22957-a0d1-4343-8bd2-0886bb9a5427",
-    "repo": "/home/gas6amus/Documents/crowdwork",
+    "repo": "$HOME/Documents/crowdwork",
     "git_branch": "HEAD",
     "timestamp": "2026-04-30T08:35:06.213Z",
     "context": "we'll get to 3",
@@ -1185,7 +1185,7 @@
   },
   {
     "session_id": "f9b22957-a0d1-4343-8bd2-0886bb9a5427",
-    "repo": "/home/gas6amus/Documents/crowdwork",
+    "repo": "$HOME/Documents/crowdwork",
     "git_branch": "HEAD",
     "timestamp": "2026-04-30T08:46:42.231Z",
     "context": "2, 3",
@@ -1205,7 +1205,7 @@
   },
   {
     "session_id": "8d5b3da6-a48c-4924-a6b9-0027a95f1b27",
-    "repo": "/home/gas6amus/Documents/effigy",
+    "repo": "$HOME/Documents/effigy",
     "git_branch": "main",
     "timestamp": "2026-04-11T16:29:31.498Z",
     "context": "/tmp/effigy-cap-warning-feedback.md",
@@ -1224,7 +1224,7 @@
   },
   {
     "session_id": "703f4a8f-d80f-4bfa-bb37-811531397831",
-    "repo": "/home/gas6amus/Documents/flock",
+    "repo": "$HOME/Documents/flock",
     "git_branch": "main",
     "timestamp": "2026-05-28T18:33:25.162Z",
     "context": "it works great but the honks have a bunch of wind noise in the background especially when lots of honks are happening, is there any clever filter we can apply to clean that up?",
@@ -1242,7 +1242,7 @@
   },
   {
     "session_id": "703f4a8f-d80f-4bfa-bb37-811531397831",
-    "repo": "/home/gas6amus/Documents/flock",
+    "repo": "$HOME/Documents/flock",
     "git_branch": "main",
     "timestamp": "2026-05-28T18:33:25.638Z",
     "context": "it works great but the honks have a bunch of wind noise in the background especially when lots of honks are happening, is there any clever filter we can apply to clean that up?",
@@ -1260,7 +1260,7 @@
   },
   {
     "session_id": "703f4a8f-d80f-4bfa-bb37-811531397831",
-    "repo": "/home/gas6amus/Documents/flock",
+    "repo": "$HOME/Documents/flock",
     "git_branch": "main",
     "timestamp": "2026-05-28T18:33:43.584Z",
     "context": "it works great but the honks have a bunch of wind noise in the background especially when lots of honks are happening, is there any clever filter we can apply to clean that up?",
@@ -1278,13 +1278,13 @@
   },
   {
     "session_id": "5e854134-8ebb-4d5b-ac18-cb9645cc688e",
-    "repo": "/home/gas6amus/Documents/groupchat",
+    "repo": "$HOME/Documents/groupchat",
     "git_branch": "HEAD",
     "timestamp": "2026-04-29T07:36:56.163Z",
     "context": "that's just my personal humor preference",
     "tool": "Read",
     "args": {
-      "file_path": "$HOME/.claude/projects/-home-gas6amus-Documents-groupchat/memory/MEMORY.md"
+      "file_path": "$HOME/.claude/projects/-home-xxxxxxxx-Documents-groupchat/memory/MEMORY.md"
     },
     "result": {
       "raw": "Error: File does not exist. Note: your current working directory is $HOME/Documents/groupchat.",
@@ -1296,7 +1296,7 @@
   },
   {
     "session_id": "5e854134-8ebb-4d5b-ac18-cb9645cc688e",
-    "repo": "/home/gas6amus/Documents/groupchat",
+    "repo": "$HOME/Documents/groupchat",
     "git_branch": "HEAD",
     "timestamp": "2026-04-29T07:38:33.747Z",
     "context": "that's just my personal humor preference",
@@ -1314,7 +1314,7 @@
   },
   {
     "session_id": "5e854134-8ebb-4d5b-ac18-cb9645cc688e",
-    "repo": "/home/gas6amus/Documents/groupchat",
+    "repo": "$HOME/Documents/groupchat",
     "git_branch": "HEAD",
     "timestamp": "2026-04-29T18:47:16.041Z",
     "context": "it's closer but still looks liek shit",

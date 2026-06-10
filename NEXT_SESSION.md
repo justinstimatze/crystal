@@ -310,7 +310,7 @@ far end:
 
 ## Memory index
 
-`~/.claude/projects/-home-gas6amus-Documents-crystal/memory/MEMORY.md` — esp.
+`~/.claude/projects/<encoded-project-path>/memory/MEMORY.md` — esp.
 `shift-left-is-primary-payoff-measured`, `shift-left-is-intra-task-decomposition`,
 `crystal-novelty-is-integration-not-invention`, `content-not-format-predicts-channel-loss`,
 `lambda-needs-hard-labels-not-a-judge`.
