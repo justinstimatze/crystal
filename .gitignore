@@ -1,0 +1,44 @@
+# Compiled binary
+/crystal
+
+# Raw / unredacted extracts — NEVER commit these. Only testdata/corpus
+# (redacted, verified) is committed. See internal/redact.
+/raw-extract/
+*.raw.json
+*.unredacted.json
+
+# Go
+*.test
+*.out
+
+# Secrets — NEVER commit. Live-tier API key lives here.
+.env
+.env.*
+
+# Local LLM response cache (may contain prompt/response content)
+/.crystal-cache/
+
+# Runtime / tooling artifacts (not project source)
+.claude/
+.plancheck-debug.json
+
+# Live PreToolUse hook drift-window state (per-session runtime artifact)
+.crystal-hook-state.json
+# Guard constraint self-monitoring state (fire/override counts — runtime)
+.crystal-guard-state.json
+# Dispatcher per-rule self-monitoring state (runtime)
+.crystal-dispatch-state.json
+
+# data-driven viz output (regenerated each run)
+.crystal-viz/
+.crystal-proposals/
+.defn-server/
+.defn-server.pid
+
+# internal session handoff — local working doc, not for the public repo
+RESUME.md
+
+# local tooling / config — never ship in the public repo
+.codex/
+.defn/
+.mcp.json

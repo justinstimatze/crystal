@@ -1,0 +1,852 @@
+[
+  {
+    "session_id": "synthetic-Bash-0000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:00:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 0
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 40 records matched\nstatus ok at 12:00:30\nchecksum 7000\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0000"
+  },
+  {
+    "session_id": "synthetic-Bash-0001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:01:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 1
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 41 records matched\nstatus ok at 12:01:30\nchecksum 7001\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0001"
+  },
+  {
+    "session_id": "synthetic-Bash-0002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:02:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 2
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 42 records matched\nstatus ok at 12:02:30\nchecksum 7002\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0002"
+  },
+  {
+    "session_id": "synthetic-Bash-0003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:03:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 3
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 43 records matched\nstatus ok at 12:03:30\nchecksum 7003\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0003"
+  },
+  {
+    "session_id": "synthetic-Bash-0004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:04:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 4
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 44 records matched\nstatus ok at 12:04:30\nchecksum 7004\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0004"
+  },
+  {
+    "session_id": "synthetic-Bash-0005",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:05:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 5
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 45 records matched\nstatus ok at 12:05:30\nchecksum 7005\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0005"
+  },
+  {
+    "session_id": "synthetic-Bash-0006",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:06:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 6
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 46 records matched\nstatus ok at 12:06:30\nchecksum 7006\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0006"
+  },
+  {
+    "session_id": "synthetic-Bash-0007",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:07:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 7
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 47 records matched\nstatus ok at 12:07:30\nchecksum 7007\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0007"
+  },
+  {
+    "session_id": "synthetic-Bash-0008",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:08:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 8
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 48 records matched\nstatus ok at 12:08:30\nchecksum 7008\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0008"
+  },
+  {
+    "session_id": "synthetic-Bash-0009",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:09:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 9
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 49 records matched\nstatus ok at 12:09:30\nchecksum 7009\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0009"
+  },
+  {
+    "session_id": "synthetic-Bash-0010",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:10:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 10
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 50 records matched\nstatus ok at 12:10:30\nchecksum 7010\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0010"
+  },
+  {
+    "session_id": "synthetic-Bash-0011",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:11:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 11
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 51 records matched\nstatus ok at 12:11:30\nchecksum 7011\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0011"
+  },
+  {
+    "session_id": "synthetic-Bash-0012",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:12:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 12
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 52 records matched\nstatus ok at 12:12:30\nchecksum 7012\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0012"
+  },
+  {
+    "session_id": "synthetic-Bash-0013",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:13:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 13
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 53 records matched\nstatus ok at 12:13:30\nchecksum 7013\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0013"
+  },
+  {
+    "session_id": "synthetic-Bash-0014",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:14:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 14
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 54 records matched\nstatus ok at 12:14:30\nchecksum 7014\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0014"
+  },
+  {
+    "session_id": "synthetic-Bash-0015",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:15:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 15
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 55 records matched\nstatus ok at 12:15:30\nchecksum 7015\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0015"
+  },
+  {
+    "session_id": "synthetic-Bash-0016",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:16:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 16
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 56 records matched\nstatus ok at 12:16:30\nchecksum 7016\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0016"
+  },
+  {
+    "session_id": "synthetic-Bash-0017",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:17:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 17
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 57 records matched\nstatus ok at 12:17:30\nchecksum 7017\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0017"
+  },
+  {
+    "session_id": "synthetic-Bash-0018",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:18:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 18
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 58 records matched\nstatus ok at 12:18:30\nchecksum 7018\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0018"
+  },
+  {
+    "session_id": "synthetic-Bash-0019",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:19:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 19
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 59 records matched\nstatus ok at 12:19:30\nchecksum 7019\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0019"
+  },
+  {
+    "session_id": "synthetic-Bash-0020",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:20:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 20
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 60 records matched\nstatus ok at 12:20:30\nchecksum 7020\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0020"
+  },
+  {
+    "session_id": "synthetic-Bash-0021",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:21:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 21
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 61 records matched\nstatus ok at 12:21:30\nchecksum 7021\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0021"
+  },
+  {
+    "session_id": "synthetic-Bash-0022",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:22:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 22
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 62 records matched\nstatus ok at 12:22:30\nchecksum 7022\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0022"
+  },
+  {
+    "session_id": "synthetic-Bash-0023",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:23:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 23
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 63 records matched\nstatus ok at 12:23:30\nchecksum 7023\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0023"
+  },
+  {
+    "session_id": "synthetic-Bash-0024",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:24:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 24
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 64 records matched\nstatus ok at 12:24:30\nchecksum 7024\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0024"
+  },
+  {
+    "session_id": "synthetic-Bash-0025",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:25:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 25
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 65 records matched\nstatus ok at 12:25:30\nchecksum 7025\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0025"
+  },
+  {
+    "session_id": "synthetic-Bash-0026",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:26:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 26
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 66 records matched\nstatus ok at 12:26:30\nchecksum 7026\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0026"
+  },
+  {
+    "session_id": "synthetic-Bash-0027",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:27:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 27
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 67 records matched\nstatus ok at 12:27:30\nchecksum 7027\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0027"
+  },
+  {
+    "session_id": "synthetic-Bash-0028",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:28:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 28
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 68 records matched\nstatus ok at 12:28:30\nchecksum 7028\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0028"
+  },
+  {
+    "session_id": "synthetic-Bash-0029",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:29:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 29
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 69 records matched\nstatus ok at 12:29:30\nchecksum 7029\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0029"
+  },
+  {
+    "session_id": "synthetic-Bash-0030",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:30:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 30
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 70 records matched\nstatus ok at 12:30:30\nchecksum 7030\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0030"
+  },
+  {
+    "session_id": "synthetic-Bash-0031",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:31:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 31
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 71 records matched\nstatus ok at 12:31:30\nchecksum 7031\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0031"
+  },
+  {
+    "session_id": "synthetic-Bash-0032",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:32:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 32
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 72 records matched\nstatus ok at 12:32:30\nchecksum 7032\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0032"
+  },
+  {
+    "session_id": "synthetic-Bash-0033",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:33:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 33
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 73 records matched\nstatus ok at 12:33:30\nchecksum 7033\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0033"
+  },
+  {
+    "session_id": "synthetic-Bash-0034",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:34:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 34
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 74 records matched\nstatus ok at 12:34:30\nchecksum 7034\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0034"
+  },
+  {
+    "session_id": "synthetic-Bash-0035",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:35:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 35
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 75 records matched\nstatus ok at 12:35:30\nchecksum 7035\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0035"
+  },
+  {
+    "session_id": "synthetic-Bash-0036",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:36:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 36
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 76 records matched\nstatus ok at 12:36:30\nchecksum 7036\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0036"
+  },
+  {
+    "session_id": "synthetic-Bash-0037",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:37:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 37
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 77 records matched\nstatus ok at 12:37:30\nchecksum 7037\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0037"
+  },
+  {
+    "session_id": "synthetic-Bash-0038",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:38:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 38
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 78 records matched\nstatus ok at 12:38:30\nchecksum 7038\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0038"
+  },
+  {
+    "session_id": "synthetic-Bash-0039",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:39:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 39
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 79 records matched\nstatus ok at 12:39:30\nchecksum 7039\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0039"
+  },
+  {
+    "session_id": "synthetic-Bash-0040",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 40
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 80 records matched\nstatus ok at 12:40:30\nchecksum 7040\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0040"
+  },
+  {
+    "session_id": "synthetic-Bash-0041",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 41
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 81 records matched\nstatus ok at 12:41:30\nchecksum 7041\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0041"
+  },
+  {
+    "session_id": "synthetic-Bash-0042",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 42
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 82 records matched\nstatus ok at 12:42:30\nchecksum 7042\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0042"
+  },
+  {
+    "session_id": "synthetic-Bash-0043",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 43
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 83 records matched\nstatus ok at 12:43:30\nchecksum 7043\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0043"
+  },
+  {
+    "session_id": "synthetic-Bash-0044",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 44
+    },
+    "result": {
+      "is_error": false,
+      "stdout": "scan complete: 84 records matched\nstatus ok at 12:44:30\nchecksum 7044\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-0044"
+  },
+  {
+    "session_id": "synthetic-Bash-1000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 1000
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Bash failed on item 0"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-1000"
+  },
+  {
+    "session_id": "synthetic-Bash-1001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 1001
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Bash failed on item 1"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-1001"
+  },
+  {
+    "session_id": "synthetic-Bash-1002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 1002
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Bash failed on item 2"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-1002"
+  },
+  {
+    "session_id": "synthetic-Bash-1003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 1003
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Bash failed on item 3"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-1003"
+  },
+  {
+    "session_id": "synthetic-Bash-1004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Bash",
+    "args": {
+      "n": 1004
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Bash failed on item 4"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Bash-1004"
+  }
+]

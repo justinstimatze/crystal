@@ -1,0 +1,11 @@
+{
+  "_comment": "Example crystal rule LIBRARY for `crystal dispatch --rules <this file>`. Each rule is DATA: an id, a matcher name (drawn from the dispatcher's tested matcher registry — currently: git_add_all), a reason (a printf template; %s is filled with the offending form), and an enabled flag. Adding a rule that reuses an existing matcher needs no code. A genuinely new KIND of match needs one tested predicate added to matcherRegistry in cmd/dispatch.go. The dispatcher evaluates every enabled rule in ONE process and keeps per-rule self-monitoring state (denied vs bypassed; a sustained override rate flags a rule NeedsRevision). This file (the library) is the registry of what you've crystallized and is per-user; the engine is what ships publicly.",
+  "rules": [
+    {
+      "id": "git-add-all",
+      "matcher": "git_add_all",
+      "reason": "crystal: `git add %s` stages everything indiscriminately — stage explicit paths instead (`git add path/to/file ...`). Override one call with CRYSTAL_GUARD_SKIP=1.",
+      "enabled": true
+    }
+  ]
+}

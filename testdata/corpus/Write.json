@@ -1,0 +1,1797 @@
+[
+  {
+    "session_id": "synthetic-Write-0000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:00:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 0
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 0\nconst Limit = 100\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 0",
+            "+const N = 1"
+          ],
+          "newLines": 1,
+          "newStart": 1,
+          "oldLines": 1,
+          "oldStart": 1
+        },
+        {
+          "lines": [
+            "+// note 0"
+          ],
+          "newLines": 1,
+          "newStart": 11,
+          "oldLines": 0,
+          "oldStart": 10
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0000"
+  },
+  {
+    "session_id": "synthetic-Write-0001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:01:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 1
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 1\nconst Limit = 101\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 1",
+            "+const N = 2"
+          ],
+          "newLines": 1,
+          "newStart": 2,
+          "oldLines": 1,
+          "oldStart": 2
+        },
+        {
+          "lines": [
+            "+// note 1"
+          ],
+          "newLines": 1,
+          "newStart": 12,
+          "oldLines": 0,
+          "oldStart": 11
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0001"
+  },
+  {
+    "session_id": "synthetic-Write-0002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:02:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 2
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 2\nconst Limit = 102\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 2",
+            "+const N = 3"
+          ],
+          "newLines": 1,
+          "newStart": 3,
+          "oldLines": 1,
+          "oldStart": 3
+        },
+        {
+          "lines": [
+            "+// note 2"
+          ],
+          "newLines": 1,
+          "newStart": 13,
+          "oldLines": 0,
+          "oldStart": 12
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0002"
+  },
+  {
+    "session_id": "synthetic-Write-0003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:03:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 3
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 3\nconst Limit = 103\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 3",
+            "+const N = 4"
+          ],
+          "newLines": 1,
+          "newStart": 4,
+          "oldLines": 1,
+          "oldStart": 4
+        },
+        {
+          "lines": [
+            "+// note 3"
+          ],
+          "newLines": 1,
+          "newStart": 14,
+          "oldLines": 0,
+          "oldStart": 13
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0003"
+  },
+  {
+    "session_id": "synthetic-Write-0004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:04:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 4
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 4\nconst Limit = 104\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 4",
+            "+const N = 5"
+          ],
+          "newLines": 1,
+          "newStart": 5,
+          "oldLines": 1,
+          "oldStart": 5
+        },
+        {
+          "lines": [
+            "+// note 4"
+          ],
+          "newLines": 1,
+          "newStart": 15,
+          "oldLines": 0,
+          "oldStart": 14
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0004"
+  },
+  {
+    "session_id": "synthetic-Write-0005",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:05:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 5
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 5\nconst Limit = 105\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 5",
+            "+const N = 6"
+          ],
+          "newLines": 1,
+          "newStart": 6,
+          "oldLines": 1,
+          "oldStart": 6
+        },
+        {
+          "lines": [
+            "+// note 5"
+          ],
+          "newLines": 1,
+          "newStart": 16,
+          "oldLines": 0,
+          "oldStart": 15
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0005"
+  },
+  {
+    "session_id": "synthetic-Write-0006",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:06:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 6
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 6\nconst Limit = 106\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 6",
+            "+const N = 7"
+          ],
+          "newLines": 1,
+          "newStart": 7,
+          "oldLines": 1,
+          "oldStart": 7
+        },
+        {
+          "lines": [
+            "+// note 6"
+          ],
+          "newLines": 1,
+          "newStart": 17,
+          "oldLines": 0,
+          "oldStart": 16
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0006"
+  },
+  {
+    "session_id": "synthetic-Write-0007",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:07:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 7
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 7\nconst Limit = 107\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 7",
+            "+const N = 8"
+          ],
+          "newLines": 1,
+          "newStart": 8,
+          "oldLines": 1,
+          "oldStart": 8
+        },
+        {
+          "lines": [
+            "+// note 7"
+          ],
+          "newLines": 1,
+          "newStart": 18,
+          "oldLines": 0,
+          "oldStart": 17
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0007"
+  },
+  {
+    "session_id": "synthetic-Write-0008",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:08:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 8
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 8\nconst Limit = 108\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 8",
+            "+const N = 9"
+          ],
+          "newLines": 1,
+          "newStart": 9,
+          "oldLines": 1,
+          "oldStart": 9
+        },
+        {
+          "lines": [
+            "+// note 8"
+          ],
+          "newLines": 1,
+          "newStart": 19,
+          "oldLines": 0,
+          "oldStart": 18
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0008"
+  },
+  {
+    "session_id": "synthetic-Write-0009",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:09:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 9
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 9\nconst Limit = 109\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 9",
+            "+const N = 10"
+          ],
+          "newLines": 1,
+          "newStart": 10,
+          "oldLines": 1,
+          "oldStart": 10
+        },
+        {
+          "lines": [
+            "+// note 9"
+          ],
+          "newLines": 1,
+          "newStart": 20,
+          "oldLines": 0,
+          "oldStart": 19
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0009"
+  },
+  {
+    "session_id": "synthetic-Write-0010",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:10:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 10
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 10\nconst Limit = 110\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 10",
+            "+const N = 11"
+          ],
+          "newLines": 1,
+          "newStart": 11,
+          "oldLines": 1,
+          "oldStart": 11
+        },
+        {
+          "lines": [
+            "+// note 10"
+          ],
+          "newLines": 1,
+          "newStart": 21,
+          "oldLines": 0,
+          "oldStart": 20
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0010"
+  },
+  {
+    "session_id": "synthetic-Write-0011",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:11:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 11
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 11\nconst Limit = 111\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 11",
+            "+const N = 12"
+          ],
+          "newLines": 1,
+          "newStart": 12,
+          "oldLines": 1,
+          "oldStart": 12
+        },
+        {
+          "lines": [
+            "+// note 11"
+          ],
+          "newLines": 1,
+          "newStart": 22,
+          "oldLines": 0,
+          "oldStart": 21
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0011"
+  },
+  {
+    "session_id": "synthetic-Write-0012",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:12:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 12
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 12\nconst Limit = 112\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 12",
+            "+const N = 13"
+          ],
+          "newLines": 1,
+          "newStart": 13,
+          "oldLines": 1,
+          "oldStart": 13
+        },
+        {
+          "lines": [
+            "+// note 12"
+          ],
+          "newLines": 1,
+          "newStart": 23,
+          "oldLines": 0,
+          "oldStart": 22
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0012"
+  },
+  {
+    "session_id": "synthetic-Write-0013",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:13:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 13
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 13\nconst Limit = 113\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 13",
+            "+const N = 14"
+          ],
+          "newLines": 1,
+          "newStart": 14,
+          "oldLines": 1,
+          "oldStart": 14
+        },
+        {
+          "lines": [
+            "+// note 13"
+          ],
+          "newLines": 1,
+          "newStart": 24,
+          "oldLines": 0,
+          "oldStart": 23
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0013"
+  },
+  {
+    "session_id": "synthetic-Write-0014",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:14:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 14
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 14\nconst Limit = 114\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 14",
+            "+const N = 15"
+          ],
+          "newLines": 1,
+          "newStart": 15,
+          "oldLines": 1,
+          "oldStart": 15
+        },
+        {
+          "lines": [
+            "+// note 14"
+          ],
+          "newLines": 1,
+          "newStart": 25,
+          "oldLines": 0,
+          "oldStart": 24
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0014"
+  },
+  {
+    "session_id": "synthetic-Write-0015",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:15:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 15
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 15\nconst Limit = 115\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 15",
+            "+const N = 16"
+          ],
+          "newLines": 1,
+          "newStart": 16,
+          "oldLines": 1,
+          "oldStart": 16
+        },
+        {
+          "lines": [
+            "+// note 15"
+          ],
+          "newLines": 1,
+          "newStart": 26,
+          "oldLines": 0,
+          "oldStart": 25
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0015"
+  },
+  {
+    "session_id": "synthetic-Write-0016",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:16:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 16
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 16\nconst Limit = 116\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 16",
+            "+const N = 17"
+          ],
+          "newLines": 1,
+          "newStart": 17,
+          "oldLines": 1,
+          "oldStart": 17
+        },
+        {
+          "lines": [
+            "+// note 16"
+          ],
+          "newLines": 1,
+          "newStart": 27,
+          "oldLines": 0,
+          "oldStart": 26
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0016"
+  },
+  {
+    "session_id": "synthetic-Write-0017",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:17:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 17
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 17\nconst Limit = 117\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 17",
+            "+const N = 18"
+          ],
+          "newLines": 1,
+          "newStart": 18,
+          "oldLines": 1,
+          "oldStart": 18
+        },
+        {
+          "lines": [
+            "+// note 17"
+          ],
+          "newLines": 1,
+          "newStart": 28,
+          "oldLines": 0,
+          "oldStart": 27
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0017"
+  },
+  {
+    "session_id": "synthetic-Write-0018",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:18:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 18
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 18\nconst Limit = 118\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 18",
+            "+const N = 19"
+          ],
+          "newLines": 1,
+          "newStart": 19,
+          "oldLines": 1,
+          "oldStart": 19
+        },
+        {
+          "lines": [
+            "+// note 18"
+          ],
+          "newLines": 1,
+          "newStart": 29,
+          "oldLines": 0,
+          "oldStart": 28
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0018"
+  },
+  {
+    "session_id": "synthetic-Write-0019",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:19:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 19
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 19\nconst Limit = 119\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 19",
+            "+const N = 20"
+          ],
+          "newLines": 1,
+          "newStart": 20,
+          "oldLines": 1,
+          "oldStart": 20
+        },
+        {
+          "lines": [
+            "+// note 19"
+          ],
+          "newLines": 1,
+          "newStart": 30,
+          "oldLines": 0,
+          "oldStart": 29
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0019"
+  },
+  {
+    "session_id": "synthetic-Write-0020",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:20:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 20
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 20\nconst Limit = 120\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 20",
+            "+const N = 21"
+          ],
+          "newLines": 1,
+          "newStart": 21,
+          "oldLines": 1,
+          "oldStart": 21
+        },
+        {
+          "lines": [
+            "+// note 20"
+          ],
+          "newLines": 1,
+          "newStart": 31,
+          "oldLines": 0,
+          "oldStart": 30
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0020"
+  },
+  {
+    "session_id": "synthetic-Write-0021",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:21:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 21
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 21\nconst Limit = 121\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 21",
+            "+const N = 22"
+          ],
+          "newLines": 1,
+          "newStart": 22,
+          "oldLines": 1,
+          "oldStart": 22
+        },
+        {
+          "lines": [
+            "+// note 21"
+          ],
+          "newLines": 1,
+          "newStart": 32,
+          "oldLines": 0,
+          "oldStart": 31
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0021"
+  },
+  {
+    "session_id": "synthetic-Write-0022",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:22:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 22
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 22\nconst Limit = 122\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 22",
+            "+const N = 23"
+          ],
+          "newLines": 1,
+          "newStart": 23,
+          "oldLines": 1,
+          "oldStart": 23
+        },
+        {
+          "lines": [
+            "+// note 22"
+          ],
+          "newLines": 1,
+          "newStart": 33,
+          "oldLines": 0,
+          "oldStart": 32
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0022"
+  },
+  {
+    "session_id": "synthetic-Write-0023",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:23:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 23
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 23\nconst Limit = 123\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 23",
+            "+const N = 24"
+          ],
+          "newLines": 1,
+          "newStart": 24,
+          "oldLines": 1,
+          "oldStart": 24
+        },
+        {
+          "lines": [
+            "+// note 23"
+          ],
+          "newLines": 1,
+          "newStart": 34,
+          "oldLines": 0,
+          "oldStart": 33
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0023"
+  },
+  {
+    "session_id": "synthetic-Write-0024",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:24:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 24
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 24\nconst Limit = 124\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 24",
+            "+const N = 25"
+          ],
+          "newLines": 1,
+          "newStart": 25,
+          "oldLines": 1,
+          "oldStart": 25
+        },
+        {
+          "lines": [
+            "+// note 24"
+          ],
+          "newLines": 1,
+          "newStart": 35,
+          "oldLines": 0,
+          "oldStart": 34
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0024"
+  },
+  {
+    "session_id": "synthetic-Write-0025",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:25:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 25
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 25\nconst Limit = 125\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 25",
+            "+const N = 26"
+          ],
+          "newLines": 1,
+          "newStart": 26,
+          "oldLines": 1,
+          "oldStart": 26
+        },
+        {
+          "lines": [
+            "+// note 25"
+          ],
+          "newLines": 1,
+          "newStart": 36,
+          "oldLines": 0,
+          "oldStart": 35
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0025"
+  },
+  {
+    "session_id": "synthetic-Write-0026",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:26:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 26
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 26\nconst Limit = 126\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 26",
+            "+const N = 27"
+          ],
+          "newLines": 1,
+          "newStart": 27,
+          "oldLines": 1,
+          "oldStart": 27
+        },
+        {
+          "lines": [
+            "+// note 26"
+          ],
+          "newLines": 1,
+          "newStart": 37,
+          "oldLines": 0,
+          "oldStart": 36
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0026"
+  },
+  {
+    "session_id": "synthetic-Write-0027",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:27:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 27
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 27\nconst Limit = 127\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 27",
+            "+const N = 28"
+          ],
+          "newLines": 1,
+          "newStart": 28,
+          "oldLines": 1,
+          "oldStart": 28
+        },
+        {
+          "lines": [
+            "+// note 27"
+          ],
+          "newLines": 1,
+          "newStart": 38,
+          "oldLines": 0,
+          "oldStart": 37
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0027"
+  },
+  {
+    "session_id": "synthetic-Write-0028",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:28:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 28
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 28\nconst Limit = 128\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 28",
+            "+const N = 29"
+          ],
+          "newLines": 1,
+          "newStart": 29,
+          "oldLines": 1,
+          "oldStart": 29
+        },
+        {
+          "lines": [
+            "+// note 28"
+          ],
+          "newLines": 1,
+          "newStart": 39,
+          "oldLines": 0,
+          "oldStart": 38
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0028"
+  },
+  {
+    "session_id": "synthetic-Write-0029",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:29:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 29
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 29\nconst Limit = 129\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 29",
+            "+const N = 30"
+          ],
+          "newLines": 1,
+          "newStart": 30,
+          "oldLines": 1,
+          "oldStart": 30
+        },
+        {
+          "lines": [
+            "+// note 29"
+          ],
+          "newLines": 1,
+          "newStart": 40,
+          "oldLines": 0,
+          "oldStart": 39
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0029"
+  },
+  {
+    "session_id": "synthetic-Write-0030",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:30:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 30
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 30\nconst Limit = 130\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 30",
+            "+const N = 31"
+          ],
+          "newLines": 1,
+          "newStart": 31,
+          "oldLines": 1,
+          "oldStart": 31
+        },
+        {
+          "lines": [
+            "+// note 30"
+          ],
+          "newLines": 1,
+          "newStart": 41,
+          "oldLines": 0,
+          "oldStart": 40
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0030"
+  },
+  {
+    "session_id": "synthetic-Write-0031",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:31:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 31
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 31\nconst Limit = 131\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 31",
+            "+const N = 32"
+          ],
+          "newLines": 1,
+          "newStart": 32,
+          "oldLines": 1,
+          "oldStart": 32
+        },
+        {
+          "lines": [
+            "+// note 31"
+          ],
+          "newLines": 1,
+          "newStart": 42,
+          "oldLines": 0,
+          "oldStart": 41
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0031"
+  },
+  {
+    "session_id": "synthetic-Write-0032",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:32:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 32
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 32\nconst Limit = 132\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 32",
+            "+const N = 33"
+          ],
+          "newLines": 1,
+          "newStart": 33,
+          "oldLines": 1,
+          "oldStart": 33
+        },
+        {
+          "lines": [
+            "+// note 32"
+          ],
+          "newLines": 1,
+          "newStart": 43,
+          "oldLines": 0,
+          "oldStart": 42
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0032"
+  },
+  {
+    "session_id": "synthetic-Write-0033",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:33:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 33
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 33\nconst Limit = 133\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 33",
+            "+const N = 34"
+          ],
+          "newLines": 1,
+          "newStart": 34,
+          "oldLines": 1,
+          "oldStart": 34
+        },
+        {
+          "lines": [
+            "+// note 33"
+          ],
+          "newLines": 1,
+          "newStart": 44,
+          "oldLines": 0,
+          "oldStart": 43
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0033"
+  },
+  {
+    "session_id": "synthetic-Write-0034",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:34:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 34
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 34\nconst Limit = 134\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 34",
+            "+const N = 35"
+          ],
+          "newLines": 1,
+          "newStart": 35,
+          "oldLines": 1,
+          "oldStart": 35
+        },
+        {
+          "lines": [
+            "+// note 34"
+          ],
+          "newLines": 1,
+          "newStart": 45,
+          "oldLines": 0,
+          "oldStart": 44
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0034"
+  },
+  {
+    "session_id": "synthetic-Write-0035",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:35:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 35
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 35\nconst Limit = 135\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 35",
+            "+const N = 36"
+          ],
+          "newLines": 1,
+          "newStart": 36,
+          "oldLines": 1,
+          "oldStart": 36
+        },
+        {
+          "lines": [
+            "+// note 35"
+          ],
+          "newLines": 1,
+          "newStart": 46,
+          "oldLines": 0,
+          "oldStart": 45
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0035"
+  },
+  {
+    "session_id": "synthetic-Write-0036",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:36:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 36
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 36\nconst Limit = 136\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 36",
+            "+const N = 37"
+          ],
+          "newLines": 1,
+          "newStart": 37,
+          "oldLines": 1,
+          "oldStart": 37
+        },
+        {
+          "lines": [
+            "+// note 36"
+          ],
+          "newLines": 1,
+          "newStart": 47,
+          "oldLines": 0,
+          "oldStart": 46
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0036"
+  },
+  {
+    "session_id": "synthetic-Write-0037",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:37:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 37
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 37\nconst Limit = 137\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 37",
+            "+const N = 38"
+          ],
+          "newLines": 1,
+          "newStart": 38,
+          "oldLines": 1,
+          "oldStart": 38
+        },
+        {
+          "lines": [
+            "+// note 37"
+          ],
+          "newLines": 1,
+          "newStart": 48,
+          "oldLines": 0,
+          "oldStart": 47
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0037"
+  },
+  {
+    "session_id": "synthetic-Write-0038",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:38:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 38
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 38\nconst Limit = 138\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 38",
+            "+const N = 39"
+          ],
+          "newLines": 1,
+          "newStart": 39,
+          "oldLines": 1,
+          "oldStart": 39
+        },
+        {
+          "lines": [
+            "+// note 38"
+          ],
+          "newLines": 1,
+          "newStart": 49,
+          "oldLines": 0,
+          "oldStart": 48
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0038"
+  },
+  {
+    "session_id": "synthetic-Write-0039",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:39:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 39
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 39\nconst Limit = 139\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 39",
+            "+const N = 40"
+          ],
+          "newLines": 1,
+          "newStart": 40,
+          "oldLines": 1,
+          "oldStart": 40
+        },
+        {
+          "lines": [
+            "+// note 39"
+          ],
+          "newLines": 1,
+          "newStart": 50,
+          "oldLines": 0,
+          "oldStart": 49
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0039"
+  },
+  {
+    "session_id": "synthetic-Write-0040",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 40
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 40\nconst Limit = 140\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 40",
+            "+const N = 41"
+          ],
+          "newLines": 1,
+          "newStart": 41,
+          "oldLines": 1,
+          "oldStart": 41
+        },
+        {
+          "lines": [
+            "+// note 40"
+          ],
+          "newLines": 1,
+          "newStart": 51,
+          "oldLines": 0,
+          "oldStart": 50
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0040"
+  },
+  {
+    "session_id": "synthetic-Write-0041",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 41
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 41\nconst Limit = 141\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 41",
+            "+const N = 42"
+          ],
+          "newLines": 1,
+          "newStart": 42,
+          "oldLines": 1,
+          "oldStart": 42
+        },
+        {
+          "lines": [
+            "+// note 41"
+          ],
+          "newLines": 1,
+          "newStart": 52,
+          "oldLines": 0,
+          "oldStart": 51
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0041"
+  },
+  {
+    "session_id": "synthetic-Write-0042",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 42
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 42\nconst Limit = 142\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 42",
+            "+const N = 43"
+          ],
+          "newLines": 1,
+          "newStart": 43,
+          "oldLines": 1,
+          "oldStart": 43
+        },
+        {
+          "lines": [
+            "+// note 42"
+          ],
+          "newLines": 1,
+          "newStart": 53,
+          "oldLines": 0,
+          "oldStart": 52
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0042"
+  },
+  {
+    "session_id": "synthetic-Write-0043",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 43
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 43\nconst Limit = 143\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 43",
+            "+const N = 44"
+          ],
+          "newLines": 1,
+          "newStart": 44,
+          "oldLines": 1,
+          "oldStart": 44
+        },
+        {
+          "lines": [
+            "+// note 43"
+          ],
+          "newLines": 1,
+          "newStart": 54,
+          "oldLines": 0,
+          "oldStart": 53
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0043"
+  },
+  {
+    "session_id": "synthetic-Write-0044",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 44
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "package demo\n\n// generated file 44\nconst Limit = 144\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 44",
+            "+const N = 45"
+          ],
+          "newLines": 1,
+          "newStart": 45,
+          "oldLines": 1,
+          "oldStart": 45
+        },
+        {
+          "lines": [
+            "+// note 44"
+          ],
+          "newLines": 1,
+          "newStart": 55,
+          "oldLines": 0,
+          "oldStart": 54
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-0044"
+  },
+  {
+    "session_id": "synthetic-Write-1000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 1000
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Write failed on item 0"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-1000"
+  },
+  {
+    "session_id": "synthetic-Write-1001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 1001
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Write failed on item 1"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-1001"
+  },
+  {
+    "session_id": "synthetic-Write-1002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 1002
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Write failed on item 2"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-1002"
+  },
+  {
+    "session_id": "synthetic-Write-1003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 1003
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Write failed on item 3"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-1003"
+  },
+  {
+    "session_id": "synthetic-Write-1004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Write",
+    "args": {
+      "n": 1004
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Write failed on item 4"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Write-1004"
+  }
+]

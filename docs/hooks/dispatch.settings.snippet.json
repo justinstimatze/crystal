@@ -1,0 +1,18 @@
+{
+  "_comment": "Wire crystal's rule-library DISPATCHER in as a single Claude Code PreToolUse hook. Merge this 'hooks' block into ~/.claude/settings.json (global). Replace /path/to/crystal and /path/to/library.json. Unlike one `crystal guard`/rule, ONE `crystal dispatch` process evaluates the whole rule library in-process — the architecture that scales to hundreds/thousands of rules without N process-forks per Bash call. Omit --rules to serve the built-in default library (just the git-add-all rule). Per-rule self-monitoring state lands in --state (id -> denied/bypassed counts; a sustained override rate flags a rule NeedsRevision). Override one command with CRYSTAL_GUARD_SKIP=1. Fail-open: a missing/broken library or unknown matcher never blocks the host.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/crystal dispatch --rules /path/to/library.json --state ${CLAUDE_PROJECT_DIR}/.crystal-dispatch-state.json",
+            "timeout": 10,
+            "statusMessage": "crystal dispatch: rule library"
+          }
+        ]
+      }
+    ]
+  }
+}

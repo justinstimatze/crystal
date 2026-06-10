@@ -1,0 +1,1797 @@
+[
+  {
+    "session_id": "synthetic-Edit-0000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:00:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 0
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler0() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 0",
+            "+const N = 1"
+          ],
+          "newLines": 1,
+          "newStart": 1,
+          "oldLines": 1,
+          "oldStart": 1
+        },
+        {
+          "lines": [
+            "+// note 0"
+          ],
+          "newLines": 1,
+          "newStart": 11,
+          "oldLines": 0,
+          "oldStart": 10
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0000"
+  },
+  {
+    "session_id": "synthetic-Edit-0001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:01:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 1
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler1() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 1",
+            "+const N = 2"
+          ],
+          "newLines": 1,
+          "newStart": 2,
+          "oldLines": 1,
+          "oldStart": 2
+        },
+        {
+          "lines": [
+            "+// note 1"
+          ],
+          "newLines": 1,
+          "newStart": 12,
+          "oldLines": 0,
+          "oldStart": 11
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0001"
+  },
+  {
+    "session_id": "synthetic-Edit-0002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:02:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 2
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler2() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 2",
+            "+const N = 3"
+          ],
+          "newLines": 1,
+          "newStart": 3,
+          "oldLines": 1,
+          "oldStart": 3
+        },
+        {
+          "lines": [
+            "+// note 2"
+          ],
+          "newLines": 1,
+          "newStart": 13,
+          "oldLines": 0,
+          "oldStart": 12
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0002"
+  },
+  {
+    "session_id": "synthetic-Edit-0003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:03:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 3
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler3() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 3",
+            "+const N = 4"
+          ],
+          "newLines": 1,
+          "newStart": 4,
+          "oldLines": 1,
+          "oldStart": 4
+        },
+        {
+          "lines": [
+            "+// note 3"
+          ],
+          "newLines": 1,
+          "newStart": 14,
+          "oldLines": 0,
+          "oldStart": 13
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0003"
+  },
+  {
+    "session_id": "synthetic-Edit-0004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:04:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 4
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler4() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 4",
+            "+const N = 5"
+          ],
+          "newLines": 1,
+          "newStart": 5,
+          "oldLines": 1,
+          "oldStart": 5
+        },
+        {
+          "lines": [
+            "+// note 4"
+          ],
+          "newLines": 1,
+          "newStart": 15,
+          "oldLines": 0,
+          "oldStart": 14
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0004"
+  },
+  {
+    "session_id": "synthetic-Edit-0005",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:05:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 5
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler5() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 5",
+            "+const N = 6"
+          ],
+          "newLines": 1,
+          "newStart": 6,
+          "oldLines": 1,
+          "oldStart": 6
+        },
+        {
+          "lines": [
+            "+// note 5"
+          ],
+          "newLines": 1,
+          "newStart": 16,
+          "oldLines": 0,
+          "oldStart": 15
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0005"
+  },
+  {
+    "session_id": "synthetic-Edit-0006",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:06:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 6
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler6() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 6",
+            "+const N = 7"
+          ],
+          "newLines": 1,
+          "newStart": 7,
+          "oldLines": 1,
+          "oldStart": 7
+        },
+        {
+          "lines": [
+            "+// note 6"
+          ],
+          "newLines": 1,
+          "newStart": 17,
+          "oldLines": 0,
+          "oldStart": 16
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0006"
+  },
+  {
+    "session_id": "synthetic-Edit-0007",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:07:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 7
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler7() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 7",
+            "+const N = 8"
+          ],
+          "newLines": 1,
+          "newStart": 8,
+          "oldLines": 1,
+          "oldStart": 8
+        },
+        {
+          "lines": [
+            "+// note 7"
+          ],
+          "newLines": 1,
+          "newStart": 18,
+          "oldLines": 0,
+          "oldStart": 17
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0007"
+  },
+  {
+    "session_id": "synthetic-Edit-0008",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:08:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 8
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler8() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 8",
+            "+const N = 9"
+          ],
+          "newLines": 1,
+          "newStart": 9,
+          "oldLines": 1,
+          "oldStart": 9
+        },
+        {
+          "lines": [
+            "+// note 8"
+          ],
+          "newLines": 1,
+          "newStart": 19,
+          "oldLines": 0,
+          "oldStart": 18
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0008"
+  },
+  {
+    "session_id": "synthetic-Edit-0009",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:09:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 9
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler9() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 9",
+            "+const N = 10"
+          ],
+          "newLines": 1,
+          "newStart": 10,
+          "oldLines": 1,
+          "oldStart": 10
+        },
+        {
+          "lines": [
+            "+// note 9"
+          ],
+          "newLines": 1,
+          "newStart": 20,
+          "oldLines": 0,
+          "oldStart": 19
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0009"
+  },
+  {
+    "session_id": "synthetic-Edit-0010",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:10:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 10
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler10() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 10",
+            "+const N = 11"
+          ],
+          "newLines": 1,
+          "newStart": 11,
+          "oldLines": 1,
+          "oldStart": 11
+        },
+        {
+          "lines": [
+            "+// note 10"
+          ],
+          "newLines": 1,
+          "newStart": 21,
+          "oldLines": 0,
+          "oldStart": 20
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0010"
+  },
+  {
+    "session_id": "synthetic-Edit-0011",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:11:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 11
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler11() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 11",
+            "+const N = 12"
+          ],
+          "newLines": 1,
+          "newStart": 12,
+          "oldLines": 1,
+          "oldStart": 12
+        },
+        {
+          "lines": [
+            "+// note 11"
+          ],
+          "newLines": 1,
+          "newStart": 22,
+          "oldLines": 0,
+          "oldStart": 21
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0011"
+  },
+  {
+    "session_id": "synthetic-Edit-0012",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:12:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 12
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler12() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 12",
+            "+const N = 13"
+          ],
+          "newLines": 1,
+          "newStart": 13,
+          "oldLines": 1,
+          "oldStart": 13
+        },
+        {
+          "lines": [
+            "+// note 12"
+          ],
+          "newLines": 1,
+          "newStart": 23,
+          "oldLines": 0,
+          "oldStart": 22
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0012"
+  },
+  {
+    "session_id": "synthetic-Edit-0013",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:13:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 13
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler13() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 13",
+            "+const N = 14"
+          ],
+          "newLines": 1,
+          "newStart": 14,
+          "oldLines": 1,
+          "oldStart": 14
+        },
+        {
+          "lines": [
+            "+// note 13"
+          ],
+          "newLines": 1,
+          "newStart": 24,
+          "oldLines": 0,
+          "oldStart": 23
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0013"
+  },
+  {
+    "session_id": "synthetic-Edit-0014",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:14:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 14
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler14() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 14",
+            "+const N = 15"
+          ],
+          "newLines": 1,
+          "newStart": 15,
+          "oldLines": 1,
+          "oldStart": 15
+        },
+        {
+          "lines": [
+            "+// note 14"
+          ],
+          "newLines": 1,
+          "newStart": 25,
+          "oldLines": 0,
+          "oldStart": 24
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0014"
+  },
+  {
+    "session_id": "synthetic-Edit-0015",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:15:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 15
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler15() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 15",
+            "+const N = 16"
+          ],
+          "newLines": 1,
+          "newStart": 16,
+          "oldLines": 1,
+          "oldStart": 16
+        },
+        {
+          "lines": [
+            "+// note 15"
+          ],
+          "newLines": 1,
+          "newStart": 26,
+          "oldLines": 0,
+          "oldStart": 25
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0015"
+  },
+  {
+    "session_id": "synthetic-Edit-0016",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:16:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 16
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler16() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 16",
+            "+const N = 17"
+          ],
+          "newLines": 1,
+          "newStart": 17,
+          "oldLines": 1,
+          "oldStart": 17
+        },
+        {
+          "lines": [
+            "+// note 16"
+          ],
+          "newLines": 1,
+          "newStart": 27,
+          "oldLines": 0,
+          "oldStart": 26
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0016"
+  },
+  {
+    "session_id": "synthetic-Edit-0017",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:17:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 17
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler17() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 17",
+            "+const N = 18"
+          ],
+          "newLines": 1,
+          "newStart": 18,
+          "oldLines": 1,
+          "oldStart": 18
+        },
+        {
+          "lines": [
+            "+// note 17"
+          ],
+          "newLines": 1,
+          "newStart": 28,
+          "oldLines": 0,
+          "oldStart": 27
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0017"
+  },
+  {
+    "session_id": "synthetic-Edit-0018",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:18:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 18
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler18() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 18",
+            "+const N = 19"
+          ],
+          "newLines": 1,
+          "newStart": 19,
+          "oldLines": 1,
+          "oldStart": 19
+        },
+        {
+          "lines": [
+            "+// note 18"
+          ],
+          "newLines": 1,
+          "newStart": 29,
+          "oldLines": 0,
+          "oldStart": 28
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0018"
+  },
+  {
+    "session_id": "synthetic-Edit-0019",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:19:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 19
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler19() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 19",
+            "+const N = 20"
+          ],
+          "newLines": 1,
+          "newStart": 20,
+          "oldLines": 1,
+          "oldStart": 20
+        },
+        {
+          "lines": [
+            "+// note 19"
+          ],
+          "newLines": 1,
+          "newStart": 30,
+          "oldLines": 0,
+          "oldStart": 29
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0019"
+  },
+  {
+    "session_id": "synthetic-Edit-0020",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:20:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 20
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler20() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 20",
+            "+const N = 21"
+          ],
+          "newLines": 1,
+          "newStart": 21,
+          "oldLines": 1,
+          "oldStart": 21
+        },
+        {
+          "lines": [
+            "+// note 20"
+          ],
+          "newLines": 1,
+          "newStart": 31,
+          "oldLines": 0,
+          "oldStart": 30
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0020"
+  },
+  {
+    "session_id": "synthetic-Edit-0021",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:21:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 21
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler21() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 21",
+            "+const N = 22"
+          ],
+          "newLines": 1,
+          "newStart": 22,
+          "oldLines": 1,
+          "oldStart": 22
+        },
+        {
+          "lines": [
+            "+// note 21"
+          ],
+          "newLines": 1,
+          "newStart": 32,
+          "oldLines": 0,
+          "oldStart": 31
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0021"
+  },
+  {
+    "session_id": "synthetic-Edit-0022",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:22:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 22
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler22() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 22",
+            "+const N = 23"
+          ],
+          "newLines": 1,
+          "newStart": 23,
+          "oldLines": 1,
+          "oldStart": 23
+        },
+        {
+          "lines": [
+            "+// note 22"
+          ],
+          "newLines": 1,
+          "newStart": 33,
+          "oldLines": 0,
+          "oldStart": 32
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0022"
+  },
+  {
+    "session_id": "synthetic-Edit-0023",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:23:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 23
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler23() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 23",
+            "+const N = 24"
+          ],
+          "newLines": 1,
+          "newStart": 24,
+          "oldLines": 1,
+          "oldStart": 24
+        },
+        {
+          "lines": [
+            "+// note 23"
+          ],
+          "newLines": 1,
+          "newStart": 34,
+          "oldLines": 0,
+          "oldStart": 33
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0023"
+  },
+  {
+    "session_id": "synthetic-Edit-0024",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:24:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 24
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler24() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 24",
+            "+const N = 25"
+          ],
+          "newLines": 1,
+          "newStart": 25,
+          "oldLines": 1,
+          "oldStart": 25
+        },
+        {
+          "lines": [
+            "+// note 24"
+          ],
+          "newLines": 1,
+          "newStart": 35,
+          "oldLines": 0,
+          "oldStart": 34
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0024"
+  },
+  {
+    "session_id": "synthetic-Edit-0025",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:25:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 25
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler25() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 25",
+            "+const N = 26"
+          ],
+          "newLines": 1,
+          "newStart": 26,
+          "oldLines": 1,
+          "oldStart": 26
+        },
+        {
+          "lines": [
+            "+// note 25"
+          ],
+          "newLines": 1,
+          "newStart": 36,
+          "oldLines": 0,
+          "oldStart": 35
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0025"
+  },
+  {
+    "session_id": "synthetic-Edit-0026",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:26:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 26
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler26() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 26",
+            "+const N = 27"
+          ],
+          "newLines": 1,
+          "newStart": 27,
+          "oldLines": 1,
+          "oldStart": 27
+        },
+        {
+          "lines": [
+            "+// note 26"
+          ],
+          "newLines": 1,
+          "newStart": 37,
+          "oldLines": 0,
+          "oldStart": 36
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0026"
+  },
+  {
+    "session_id": "synthetic-Edit-0027",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:27:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 27
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler27() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 27",
+            "+const N = 28"
+          ],
+          "newLines": 1,
+          "newStart": 28,
+          "oldLines": 1,
+          "oldStart": 28
+        },
+        {
+          "lines": [
+            "+// note 27"
+          ],
+          "newLines": 1,
+          "newStart": 38,
+          "oldLines": 0,
+          "oldStart": 37
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0027"
+  },
+  {
+    "session_id": "synthetic-Edit-0028",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:28:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 28
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler28() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 28",
+            "+const N = 29"
+          ],
+          "newLines": 1,
+          "newStart": 29,
+          "oldLines": 1,
+          "oldStart": 29
+        },
+        {
+          "lines": [
+            "+// note 28"
+          ],
+          "newLines": 1,
+          "newStart": 39,
+          "oldLines": 0,
+          "oldStart": 38
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0028"
+  },
+  {
+    "session_id": "synthetic-Edit-0029",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:29:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 29
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler29() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 29",
+            "+const N = 30"
+          ],
+          "newLines": 1,
+          "newStart": 30,
+          "oldLines": 1,
+          "oldStart": 30
+        },
+        {
+          "lines": [
+            "+// note 29"
+          ],
+          "newLines": 1,
+          "newStart": 40,
+          "oldLines": 0,
+          "oldStart": 39
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0029"
+  },
+  {
+    "session_id": "synthetic-Edit-0030",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:30:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 30
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler30() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 30",
+            "+const N = 31"
+          ],
+          "newLines": 1,
+          "newStart": 31,
+          "oldLines": 1,
+          "oldStart": 31
+        },
+        {
+          "lines": [
+            "+// note 30"
+          ],
+          "newLines": 1,
+          "newStart": 41,
+          "oldLines": 0,
+          "oldStart": 40
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0030"
+  },
+  {
+    "session_id": "synthetic-Edit-0031",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:31:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 31
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler31() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 31",
+            "+const N = 32"
+          ],
+          "newLines": 1,
+          "newStart": 32,
+          "oldLines": 1,
+          "oldStart": 32
+        },
+        {
+          "lines": [
+            "+// note 31"
+          ],
+          "newLines": 1,
+          "newStart": 42,
+          "oldLines": 0,
+          "oldStart": 41
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0031"
+  },
+  {
+    "session_id": "synthetic-Edit-0032",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:32:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 32
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler32() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 32",
+            "+const N = 33"
+          ],
+          "newLines": 1,
+          "newStart": 33,
+          "oldLines": 1,
+          "oldStart": 33
+        },
+        {
+          "lines": [
+            "+// note 32"
+          ],
+          "newLines": 1,
+          "newStart": 43,
+          "oldLines": 0,
+          "oldStart": 42
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0032"
+  },
+  {
+    "session_id": "synthetic-Edit-0033",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:33:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 33
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler33() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 33",
+            "+const N = 34"
+          ],
+          "newLines": 1,
+          "newStart": 34,
+          "oldLines": 1,
+          "oldStart": 34
+        },
+        {
+          "lines": [
+            "+// note 33"
+          ],
+          "newLines": 1,
+          "newStart": 44,
+          "oldLines": 0,
+          "oldStart": 43
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0033"
+  },
+  {
+    "session_id": "synthetic-Edit-0034",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:34:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 34
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler34() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 34",
+            "+const N = 35"
+          ],
+          "newLines": 1,
+          "newStart": 35,
+          "oldLines": 1,
+          "oldStart": 35
+        },
+        {
+          "lines": [
+            "+// note 34"
+          ],
+          "newLines": 1,
+          "newStart": 45,
+          "oldLines": 0,
+          "oldStart": 44
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0034"
+  },
+  {
+    "session_id": "synthetic-Edit-0035",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:35:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 35
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler35() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 35",
+            "+const N = 36"
+          ],
+          "newLines": 1,
+          "newStart": 36,
+          "oldLines": 1,
+          "oldStart": 36
+        },
+        {
+          "lines": [
+            "+// note 35"
+          ],
+          "newLines": 1,
+          "newStart": 46,
+          "oldLines": 0,
+          "oldStart": 45
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0035"
+  },
+  {
+    "session_id": "synthetic-Edit-0036",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:36:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 36
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler36() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 36",
+            "+const N = 37"
+          ],
+          "newLines": 1,
+          "newStart": 37,
+          "oldLines": 1,
+          "oldStart": 37
+        },
+        {
+          "lines": [
+            "+// note 36"
+          ],
+          "newLines": 1,
+          "newStart": 47,
+          "oldLines": 0,
+          "oldStart": 46
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0036"
+  },
+  {
+    "session_id": "synthetic-Edit-0037",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:37:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 37
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler37() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 37",
+            "+const N = 38"
+          ],
+          "newLines": 1,
+          "newStart": 38,
+          "oldLines": 1,
+          "oldStart": 38
+        },
+        {
+          "lines": [
+            "+// note 37"
+          ],
+          "newLines": 1,
+          "newStart": 48,
+          "oldLines": 0,
+          "oldStart": 47
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0037"
+  },
+  {
+    "session_id": "synthetic-Edit-0038",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:38:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 38
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler38() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 38",
+            "+const N = 39"
+          ],
+          "newLines": 1,
+          "newStart": 39,
+          "oldLines": 1,
+          "oldStart": 39
+        },
+        {
+          "lines": [
+            "+// note 38"
+          ],
+          "newLines": 1,
+          "newStart": 49,
+          "oldLines": 0,
+          "oldStart": 48
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0038"
+  },
+  {
+    "session_id": "synthetic-Edit-0039",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:39:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 39
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler39() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 39",
+            "+const N = 40"
+          ],
+          "newLines": 1,
+          "newStart": 40,
+          "oldLines": 1,
+          "oldStart": 40
+        },
+        {
+          "lines": [
+            "+// note 39"
+          ],
+          "newLines": 1,
+          "newStart": 50,
+          "oldLines": 0,
+          "oldStart": 49
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0039"
+  },
+  {
+    "session_id": "synthetic-Edit-0040",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 40
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler40() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 40",
+            "+const N = 41"
+          ],
+          "newLines": 1,
+          "newStart": 41,
+          "oldLines": 1,
+          "oldStart": 41
+        },
+        {
+          "lines": [
+            "+// note 40"
+          ],
+          "newLines": 1,
+          "newStart": 51,
+          "oldLines": 0,
+          "oldStart": 50
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0040"
+  },
+  {
+    "session_id": "synthetic-Edit-0041",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 41
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler41() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 41",
+            "+const N = 42"
+          ],
+          "newLines": 1,
+          "newStart": 42,
+          "oldLines": 1,
+          "oldStart": 42
+        },
+        {
+          "lines": [
+            "+// note 41"
+          ],
+          "newLines": 1,
+          "newStart": 52,
+          "oldLines": 0,
+          "oldStart": 51
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0041"
+  },
+  {
+    "session_id": "synthetic-Edit-0042",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 42
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler42() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 42",
+            "+const N = 43"
+          ],
+          "newLines": 1,
+          "newStart": 43,
+          "oldLines": 1,
+          "oldStart": 43
+        },
+        {
+          "lines": [
+            "+// note 42"
+          ],
+          "newLines": 1,
+          "newStart": 53,
+          "oldLines": 0,
+          "oldStart": 52
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0042"
+  },
+  {
+    "session_id": "synthetic-Edit-0043",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 43
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler43() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 43",
+            "+const N = 44"
+          ],
+          "newLines": 1,
+          "newStart": 44,
+          "oldLines": 1,
+          "oldStart": 44
+        },
+        {
+          "lines": [
+            "+// note 43"
+          ],
+          "newLines": 1,
+          "newStart": 54,
+          "oldLines": 0,
+          "oldStart": 53
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0043"
+  },
+  {
+    "session_id": "synthetic-Edit-0044",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 44
+    },
+    "result": {
+      "is_error": false,
+      "new_string": "func handler44() error {\n\treturn nil\n}\n",
+      "structured_patch": [
+        {
+          "lines": [
+            "-const N = 44",
+            "+const N = 45"
+          ],
+          "newLines": 1,
+          "newStart": 45,
+          "oldLines": 1,
+          "oldStart": 45
+        },
+        {
+          "lines": [
+            "+// note 44"
+          ],
+          "newLines": 1,
+          "newStart": 55,
+          "oldLines": 0,
+          "oldStart": 54
+        }
+      ]
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-0044"
+  },
+  {
+    "session_id": "synthetic-Edit-1000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 1000
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Edit failed on item 0"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-1000"
+  },
+  {
+    "session_id": "synthetic-Edit-1001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 1001
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Edit failed on item 1"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-1001"
+  },
+  {
+    "session_id": "synthetic-Edit-1002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 1002
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Edit failed on item 2"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-1002"
+  },
+  {
+    "session_id": "synthetic-Edit-1003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 1003
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Edit failed on item 3"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-1003"
+  },
+  {
+    "session_id": "synthetic-Edit-1004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Edit",
+    "args": {
+      "n": 1004
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Edit failed on item 4"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Edit-1004"
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "_comment": "Wire crystal's deterministic Bash-command categorizer in as a live Claude Code PreToolUse hook. Merge this 'hooks' block into your .claude/settings.json (project) or ~/.claude/settings.json (global). Replace /path/to/crystal with the built binary. The hook answers the categorize-this-command chore deterministically (0 model calls) on the covered fraction, defers the residual silently, and demotes itself on a sustained coverage collapse via the --state drift window. It is fail-open: it never denies a command.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/path/to/crystal hook --state ${CLAUDE_PROJECT_DIR}/.crystal-hook-state.json --drift-m 3 --drift-w 5",
+            "timeout": 10,
+            "statusMessage": "crystal: categorizing (deterministic)"
+          }
+        ]
+      }
+    ]
+  }
+}

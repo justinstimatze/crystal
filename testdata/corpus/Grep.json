@@ -1,0 +1,1077 @@
+[
+  {
+    "session_id": "synthetic-Grep-0000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:00:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 0
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a0.go",
+        "internal/pkg/b0.go",
+        "cmd/c0.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0000"
+  },
+  {
+    "session_id": "synthetic-Grep-0001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:01:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 1
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a1.go",
+        "internal/pkg/b1.go",
+        "cmd/c1.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0001"
+  },
+  {
+    "session_id": "synthetic-Grep-0002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:02:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 2
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a2.go",
+        "internal/pkg/b2.go",
+        "cmd/c2.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0002"
+  },
+  {
+    "session_id": "synthetic-Grep-0003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:03:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 3
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a3.go",
+        "internal/pkg/b3.go",
+        "cmd/c3.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0003"
+  },
+  {
+    "session_id": "synthetic-Grep-0004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:04:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 4
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a4.go",
+        "internal/pkg/b4.go",
+        "cmd/c4.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0004"
+  },
+  {
+    "session_id": "synthetic-Grep-0005",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:05:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 5
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a5.go",
+        "internal/pkg/b5.go",
+        "cmd/c5.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0005"
+  },
+  {
+    "session_id": "synthetic-Grep-0006",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:06:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 6
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a6.go",
+        "internal/pkg/b6.go",
+        "cmd/c6.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0006"
+  },
+  {
+    "session_id": "synthetic-Grep-0007",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:07:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 7
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a7.go",
+        "internal/pkg/b7.go",
+        "cmd/c7.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0007"
+  },
+  {
+    "session_id": "synthetic-Grep-0008",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:08:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 8
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a8.go",
+        "internal/pkg/b8.go",
+        "cmd/c8.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0008"
+  },
+  {
+    "session_id": "synthetic-Grep-0009",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:09:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 9
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a9.go",
+        "internal/pkg/b9.go",
+        "cmd/c9.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0009"
+  },
+  {
+    "session_id": "synthetic-Grep-0010",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:10:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 10
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a10.go",
+        "internal/pkg/b10.go",
+        "cmd/c10.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0010"
+  },
+  {
+    "session_id": "synthetic-Grep-0011",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:11:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 11
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a11.go",
+        "internal/pkg/b11.go",
+        "cmd/c11.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0011"
+  },
+  {
+    "session_id": "synthetic-Grep-0012",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:12:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 12
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a12.go",
+        "internal/pkg/b12.go",
+        "cmd/c12.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0012"
+  },
+  {
+    "session_id": "synthetic-Grep-0013",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:13:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 13
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a13.go",
+        "internal/pkg/b13.go",
+        "cmd/c13.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0013"
+  },
+  {
+    "session_id": "synthetic-Grep-0014",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:14:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 14
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a14.go",
+        "internal/pkg/b14.go",
+        "cmd/c14.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0014"
+  },
+  {
+    "session_id": "synthetic-Grep-0015",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:15:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 15
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a15.go",
+        "internal/pkg/b15.go",
+        "cmd/c15.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0015"
+  },
+  {
+    "session_id": "synthetic-Grep-0016",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:16:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 16
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a16.go",
+        "internal/pkg/b16.go",
+        "cmd/c16.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0016"
+  },
+  {
+    "session_id": "synthetic-Grep-0017",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:17:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 17
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a17.go",
+        "internal/pkg/b17.go",
+        "cmd/c17.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0017"
+  },
+  {
+    "session_id": "synthetic-Grep-0018",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:18:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 18
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a18.go",
+        "internal/pkg/b18.go",
+        "cmd/c18.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0018"
+  },
+  {
+    "session_id": "synthetic-Grep-0019",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:19:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 19
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a19.go",
+        "internal/pkg/b19.go",
+        "cmd/c19.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0019"
+  },
+  {
+    "session_id": "synthetic-Grep-0020",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:20:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 20
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a20.go",
+        "internal/pkg/b20.go",
+        "cmd/c20.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0020"
+  },
+  {
+    "session_id": "synthetic-Grep-0021",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:21:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 21
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a21.go",
+        "internal/pkg/b21.go",
+        "cmd/c21.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0021"
+  },
+  {
+    "session_id": "synthetic-Grep-0022",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:22:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 22
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a22.go",
+        "internal/pkg/b22.go",
+        "cmd/c22.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0022"
+  },
+  {
+    "session_id": "synthetic-Grep-0023",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:23:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 23
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a23.go",
+        "internal/pkg/b23.go",
+        "cmd/c23.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0023"
+  },
+  {
+    "session_id": "synthetic-Grep-0024",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:24:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 24
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a24.go",
+        "internal/pkg/b24.go",
+        "cmd/c24.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0024"
+  },
+  {
+    "session_id": "synthetic-Grep-0025",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:25:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 25
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a25.go",
+        "internal/pkg/b25.go",
+        "cmd/c25.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0025"
+  },
+  {
+    "session_id": "synthetic-Grep-0026",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:26:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 26
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a26.go",
+        "internal/pkg/b26.go",
+        "cmd/c26.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0026"
+  },
+  {
+    "session_id": "synthetic-Grep-0027",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:27:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 27
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a27.go",
+        "internal/pkg/b27.go",
+        "cmd/c27.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0027"
+  },
+  {
+    "session_id": "synthetic-Grep-0028",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:28:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 28
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a28.go",
+        "internal/pkg/b28.go",
+        "cmd/c28.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0028"
+  },
+  {
+    "session_id": "synthetic-Grep-0029",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:29:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 29
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a29.go",
+        "internal/pkg/b29.go",
+        "cmd/c29.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0029"
+  },
+  {
+    "session_id": "synthetic-Grep-0030",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:30:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 30
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a30.go",
+        "internal/pkg/b30.go",
+        "cmd/c30.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0030"
+  },
+  {
+    "session_id": "synthetic-Grep-0031",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:31:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 31
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a31.go",
+        "internal/pkg/b31.go",
+        "cmd/c31.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0031"
+  },
+  {
+    "session_id": "synthetic-Grep-0032",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:32:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 32
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a32.go",
+        "internal/pkg/b32.go",
+        "cmd/c32.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0032"
+  },
+  {
+    "session_id": "synthetic-Grep-0033",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:33:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 33
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a33.go",
+        "internal/pkg/b33.go",
+        "cmd/c33.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0033"
+  },
+  {
+    "session_id": "synthetic-Grep-0034",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:34:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 34
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a34.go",
+        "internal/pkg/b34.go",
+        "cmd/c34.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0034"
+  },
+  {
+    "session_id": "synthetic-Grep-0035",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:35:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 35
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a35.go",
+        "internal/pkg/b35.go",
+        "cmd/c35.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0035"
+  },
+  {
+    "session_id": "synthetic-Grep-0036",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:36:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 36
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a36.go",
+        "internal/pkg/b36.go",
+        "cmd/c36.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0036"
+  },
+  {
+    "session_id": "synthetic-Grep-0037",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:37:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 37
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a37.go",
+        "internal/pkg/b37.go",
+        "cmd/c37.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0037"
+  },
+  {
+    "session_id": "synthetic-Grep-0038",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:38:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 38
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a38.go",
+        "internal/pkg/b38.go",
+        "cmd/c38.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0038"
+  },
+  {
+    "session_id": "synthetic-Grep-0039",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:39:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 39
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a39.go",
+        "internal/pkg/b39.go",
+        "cmd/c39.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0039"
+  },
+  {
+    "session_id": "synthetic-Grep-0040",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 40
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a40.go",
+        "internal/pkg/b40.go",
+        "cmd/c40.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0040"
+  },
+  {
+    "session_id": "synthetic-Grep-0041",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 41
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a41.go",
+        "internal/pkg/b41.go",
+        "cmd/c41.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0041"
+  },
+  {
+    "session_id": "synthetic-Grep-0042",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 42
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a42.go",
+        "internal/pkg/b42.go",
+        "cmd/c42.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0042"
+  },
+  {
+    "session_id": "synthetic-Grep-0043",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 43
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a43.go",
+        "internal/pkg/b43.go",
+        "cmd/c43.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0043"
+  },
+  {
+    "session_id": "synthetic-Grep-0044",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 44
+    },
+    "result": {
+      "is_error": false,
+      "filenames": [
+        "internal/pkg/a44.go",
+        "internal/pkg/b44.go",
+        "cmd/c44.go"
+      ],
+      "num_files": 3
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-0044"
+  },
+  {
+    "session_id": "synthetic-Grep-1000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 1000
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Grep failed on item 0"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-1000"
+  },
+  {
+    "session_id": "synthetic-Grep-1001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 1001
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Grep failed on item 1"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-1001"
+  },
+  {
+    "session_id": "synthetic-Grep-1002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 1002
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Grep failed on item 2"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-1002"
+  },
+  {
+    "session_id": "synthetic-Grep-1003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 1003
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Grep failed on item 3"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-1003"
+  },
+  {
+    "session_id": "synthetic-Grep-1004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Grep",
+    "args": {
+      "n": 1004
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Grep failed on item 4"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Grep-1004"
+  }
+]

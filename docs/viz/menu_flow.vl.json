@@ -1,0 +1,64 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "crystal hook-loop — where the requests actually went (real run counts)",
+    "subtitle": "data: .crystal-viz/hook-loop-flow.json (regenerated every run; lucida can watch it)",
+    "anchor": "start"
+  },
+  "data": {
+    "url": "../../.crystal-viz/hook-loop-flow.json",
+    "format": { "type": "json", "property": "edges" }
+  },
+  "transform": [
+    { "filter": "datum.value > 0" },
+    {
+      "calculate": "indexof(['stream','deferred-model','demote','agree-labeled','cloud-confirm','reauthor'], datum.source)",
+      "as": "stageOrder"
+    },
+    { "stack": "value", "groupby": ["source"], "sort": [{ "field": "target" }], "as": ["x0", "x1"] },
+    { "calculate": "(datum.x0 + datum.x1) / 2", "as": "mid" }
+  ],
+  "encoding": {
+    "y": {
+      "field": "source",
+      "type": "nominal",
+      "title": "stage",
+      "sort": { "field": "stageOrder", "order": "ascending" }
+    },
+    "color": {
+      "field": "target",
+      "type": "nominal",
+      "title": "fate",
+      "scale": {
+        "domain": ["served-det", "deferred-model", "demote", "agree-labeled", "cloud-confirm", "abstain", "served-now", "still-deferred"],
+        "range": ["#2ca02c", "#d62728", "#ff7f0e", "#1f77b4", "#9467bd", "#7f7f7f", "#2ca02c", "#d62728"]
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": { "type": "bar", "height": { "band": 0.7 } },
+      "encoding": {
+        "x": { "field": "x0", "type": "quantitative", "title": "requests (count)" },
+        "x2": { "field": "x1" }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "center",
+        "baseline": "middle",
+        "fontSize": 14,
+        "fontWeight": "bold",
+        "color": "white"
+      },
+      "encoding": {
+        "x": { "field": "mid", "type": "quantitative" },
+        "text": { "field": "value", "type": "quantitative" },
+        "detail": { "field": "target" },
+        "color": { "value": "white" }
+      }
+    }
+  ],
+  "config": { "view": { "stroke": null }, "axis": { "labelFontSize": 12, "titleFontSize": 12 } }
+}

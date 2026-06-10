@@ -1,0 +1,852 @@
+[
+  {
+    "session_id": "synthetic-Read-0000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:00:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 0
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 0\npackage demo\n\nfunc Demo0() int {\n\treturn 0\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0000"
+  },
+  {
+    "session_id": "synthetic-Read-0001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:01:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 1
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 1\npackage demo\n\nfunc Demo1() int {\n\treturn 1\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0001"
+  },
+  {
+    "session_id": "synthetic-Read-0002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:02:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 2
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 2\npackage demo\n\nfunc Demo2() int {\n\treturn 2\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0002"
+  },
+  {
+    "session_id": "synthetic-Read-0003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:03:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 3
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 3\npackage demo\n\nfunc Demo3() int {\n\treturn 3\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0003"
+  },
+  {
+    "session_id": "synthetic-Read-0004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:04:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 4
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 4\npackage demo\n\nfunc Demo4() int {\n\treturn 4\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0004"
+  },
+  {
+    "session_id": "synthetic-Read-0005",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:05:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 5
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 5\npackage demo\n\nfunc Demo5() int {\n\treturn 5\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0005"
+  },
+  {
+    "session_id": "synthetic-Read-0006",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:06:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 6
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 6\npackage demo\n\nfunc Demo6() int {\n\treturn 6\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0006"
+  },
+  {
+    "session_id": "synthetic-Read-0007",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:07:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 7
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 7\npackage demo\n\nfunc Demo7() int {\n\treturn 7\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0007"
+  },
+  {
+    "session_id": "synthetic-Read-0008",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:08:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 8
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 8\npackage demo\n\nfunc Demo8() int {\n\treturn 8\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0008"
+  },
+  {
+    "session_id": "synthetic-Read-0009",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:09:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 9
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 9\npackage demo\n\nfunc Demo9() int {\n\treturn 9\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0009"
+  },
+  {
+    "session_id": "synthetic-Read-0010",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:10:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 10
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 10\npackage demo\n\nfunc Demo10() int {\n\treturn 10\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0010"
+  },
+  {
+    "session_id": "synthetic-Read-0011",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:11:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 11
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 11\npackage demo\n\nfunc Demo11() int {\n\treturn 11\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0011"
+  },
+  {
+    "session_id": "synthetic-Read-0012",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:12:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 12
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 12\npackage demo\n\nfunc Demo12() int {\n\treturn 12\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0012"
+  },
+  {
+    "session_id": "synthetic-Read-0013",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:13:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 13
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 13\npackage demo\n\nfunc Demo13() int {\n\treturn 13\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0013"
+  },
+  {
+    "session_id": "synthetic-Read-0014",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:14:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 14
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 14\npackage demo\n\nfunc Demo14() int {\n\treturn 14\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0014"
+  },
+  {
+    "session_id": "synthetic-Read-0015",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:15:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 15
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 15\npackage demo\n\nfunc Demo15() int {\n\treturn 15\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0015"
+  },
+  {
+    "session_id": "synthetic-Read-0016",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:16:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 16
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 16\npackage demo\n\nfunc Demo16() int {\n\treturn 16\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0016"
+  },
+  {
+    "session_id": "synthetic-Read-0017",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:17:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 17
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 17\npackage demo\n\nfunc Demo17() int {\n\treturn 17\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0017"
+  },
+  {
+    "session_id": "synthetic-Read-0018",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:18:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 18
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 18\npackage demo\n\nfunc Demo18() int {\n\treturn 18\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0018"
+  },
+  {
+    "session_id": "synthetic-Read-0019",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:19:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 19
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 19\npackage demo\n\nfunc Demo19() int {\n\treturn 19\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0019"
+  },
+  {
+    "session_id": "synthetic-Read-0020",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:20:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 20
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 20\npackage demo\n\nfunc Demo20() int {\n\treturn 20\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0020"
+  },
+  {
+    "session_id": "synthetic-Read-0021",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:21:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 21
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 21\npackage demo\n\nfunc Demo21() int {\n\treturn 21\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0021"
+  },
+  {
+    "session_id": "synthetic-Read-0022",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:22:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 22
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 22\npackage demo\n\nfunc Demo22() int {\n\treturn 22\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0022"
+  },
+  {
+    "session_id": "synthetic-Read-0023",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:23:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 23
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 23\npackage demo\n\nfunc Demo23() int {\n\treturn 23\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0023"
+  },
+  {
+    "session_id": "synthetic-Read-0024",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:24:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 24
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 24\npackage demo\n\nfunc Demo24() int {\n\treturn 24\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0024"
+  },
+  {
+    "session_id": "synthetic-Read-0025",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:25:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 25
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 25\npackage demo\n\nfunc Demo25() int {\n\treturn 25\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0025"
+  },
+  {
+    "session_id": "synthetic-Read-0026",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:26:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 26
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 26\npackage demo\n\nfunc Demo26() int {\n\treturn 26\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0026"
+  },
+  {
+    "session_id": "synthetic-Read-0027",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:27:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 27
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 27\npackage demo\n\nfunc Demo27() int {\n\treturn 27\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0027"
+  },
+  {
+    "session_id": "synthetic-Read-0028",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:28:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 28
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 28\npackage demo\n\nfunc Demo28() int {\n\treturn 28\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0028"
+  },
+  {
+    "session_id": "synthetic-Read-0029",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:29:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 29
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 29\npackage demo\n\nfunc Demo29() int {\n\treturn 29\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0029"
+  },
+  {
+    "session_id": "synthetic-Read-0030",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:30:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 30
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 30\npackage demo\n\nfunc Demo30() int {\n\treturn 30\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0030"
+  },
+  {
+    "session_id": "synthetic-Read-0031",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:31:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 31
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 31\npackage demo\n\nfunc Demo31() int {\n\treturn 31\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0031"
+  },
+  {
+    "session_id": "synthetic-Read-0032",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:32:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 32
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 32\npackage demo\n\nfunc Demo32() int {\n\treturn 32\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0032"
+  },
+  {
+    "session_id": "synthetic-Read-0033",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:33:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 33
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 33\npackage demo\n\nfunc Demo33() int {\n\treturn 33\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0033"
+  },
+  {
+    "session_id": "synthetic-Read-0034",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:34:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 34
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 34\npackage demo\n\nfunc Demo34() int {\n\treturn 34\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0034"
+  },
+  {
+    "session_id": "synthetic-Read-0035",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:35:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 35
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 35\npackage demo\n\nfunc Demo35() int {\n\treturn 35\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0035"
+  },
+  {
+    "session_id": "synthetic-Read-0036",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:36:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 36
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 36\npackage demo\n\nfunc Demo36() int {\n\treturn 36\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0036"
+  },
+  {
+    "session_id": "synthetic-Read-0037",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:37:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 37
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 37\npackage demo\n\nfunc Demo37() int {\n\treturn 37\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0037"
+  },
+  {
+    "session_id": "synthetic-Read-0038",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:38:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 38
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 38\npackage demo\n\nfunc Demo38() int {\n\treturn 38\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0038"
+  },
+  {
+    "session_id": "synthetic-Read-0039",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:39:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 39
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 39\npackage demo\n\nfunc Demo39() int {\n\treturn 39\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0039"
+  },
+  {
+    "session_id": "synthetic-Read-0040",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 40
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 40\npackage demo\n\nfunc Demo40() int {\n\treturn 40\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0040"
+  },
+  {
+    "session_id": "synthetic-Read-0041",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 41
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 41\npackage demo\n\nfunc Demo41() int {\n\treturn 41\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0041"
+  },
+  {
+    "session_id": "synthetic-Read-0042",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 42
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 42\npackage demo\n\nfunc Demo42() int {\n\treturn 42\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0042"
+  },
+  {
+    "session_id": "synthetic-Read-0043",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 43
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 43\npackage demo\n\nfunc Demo43() int {\n\treturn 43\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0043"
+  },
+  {
+    "session_id": "synthetic-Read-0044",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T00:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 44
+    },
+    "result": {
+      "is_error": false,
+      "file": "// file 44\npackage demo\n\nfunc Demo44() int {\n\treturn 44\n}\n"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-0044"
+  },
+  {
+    "session_id": "synthetic-Read-1000",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:40:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 1000
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Read failed on item 0"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-1000"
+  },
+  {
+    "session_id": "synthetic-Read-1001",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:41:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 1001
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Read failed on item 1"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-1001"
+  },
+  {
+    "session_id": "synthetic-Read-1002",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:42:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 1002
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Read failed on item 2"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-1002"
+  },
+  {
+    "session_id": "synthetic-Read-1003",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:43:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 1003
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Read failed on item 3"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-1003"
+  },
+  {
+    "session_id": "synthetic-Read-1004",
+    "repo": "$HOME/Documents/example",
+    "git_branch": "main",
+    "timestamp": "2026-01-01T16:44:00Z",
+    "context": "synthetic schema-faithful fixture (no real content)",
+    "tool": "Read",
+    "args": {
+      "n": 1004
+    },
+    "result": {
+      "is_error": true,
+      "scalar": "Error: Read failed on item 4"
+    },
+    "followup": "",
+    "tool_use_id": "synthetic-Read-1004"
+  }
+]
