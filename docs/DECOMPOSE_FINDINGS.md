@@ -44,7 +44,7 @@ chore alone (the fuzzy/paraphrase residual). When the tool *can* cover it:
 - adding a model as a *driver* can be actively worse, because choosing the tool's input is itself a
   fumble-prone judgment (it dropped the distinguishing token).
 
-Applied to the user's framing — *"leave citations in, have a cheap agent check them" rather than
+Applied to the author's framing — *"leave citations in, have a cheap agent check them" rather than
 making the big model get them right inline* — the sharper version is: for **verbatim** citation
 checking, you may not need the cheap *agent* at all; a deterministic `rg` check verifies it
 perfectly and faster. The cheap agent earns its keep only on **semantic** citation support

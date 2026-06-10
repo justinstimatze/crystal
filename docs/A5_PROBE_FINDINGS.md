@@ -179,7 +179,7 @@ run: **two independent 250-draws from ~45k both show the same shape** (coverage 
 ## ⇒ UPDATE 2026-06-07: the negative is OVERTURNED on accuracy (GPU + a capable model)
 
 The 2026-05-29 negative below was a **toy-model artifact**, not a local-tier verdict. Re-run against a
-real model on real hardware — `qwen3.6:35b` (a 36B MoE) on the user's RTX 3080 box over the LAN
+real model on real hardware — `qwen3.6:35b` (a 36B MoE) on the author's RTX 3080 box over the LAN
 (`OLLAMA_HOST=http://192.168.4.114:11434`, zero code change — `internal/local` already reads it):
 
 | tier | accuracy vs det | p50 | p99 |

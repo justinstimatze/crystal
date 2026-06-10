@@ -32,3 +32,13 @@
 # data-driven viz output (regenerated each run)
 .crystal-viz/
 .crystal-proposals/
+.defn-server/
+.defn-server.pid
+
+# internal session handoff — local working doc, not for the public repo
+NEXT_SESSION.md
+
+# local tooling / config — never ship in the public repo
+.codex/
+.defn/
+.mcp.json

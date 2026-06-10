@@ -8,7 +8,7 @@ reliable, zero context, fires unconditionally. So promoting a rule from *memory*
 shift-left applied to remembering — and it's **auto-chunking**: bind an N-step recurring procedure
 into one named unit so working memory holds one token (or zero), not N.
 
-The recursion the user named: a memory rule is the first-order "don't make me remember"; it still
+The recursion the author named: a memory rule is the first-order "don't make me remember"; it still
 fails because *applying* it is a second-order act of remembering. The fix collapses the recursion —
 move the constraint out of memory into the environment, where the wrong path is simply unavailable.
 "Not having to remember to not have to remember."
