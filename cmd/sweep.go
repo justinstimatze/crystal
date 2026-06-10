@@ -40,7 +40,7 @@ type SweepCmd struct {
 	Author       bool   `help:"Procedures: author a draft shell script for the TOP candidate (expensive tier), gated by a no-run structural check (no hallucinated commands). Emits a proposal; never installs or runs it."`
 	CacheDir     string `help:"Disk cache dir for the authoring model call." default:".crystal-cache"`
 	Model        string `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
-	EmitStull    bool   `help:"Constraints: emit the top constraint as a provably-sound stull machine (PreToolUse deny), run stull's static soundness check, and compile a settings.json hook. The formal-proof upgrade to --author's structural gate."`
+	EmitStull    bool   `help:"Constraints: (deferred) crystallize the top constraint as a provably-sound stull machine. The stull formal-proof backend is not yet public; this path explains the seam and points at --emit-dispatch. See docs/ROADMAP.md."`
 	EmitDispatch bool   `help:"Constraints: author + GATE a data-driven regex matcher for the top NEW constraint and emit a crystal dispatch-library rule (stateless block-every-time serve). The crystal-native complement to --emit-stull."`
 }
 

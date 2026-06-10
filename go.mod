@@ -5,12 +5,7 @@ go 1.25.0
 require (
 	github.com/alecthomas/kong v1.15.0
 	github.com/anthropics/anthropic-sdk-go v1.46.0
-	github.com/justinstimatze/stull v0.0.0
 )
-
-// stull is a local sibling project (not published); crystal consumes its
-// spec/check/compile packages to emit provably-sound constraint machines.
-replace github.com/justinstimatze/stull => ../stull
 
 require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
