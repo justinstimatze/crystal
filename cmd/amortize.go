@@ -28,13 +28,13 @@ import (
 // All inputs are already in the disk cache (the author call's real LatencyMS,
 // the per-command model latencies), so this reconstructs them for free.
 type AmortizeCmd struct {
-	Corpus    string   `help:"Corpus dir of real records." default:"testdata/corpus"`
-	Home      []string `help:"Instead of the corpus, scan these home dirs' live transcripts. Repeatable."`
-	CacheDir  string   `help:"Disk cache dir for LLM calls." default:".crystal-cache"`
-	Sample    int      `help:"Author sample size (must match the author run you want to price)." default:"800"`
-	Model     string   `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
-	Reps      int      `help:"Iterations to time the deterministic tier over." default:"1000"`
-	Probe     int      `help:"Commands to sample for the model-latency baseline (capped — does NOT call the model over the whole corpus)." default:"60"`
+	Corpus   string   `help:"Corpus dir of real records." default:"testdata/corpus"`
+	Home     []string `help:"Instead of the corpus, scan these home dirs' live transcripts. Repeatable."`
+	CacheDir string   `help:"Disk cache dir for LLM calls." default:".crystal-cache"`
+	Sample   int      `help:"Author sample size (must match the author run you want to price)." default:"800"`
+	Model    string   `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
+	Reps     int      `help:"Iterations to time the deterministic tier over." default:"1000"`
+	Probe    int      `help:"Commands to sample for the model-latency baseline (capped — does NOT call the model over the whole corpus)." default:"60"`
 }
 
 func (c *AmortizeCmd) Run() error {

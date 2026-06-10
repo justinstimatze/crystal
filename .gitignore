@@ -36,7 +36,7 @@
 .defn-server.pid
 
 # internal session handoff — local working doc, not for the public repo
-NEXT_SESSION.md
+RESUME.md
 
 # local tooling / config — never ship in the public repo
 .codex/

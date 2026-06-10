@@ -14,10 +14,10 @@ func TestParseCategoryFromRecognizesExpandedSet(t *testing.T) {
 	}{
 		{"container", "container"},
 		{"Container", "container"},                 // case-insensitive
-		{"  container\n", "container"},              // trimmed
-		{"the category is container", "container"},  // substring
-		{"network", "network"},                      // an existing class still resolves
-		{"banana", "banana"},                        // unknown → raw text (not silently mapped)
+		{"  container\n", "container"},             // trimmed
+		{"the category is container", "container"}, // substring
+		{"network", "network"},                     // an existing class still resolves
+		{"banana", "banana"},                       // unknown → raw text (not silently mapped)
 	}
 	for _, tc := range tests {
 		if got := parseCategoryFrom(tc.reply, cats); got != tc.want {

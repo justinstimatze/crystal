@@ -10,7 +10,7 @@ import (
 func TestProcSignature(t *testing.T) {
 	tests := map[string]string{
 		"git commit-tree HEAD^{tree} -m x": "git commit-tree", // ref dropped, subcommand kept
-		"git reset --hard NEW":             "git reset",        // flag ends the chain
+		"git reset --hard NEW":             "git reset",       // flag ends the chain
 		"gh api repos/owner/r --paginate":  "gh api",
 		"git add -A":                       "git add",
 		"docker build -t app .":            "docker build",

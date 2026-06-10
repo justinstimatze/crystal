@@ -14,7 +14,7 @@ func TestCommandSignatureCanonicalizes(t *testing.T) {
 		{"git add -A", "git add <all>"},
 		{"git add --all", "git add <all>"},
 		{"git add .", "git add <all>"},
-		{"git add path/to/file", "git add"},      // explicit path → not stage-all
+		{"git add path/to/file", "git add"}, // explicit path → not stage-all
 		// Flags/paths are dropped: the signature is a CLUSTERING key (group rules by
 		// command+subcommand so the same rule clusters across projects regardless of
 		// the specific remedy flag); the example line carries the --private/-t detail.
@@ -23,9 +23,9 @@ func TestCommandSignatureCanonicalizes(t *testing.T) {
 		{"gh repo create --private", "gh repo create"},
 		{"git config --global init.defaultBranch", "git config"},
 		{"docker build -t app .", "docker build"},
-		{"FOO_BAR=1", ""},                 // not a command lead → excluded
-		{"some/path/file.go", ""},         // a path reference, not a command
-		{"the loop", ""},                  // prose in backticks
+		{"FOO_BAR=1", ""},         // not a command lead → excluded
+		{"some/path/file.go", ""}, // a path reference, not a command
+		{"the loop", ""},          // prose in backticks
 	}
 	for _, tc := range tests {
 		if got := commandSignature(tc.span); got != tc.want {

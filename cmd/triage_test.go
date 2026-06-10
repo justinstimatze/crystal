@@ -1,5 +1,7 @@
 package cmd
+
 import "testing"
+
 func TestLeadingWrapperKeywordUnmasksAction(t *testing.T) {
 	cases := map[string]string{
 		`until curl -s -o /dev/null -w "%{http_code}" http://localhost:5173 | grep -q 200; do sleep 0.3; done`: "network",

@@ -18,7 +18,7 @@ func TestParseRuleTable(t *testing.T) {
 	}
 	// Fail-loud cases — none may silently yield an empty table.
 	for _, bad := range []string{
-		`{"rules":[]}`,                                                       // zero rules
+		`{"rules":[]}`, // zero rules
 		`{"rules":[{"match":"regex","token":"x","category":"git"}]}`,         // bad match kind
 		`{"rules":[{"match":"prefix","token":"x","category":"frobnicate"}]}`, // unknown category
 		`no json here`,
@@ -36,7 +36,7 @@ func TestClassifyCompound(t *testing.T) {
 		{"prefix", "rg", "search/inspect"},
 	}}
 	cases := map[string]string{
-		"git status":               "git",
+		"git status":                "git",
 		"cd src && git commit -m x": "git",            // real action beats leading cd
 		"cd src && rg foo":          "search/inspect", // ditto
 		"cd src":                    "nav",            // only nav present

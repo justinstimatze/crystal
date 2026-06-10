@@ -97,7 +97,7 @@ type genRequest struct {
 	System  string         `json:"system,omitempty"`
 	Prompt  string         `json:"prompt"`
 	Stream  bool           `json:"stream"`
-	Think   bool           `json:"think"` // explicitly false: thinking-capable models (qwen3.x) otherwise
+	Think   bool           `json:"think"`             // explicitly false: thinking-capable models (qwen3.x) otherwise
 	Options map[string]any `json:"options,omitempty"` // spend the whole num_predict budget on hidden reasoning and return an empty response
 }
 
