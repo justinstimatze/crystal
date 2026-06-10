@@ -143,7 +143,7 @@ honest positioning in [`docs/THESIS.md`](docs/THESIS.md); original charter in
 1. [`docs/THESIS.md`](docs/THESIS.md) — how the framing evolved and honest SOTA positioning. [`PROJECT_BRIEF.md`](PROJECT_BRIEF.md) is the original charter.
 2. [`docs/ROADMAP.md`](docs/ROADMAP.md) — what's built, what's next, and the vertical slice that would prove the thesis.
 3. [`docs/PRIOR_ART.md`](docs/PRIOR_ART.md) — citation map: which primitives are prior art, which seams survive.
-4. [`docs/SUBSTRATE_SURVEY.md`](docs/SUBSTRATE_SURVEY.md) — the real transcript schema the gate replays against.
+4. [`docs/SUBSTRATE_SURVEY.md`](docs/SUBSTRATE_SURVEY.md) — the real transcript schema the gate is built around. (The committed `testdata/corpus` is **synthetic** schema-faithful fixtures — `crystal synth-corpus`, no real content; replay your own real transcripts with `crystal extract`.)
 5. **Phase-1 gate:** [`MEASURE_FINDINGS.md`](docs/MEASURE_FINDINGS.md), [`DRIFT_FINDINGS.md`](docs/DRIFT_FINDINGS.md), [`LATTICE_FINDINGS.md`](docs/LATTICE_FINDINGS.md).
 6. **The grounding arc, in order:** [`EXPERIMENT_FINDINGS.md`](docs/EXPERIMENT_FINDINGS.md) → [`GROUNDHOP_FINDINGS.md`](docs/GROUNDHOP_FINDINGS.md) → [`UNCOVERHOP_FINDINGS.md`](docs/UNCOVERHOP_FINDINGS.md) → [`DEPTHSWEEP_FINDINGS.md`](docs/DEPTHSWEEP_FINDINGS.md) → [`CONTENTSWEEP_FINDINGS.md`](docs/CONTENTSWEEP_FINDINGS.md) → [`PAYOFF_FINDINGS.md`](docs/PAYOFF_FINDINGS.md) (the value-prop measurement).
 

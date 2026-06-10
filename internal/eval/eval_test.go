@@ -5,8 +5,12 @@ package eval_test
 // (sensitivity) without false-alarming on benign volatility (specificity),
 // Phase 1 has failed and we stop and rethink before logging anything live.
 //
-// It runs against the committed, redacted real-transcript corpus under
-// testdata/corpus.
+// It runs against the committed corpus under testdata/corpus, which is
+// SYNTHETIC: deterministically generated schema-faithful fixtures (see
+// `crystal synth-corpus`) with invented content, so the public repo ships
+// no real transcript data. The fixtures preserve the exact per-tool Output
+// shapes the comparators and corruptors require; real-record replay is a
+// local property (`crystal extract` over your own transcripts).
 
 import (
 	"fmt"
@@ -26,7 +30,7 @@ func loadCorpus(t *testing.T) []record.Record {
 	t.Helper()
 	recs, err := corpus.Load(corpusDir)
 	if err != nil {
-		t.Fatalf("load corpus: %v (run `crystal extract` to build fixtures)", err)
+		t.Fatalf("load corpus: %v (run `crystal synth-corpus` to build fixtures)", err)
 	}
 	if len(recs) == 0 {
 		t.Fatal("corpus is empty")
@@ -130,8 +134,8 @@ func TestOverNormalization(t *testing.T) {
 
 // TestOutcomeClassGate directly exercises the highest-value regression: a
 // historical error flipped into a success shape must always be rejected.
-// Uses real error records when present, plus a controlled synthetic error
-// record so the gate is exercised even if the corpus has none.
+// Uses the corpus error records when present, plus a controlled synthetic
+// error record so the gate is exercised even if the corpus has none.
 func TestOutcomeClassGate(t *testing.T) {
 	recs := loadCorpus(t)
 	cmp, _ := compare.Lookup("Bash")
@@ -168,7 +172,7 @@ func TestOutcomeClassGate(t *testing.T) {
 	if v := cmp.Compare(record.Output{IsError: false, Stdout: "x"}, record.Output{IsError: true, Scalar: "Error: x"}); v.Match {
 		t.Error("outcome-class gate failed to reject success-vs-error directly")
 	}
-	t.Logf("calibration: %d real error records in corpus exercised the outcome-class gate", corpusErrors)
+	t.Logf("calibration: %d error records in corpus exercised the outcome-class gate", corpusErrors)
 	if corpusErrors < 5 {
 		t.Logf("NOTE: error-class records are sparse (<5); outcome-class sensitivity rests largely on the synthetic case")
 	}

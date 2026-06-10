@@ -39,10 +39,11 @@ var secretPatterns = []*regexp.Regexp{
 	regexp.MustCompile(`-----BEGIN[A-Z ]*PRIVATE KEY-----[\s\S]*?-----END[A-Z ]*PRIVATE KEY-----`), // PEM blocks
 }
 
-// homePath matches an absolute home directory so we can normalize it to
-// $HOME — both a privacy measure (strips usernames) and a determinism one
-// (paths become host-independent for replay).
-var homePath = regexp.MustCompile(`/home/[A-Za-z0-9._-]+`)
+// homePath matches an absolute home directory (Linux /home and macOS /Users,
+// the latter for third-party paths that surface in pasted content) so we can
+// normalize it to $HOME — both a privacy measure (strips usernames, including
+// other people's) and a determinism one (paths become host-independent).
+var homePath = regexp.MustCompile(`/(home|Users)/[A-Za-z0-9._-]+`)
 
 // userRe masks bare username tokens that the home-path normalizer cannot
 // reach: `ls -la` ownership columns ("alice alice"), the encoded

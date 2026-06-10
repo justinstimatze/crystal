@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"sort"
 
 	"github.com/justinstimatze/crystal/internal/compare"
@@ -14,10 +15,22 @@ import (
 
 // ExtractCmd builds the redacted Record corpus from local transcripts.
 type ExtractCmd struct {
-	Home      []string `help:"Home dirs to scan (transcripts at <home>/.claude/projects/*/*.jsonl). Repeatable." required:""`
-	Out       string   `help:"Output corpus dir." default:"testdata/corpus"`
-	PerTool   int      `help:"Records to keep per registered tool." default:"40"`
-	PerErrors int      `help:"Additional error-class records to keep per registered tool (for outcome-class tests). Best effort — error results are rare." default:"10"`
+	Home            []string `help:"Home dirs to scan (transcripts at <home>/.claude/projects/*/*.jsonl). Repeatable." required:""`
+	Out             string   `help:"Output corpus dir." default:"testdata/corpus"`
+	PerTool         int      `help:"Records to keep per registered tool." default:"40"`
+	PerErrors       int      `help:"Additional error-class records to keep per registered tool (for outcome-class tests). Best effort — error results are rare." default:"10"`
+	IncludeProjects []string `help:"Default-deny allowlist of project tokens (the dir name after -home-<user>-Documents-). If set, ONLY transcripts from these projects are extracted — used to keep the committed corpus to public repos only. Empty = all projects." name:"include-project"`
+}
+
+// projectDirPrefix strips the encoded -home-<user>-[Documents-] lead from a
+// Claude Code project dir basename, leaving the project token (e.g. "lucida",
+// "town-winze"). Used by the include-project allowlist.
+var projectDirPrefix = regexp.MustCompile(`^-home-[A-Za-z0-9]+-(Documents-)?`)
+
+// projectToken returns the allowlist-matchable token for a transcript file:
+// the project-dir basename with the encoded home prefix stripped.
+func projectToken(jsonlPath string) string {
+	return projectDirPrefix.ReplaceAllString(filepath.Base(filepath.Dir(jsonlPath)), "")
 }
 
 // Run walks transcripts, balances per-tool, redacts, verifies fail-loud,
@@ -31,6 +44,11 @@ func (c *ExtractCmd) Run() error {
 		registered[t] = true
 	}
 
+	allow := map[string]bool{}
+	for _, p := range c.IncludeProjects {
+		allow[p] = true
+	}
+
 	counts := map[string]int{}
 	errCounts := map[string]int{}
 	seen := map[string]bool{} // tool_use_id dedup across both passes
@@ -39,6 +57,17 @@ func (c *ExtractCmd) Run() error {
 	for _, home := range c.Home {
 		matches, _ := filepath.Glob(filepath.Join(home, ".claude", "projects", "*", "*.jsonl"))
 		files = append(files, matches...)
+	}
+	// Default-deny project allowlist: when --include-project is set, keep only
+	// transcripts from those projects (the committed corpus must stay public).
+	if len(allow) > 0 {
+		var filtered []string
+		for _, f := range files {
+			if allow[projectToken(f)] {
+				filtered = append(filtered, f)
+			}
+		}
+		files = filtered
 	}
 	sort.Strings(files) // deterministic fixture selection
 
