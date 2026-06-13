@@ -284,3 +284,38 @@ opinionated, deterministic-default, verifier-gated harness); *evals / eval-drive
 under the mainstream name); *model routing* (crystal is routing taken to the extreme where the
 cheapest "tier" is deterministic code). *vibe coding* / *agentic engineering* / *spec-driven
 development* are the ambient register; *agents-over-chat* is too soft to lean on.
+
+## Tool-making, skill-libraries & library-learning (added 2026-06-13; arXiv IDs + authors re-fetched this pass)
+
+The cluster closest to crystal's core *crystallize-a-recurring-chore* mechanism — an LLM writing a
+reusable artifact and (re)using it. Two flavors: **reactive** (write a tool to solve a task) and
+**introspective** (recognize that a recurring *internal* operation is mechanizable and lift it out). All
+IDs verified this pass:
+
+- **LLMs as Tool Makers (LATM)** — Cai, Wang, Ma, Chen, Zhou, 2023; ICLR 2024 ([2305.17126](https://arxiv.org/abs/2305.17126)) ✅. A strong *tool-maker* model writes a reusable Python tool for a task class; a **cheap *tool-user* model** applies it to later instances; tools are cached and amortized (up to ~79% per-instance cost cut). **The closest overlap on the cost-amortization claim specifically** — this *is* crystal's expensive-authors-the-cheap-tier. *Doesn't:* trigger on observed recurrence in real usage (it's request/task-driven); no deterministic-no-LLM tier; no drift detection / re-authoring over time.
+- **Voyager** — Wang et al., 2023 ([2305.16291](https://arxiv.org/abs/2305.16291)) ✅. An ever-growing **skill library** of executable code, stored / retrieved / composed with self-verification before adding. *Doesn't:* externalize off the model deterministically; trigger on usage-recurrence; demote-on-drift (it only grows).
+- **DreamCoder** — Ellis et al., PLDI 2021 ([2006.08381](https://arxiv.org/abs/2006.08381)) ✅. Pre-LLM, and the cleanest ancestor of the *introspective* angle: the wake-sleep **abstraction** cycle replays its own prior solutions and compresses recurring sub-structure into named reusable library primitives (MDL/compression pressure = recurrence, not failure).
+- **ReGAL** — Stengel-Eskin et al., ICML 2024 ([2401.16467](https://arxiv.org/abs/2401.16467)) ✅. The LLM-era version: **refactors the model's own generated programs into reusable functions** because it "repeats the same functionality," verifying abstractions via execution.
+- **TroVE** — Wang et al., ICML 2024 ([2401.12869](https://arxiv.org/abs/2401.12869)) ✅. Training-free **verifiable** toolbox induction: generate-via-using → grow → periodically **trim** (the verify-and-prune rhymes with crystal's gate + demote — but on programmatic tasks, not live usage).
+- **Agent Workflow Memory** ([2409.07429](https://arxiv.org/abs/2409.07429), cited above) — the procedure analog: reusable workflows induced from trajectories.
+- The PL name for the operation is **partial evaluation / Futamura projections** (specialize a general computation on a recurring input into a faster specialized artifact — `THESIS.md` uses this term). The cognitive analog is **skill proceduralization / chunking** (`ROADMAP.md`'s "auto-chunking applied to remembering").
+
+**The delta — what is genuinely crystal's against this cluster (two load-bearing differences):**
+
+1. **Introspection, not compression/refactoring.** DreamCoder (MDL) and ReGAL refactor *programs the
+   system itself generated*; the trigger is structure in code. Crystal leans on **LLM introspection** —
+   the model recognizing, *semantically*, that an internal operation it keeps performing could be a
+   deterministic-or-composed tool — over its **behavioral trace in real, ambient usage**, not over its
+   own generated code or a task benchmark. That introspective capability is the ingredient symbolic
+   library-learning never had.
+2. **Gravity across a multi-axis menu, not a single-axis move.** Every system above moves on one axis —
+   abstract-into-a-reusable-function (capability) or maker→user (cost). Crystal frames the move as
+   **gravity over three independent axes — executor (cheaper), placement (more local / sovereign),
+   openness (more open)** — the same chore free to fall along any combination, *as far as a verifier
+   permits* (`docs/menu-axes.svg`).
+
+Plus the standing deltas: **deterministic-default** (no model at inference on the covered fraction),
+a **recurrence-in-the-wild trigger**, and a **verifier-gate + demote-on-drift** maintenance loop (TroVE
+trims; none of the cluster demotes on *live* drift). None combine introspection-driven recognition +
+multi-axis gravity + deterministic externalization + recurrence trigger + gated/demotable maintenance —
+that intersection is the seam (this doc's standing line: *novelty = integration, not invention*).
