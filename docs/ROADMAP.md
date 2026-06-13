@@ -49,6 +49,29 @@ blocking PreToolUse hook).
 - The **tamper-proof kernel** — today's gate is the gameable kind (the DGM result).
 - Anything running **unattended over real time**; any topology past the linear relay.
 
+## Demo & onboarding — a compelling first run (not yet built)
+
+The shipped demos undersell the vision. `guard` denies `git add -A` (trivially small), and the headline
+`crystallize` example deliberately REFUSES (a real feature — it won't crystallize a non-deterministic
+command — but anticlimactic as a first impression). The missing piece is a **first run that earns the
+vision on the reader's own data**:
+
+- **Surface-and-rank, don't make the reader guess a `--match`** (the *lucida-inspired* move — detect and
+  rank the qualifying candidates from observation, rather than require the user to name the target up
+  front). `crystal demo` / an improved `crystallize` front-end: scan the reader's real transcripts, rank
+  the top crystallizable chores by **frequency × determinism**, crystallize the #1 into a deployable
+  artifact, and print the **measured win** — calls it would intercept, latency saved vs the model path,
+  standing context reclaimed. A green PROMOTE with real numbers from *their* sessions, not a deny or a
+  refuse.
+- **A recorded loop above the fold.** An asciinema/GIF of `hook-loop` closing autonomously
+  (serve → drift → demote → re-author → re-promote across real processes). "Closes with no human" is the
+  genuinely novel thing and currently lives only in the findings docs.
+
+*Done when:* a no-context reader runs one command against their own `~/.claude` transcripts and watches
+their most-repeated deterministic chore crystallize into a hook with an honest savings readout — and a
+recording of that lands near the top of the README, replacing the trivial `guard` deny as the first
+impression.
+
 ## Track A — shift-left (primary)
 
 The goal is to turn the value prop from a hypothesis into a measured result, cheapest first.
