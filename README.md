@@ -22,6 +22,44 @@ claim**: see [`docs/ROADMAP.md`](docs/ROADMAP.md) and [`docs/THESIS.md`](docs/TH
 smallest grain, the honest caveat holds — the *context-budget* reclaim is real but minor (~1.5%/turn);
 latency, determinism, and reliability are the primary win.
 
+## The menu, and which way it falls
+
+It's a **menu, not a ladder.** Three *independent* axes:
+
+- **executor** — who does the work; intelligence traded for determinism as you go down.
+- **placement** — where it runs; cloud convenience traded for sovereignty as you move onto hardware you own.
+- **openness** — proprietary → open *weights* (Llama-class: you can run it) → open *source* (weights **+** data **+** training recipe — Apertus, OLMo: you can *rebuild* it) → just code. Open-source sits **past** open-weight on this axis: a model you can reproduce beats one you can only download.
+
+"Shift-left" is **gravity over this menu**: a recurring chore falls toward the bottom of the executor axis,
+the local end of placement, and the open end of openness — *as far as a verifier will let it go*. Each
+downward step is only safe because the gate confirms it; when the cheap tier drifts, the chore **floats
+back up a tier**.
+
+|  ↓ executor | chemistry stage | runs on (placement) | openness | what you gain | built? |
+|---|---|---|---|---|---|
+| **frontier LLM** (Opus) | *dissolved* — the supersaturated session | cloud API | proprietary | max intelligence | baseline |
+| **cheaper LLM** (Haiku) | *nucleating* | cloud API | proprietary | ~46% median latency, slight Δquality | measured |
+| **open-source, hosted** (PublicAI: Apertus, OLMo) | *crystallizing* | a hosted gateway | **open source** — weights + data + recipe | open-model cloud pricing (Olmo-32B ≈ $0.05 / $0.20 per 1M); no local VRAM-spill stall | wired + probed |
+| **local model** + agreement oracle | *crystallizing* | your own GPU box | open weights/source | sovereign inference; ties Haiku @ N=250 | measured, early |
+| **deterministic hook** (`guard`) | *precipitated* — fallen out of solution | this machine | fully open — it's just code | exact reproducibility, zero variance, no API key | built |
+
+![crystal's menu — executor (vertical) × placement (horizontal), with color encoding openness](docs/menu-axes.svg)
+
+*Position carries the two ordinal axes — **executor** (top→bottom: intelligence → determinism) and
+**placement** (left→right: someone's cloud → your machine); **color** carries the third, **openness**. The
+tiers are positions, not a sequence — `gravity` is a tendency (toward open, local, cheaper, at similar
+quality), not a required path. Note the crossing the colors reveal: the most-open tier (Apertus/OLMo,
+open-**source**, teal) is hosted, while the local box runs open-**weight** models (amber) — so openness and
+placement genuinely decouple.*
+
+The axes are independent — that's the whole point of a menu. A chore can shift *down* without leaving the
+cloud (Opus→Haiku), move onto your own hardware without getting dumber (Opus-cloud → a ~35B model on your
+box), or go **open without coming home**: PublicAI hosts *fully open-source* models you don't run yourself —
+the cell that decouples openness from placement, and dodges the VRAM spill a 30B+ model hits on a small
+local card. And openness has its own ordering: **open-source ≻ open-weight** — Apertus (reproducible from
+data + recipe) sits past Llama (download-only). Adding a tier — a new open-model gateway, a different local
+backend — just widens the menu; it doesn't change the gravity.
+
 ## Why bother
 
 The frontier model is the bottleneck on axes that *don't* go away as token prices fall:

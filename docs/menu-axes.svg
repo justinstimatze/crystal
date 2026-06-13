@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 500" font-family="Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="860" height="500" fill="#ffffff"/>
+
+  <!-- title -->
+  <text x="44" y="30" font-size="17" font-weight="bold" fill="#1a1a1a">crystal's menu — three axes, one gravity</text>
+
+  <!-- gravity field: a broad, faint tendency, NOT a path through the points -->
+  <!-- gravity: a tendency, NOT a path. Set in the empty (cloud × deterministic) cell so it
+       reads as a direction field rather than a chain through the tiers. -->
+  <text x="158" y="336" font-size="11" font-weight="bold" fill="#2a9d8f">gravity</text>
+  <line x1="158" y1="346" x2="228" y2="382" stroke="#2a9d8f" stroke-width="3"/>
+  <polygon points="240,388 225.9,387 230.9,377.2" fill="#2a9d8f"/>
+  <text x="150" y="408" font-size="9" fill="#777">toward open, local, cheaper — at similar quality</text>
+
+  <!-- plot axes (thin, Tufte-minimal) -->
+  <line x1="120" y1="60" x2="120" y2="420" stroke="#bbbbbb" stroke-width="1.5"/>
+  <line x1="120" y1="420" x2="560" y2="420" stroke="#bbbbbb" stroke-width="1.5"/>
+
+  <!-- Y-AXIS LABEL (executor) — title + endpoints, all OUTSIDE the axis (left) -->
+  <text x="115" y="74"  font-size="10.5" fill="#888" font-style="italic" text-anchor="end">intelligent</text>
+  <text x="115" y="416" font-size="10.5" fill="#888" font-style="italic" text-anchor="end">deterministic</text>
+  <text x="22" y="240" font-size="12.5" font-weight="bold" fill="#333"
+        text-anchor="middle" transform="rotate(-90 22 240)">EXECUTOR · who does the work ↓</text>
+
+  <!-- x-axis column labels (placement is self-evident from them) -->
+  <text x="175" y="442" font-size="10.5" fill="#666" text-anchor="middle">someone's cloud</text>
+  <text x="340" y="442" font-size="10.5" fill="#666" text-anchor="middle">public gateway</text>
+  <text x="500" y="442" font-size="10.5" fill="#666" text-anchor="middle">your machine</text>
+
+  <!-- points: (placement x) × (executor y); fill = openness -->
+  <!-- Opus -->
+  <circle cx="175" cy="92"  r="8" fill="#c1352e"/>
+  <text x="189" y="89"  font-size="12" fill="#1a1a1a">Opus</text>
+  <text x="189" y="103" font-size="10" fill="#777" font-style="italic">frontier · proprietary</text>
+  <!-- Haiku -->
+  <circle cx="175" cy="152" r="8" fill="#c1352e"/>
+  <text x="189" y="149" font-size="12" fill="#1a1a1a">Haiku</text>
+  <text x="189" y="163" font-size="10" fill="#777" font-style="italic">cheaper · proprietary</text>
+  <!-- PublicAI: open-SOURCE, hosted -->
+  <circle cx="340" cy="232" r="8" fill="#2a9d8f"/>
+  <text x="354" y="229" font-size="12" fill="#1a1a1a">Apertus · OLMo</text>
+  <text x="354" y="243" font-size="10" fill="#777" font-style="italic">public gateway · open-source</text>
+  <!-- local model: open-WEIGHT -->
+  <circle cx="500" cy="304" r="8" fill="#d98c3f"/>
+  <text x="514" y="301" font-size="12" fill="#1a1a1a">local model</text>
+  <text x="514" y="315" font-size="10" fill="#777" font-style="italic">your hardware · open-weight</text>
+  <!-- deterministic code -->
+  <circle cx="500" cy="392" r="8" fill="#356fb0"/>
+  <text x="514" y="389" font-size="12" fill="#1a1a1a">code</text>
+  <text x="514" y="403" font-size="10" fill="#777" font-style="italic">this machine · exact, reproducible</text>
+
+  <!-- openness legend (the color channel) -->
+  <text x="610" y="80" font-size="11" font-weight="bold" fill="#444">openness (color) →</text>
+  <rect x="610" y="92"  width="12" height="12" fill="#c1352e"/>
+  <text x="628" y="102" font-size="11" fill="#333">proprietary · Opus, Haiku</text>
+  <rect x="610" y="114" width="12" height="12" fill="#d98c3f"/>
+  <text x="628" y="124" font-size="11" fill="#333">open-weight · Qwen, Llama</text>
+  <rect x="610" y="136" width="12" height="12" fill="#2a9d8f"/>
+  <text x="628" y="146" font-size="11" fill="#333">open-source · Apertus, OLMo</text>
+  <rect x="610" y="158" width="12" height="12" fill="#356fb0"/>
+  <text x="628" y="168" font-size="11" fill="#333">just code</text>
+  <text x="610" y="192" font-size="9.5" fill="#888">open-source = weights + data + recipe;</text>
+  <text x="610" y="205" font-size="9.5" fill="#888">open-weight = download-and-run only.</text>
+</svg>
