@@ -14,6 +14,7 @@ type CLI struct {
 	Extract       ExtractCmd       `cmd:"" help:"Walk Claude Code transcripts into a redacted, per-tool-balanced Record corpus."`
 	SynthCorpus   SynthCorpusCmd   `cmd:"" name:"synth-corpus" help:"Generate the committed test corpus deterministically with invented, schema-faithful content (no real transcripts) — what ships in the public repo so the eval gate runs in CI without leaking. Real-record replay is local-only via extract."`
 	Eval          EvalCmd          `cmd:"" help:"Replay a synthetic artifact over a corpus and print per-tool fidelity reports."`
+	Bench         BenchCmd         `cmd:"" help:"The single citable quantitative report: verifier-gate integrity (sensitivity/specificity/determinism) over the committed corpus — key-free, reproducible by anyone — plus the executor × placement × openness menu with each tier's reproducibility class. The number a skeptic asks for, in one command."`
 	Measure       MeasureCmd       `cmd:"" help:"Sweep signature granularities over the full substrate to find crystallizable (frequent AND deterministic) patterns."`
 	Drift         DriftCmd         `cmd:"" help:"Temporal-replay drift experiment: promote a modal hook on a pattern's early occurrences, stream the rest, report demotion and silent-wrong leakage."`
 	Crystallize   CrystallizeCmd   `cmd:"" help:"Full lifecycle on one pattern: discover → propose → promote-gate → serve → drift-monitor → demote; emits a redacted deployable artifact."`
