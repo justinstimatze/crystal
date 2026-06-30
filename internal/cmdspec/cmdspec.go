@@ -59,14 +59,47 @@ func (c CmdSpec) HasSlice() bool {
 // scalar-flag commands was never shown.
 func (c CmdSpec) Irregular() bool { return c.HasEnum() || c.HasSlice() }
 
+// Commandish reports whether a struct has the STRUCTURAL fingerprint of a kong
+// command — ≥2 fields, at least half carrying a `help:` tag — independent of its
+// name. This is what makes discovery genuine: it finds a help-tagged command
+// not named "*Cmd", and rejects an unexported helper that happens to be (a
+// struct of bare fields with no help tags is not a command, whatever it's
+// called).
+func (c CmdSpec) Commandish() bool {
+	if len(c.Fields) < 2 {
+		return false
+	}
+	helped := 0
+	for _, f := range c.Fields {
+		if f.Help != "" {
+			helped++
+		}
+	}
+	return helped*2 >= len(c.Fields)
+}
+
 // Verb returns the kong CLI verb derived from the struct name (camel→kebab of
 // the name minus the trailing "Cmd").
 func (c CmdSpec) Verb() string { return Kebab(strings.TrimSuffix(c.Name, "Cmd")) }
 
 // Parse reads every *.go file in dir and returns a spec for each
-// `type XCmd struct { ... }` (excluding the root CLI struct). Fields with an
-// unsupported type are skipped (recorded by absence, never silently coerced).
+// `type XCmd struct { ... }` (exported, "Cmd"-suffixed; skips unexported helpers
+// like `labeledCmd` that share the suffix). Fields with an unsupported type are
+// skipped (recorded by absence, never silently coerced). For discovery that does
+// NOT presume the naming convention, use ParseAll + CmdSpec.Commandish.
 func Parse(dir string) ([]CmdSpec, error) {
+	return parseStructs(dir, func(name string) bool {
+		return strings.HasSuffix(name, "Cmd") && ast.IsExported(name)
+	})
+}
+
+// ParseAll returns a spec for EVERY struct in dir, regardless of name — the
+// corpus discovery scans to find the recurring command shape structurally.
+func ParseAll(dir string) ([]CmdSpec, error) {
+	return parseStructs(dir, func(string) bool { return true })
+}
+
+func parseStructs(dir string, keep func(name string) bool) ([]CmdSpec, error) {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return nil, err
@@ -88,9 +121,7 @@ func Parse(dir string) ([]CmdSpec, error) {
 			}
 			for _, spec := range gd.Specs {
 				ts, ok := spec.(*ast.TypeSpec)
-				// Exported `XCmd` structs only — skips unexported helpers like
-				// `labeledCmd` that happen to share the suffix.
-				if !ok || !strings.HasSuffix(ts.Name.Name, "Cmd") || !ast.IsExported(ts.Name.Name) {
+				if !ok || !keep(ts.Name.Name) {
 					continue
 				}
 				st, ok := ts.Type.(*ast.StructType)

@@ -13,6 +13,7 @@ import (
 
 	"github.com/justinstimatze/crystal/internal/cmdspec"
 	"github.com/justinstimatze/crystal/internal/cmdverify"
+	"github.com/justinstimatze/crystal/internal/discover"
 	"github.com/justinstimatze/crystal/internal/flow"
 	"github.com/justinstimatze/crystal/internal/llm"
 )
@@ -54,15 +55,23 @@ type DogfoodCmd struct {
 }
 
 func (c *DogfoodCmd) Run() error {
-	specs, err := cmdspec.Parse(c.Corpus)
+	// DISCOVER first: find the recurring command shape by structure rather than
+	// being told the naming convention (the watch-don't-ask front half).
+	all, err := cmdspec.ParseAll(c.Corpus)
 	if err != nil {
-		return usageError{fmt.Errorf("parse corpus %s: %w", c.Corpus, err)}
+		return usageError{fmt.Errorf("scan corpus %s: %w", c.Corpus, err)}
+	}
+	disc := discover.Scan(all, 5)
+	if !disc.Candidate {
+		return usageError{fmt.Errorf("no recurring command shape in %s (dominant recurs %d) — nothing to crystallize", c.Corpus, disc.Dominant.Recurrence())}
 	}
 	// The harness's own commands are not part of the chore being crystallized.
-	specs = drop(specs, "DogfoodCmd", "DemoCmd")
+	specs := drop(disc.Dominant.Members, "DogfoodCmd", "DemoCmd")
 	if len(specs) < c.FirstK+2 {
-		return usageError{fmt.Errorf("parsed %d commands; need ≥ first-k+2 = %d", len(specs), c.FirstK+2)}
+		return usageError{fmt.Errorf("discovered %d commands; need ≥ first-k+2 = %d", len(specs), c.FirstK+2)}
 	}
+	fmt.Printf("discovered the recurring chore: %q × %d (coverage %.0f%%), by structure not name\n",
+		disc.Dominant.Signature, disc.Dominant.Recurrence(), disc.Coverage*100)
 
 	var regular, irregular []cmdspec.CmdSpec
 	for _, s := range specs {
