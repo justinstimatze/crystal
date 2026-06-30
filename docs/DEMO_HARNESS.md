@@ -39,6 +39,36 @@ re-promote. The harness is mostly *rewiring existing components onto a new
 chore*, not new mechanism. (Generalising to OpenAPI-client or codemod targets
 is a later phase; the loop is identical, only the unit renderer changes.)
 
+## The codegen artifact wants to be an accreted DSL (notation + compiler)
+
+The harness has the expensive tier author a Go `text/template` from worked
+examples — a bespoke, one-domain "spec → code" expander, gated by a gofmt
+golden. That template is a *baby compiler*; `goldenOf` / `emitStruct` is its
+hand-rolled stand-in. The grown-up form of this artifact is a **discovered
+dense notation + a deterministic compiler** (the DNF / "dense notation format"
+shape): the LLM reads and writes only the compact notation, and a zero-model
+compiler expands it to the artifact, which is never touched by hand.
+
+This is the right long-term artifact for crystal's codegen tier because the
+notation is the one representation that **survives the trip down the executor
+axis**: a frontier model authors it, a weaker model can still edit the smaller
+surface, and the compiler needs no model at all — domain knowledge lives in
+*notation + compiler*, not in weights, so it is model-agnostic by construction.
+That is exactly the "concisely communicate the shape of things, portable across
+model-complexity regimes" property, and it is the same invariant as a hard,
+typed, deterministic up-channel (g→1) the grounding experiments found is the
+only channel that survives.
+
+The division of labor is clean and worth stating: **crystal owns the loop**
+(when to crystallize, the gate, demote-on-drift); **the DSL owns the artifact**
+(the portable notation+compiler that gets crystallized). They compound on
+different cost axes — crystal deletes the model *call* on the served fraction;
+a dense notation shrinks the *tokens-per-edit* of the call that remains. The
+boundary holds: a notation only carries the "boring lego-brick" domains a
+compiler can express; the judgment residual stays on the frontier. Wiring a
+real accreted DSL in place of the per-domain template (behind the same gate) is
+a deliberate later step, not part of the minimal cut.
+
 ## The loop (state machine)
 
 Per unit, in order:
