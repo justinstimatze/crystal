@@ -138,3 +138,22 @@ README cites. Every meme drop is a shift-left: a matched library artifact serves
 instead of the frontier generating fresh humor, gated by fit + cooldown. The
 metadata maps 1:1 to crystal's gate discipline; "wrong meme is worse than no meme"
 is "no verifier, no crystallization" at the serve layer.
+
+### The serve tier now has an Authorer (watch→author closed)
+
+The library was hand-seeded; `crystal sweep --emit-library` closes the
+watch→author half — the serve-layer twin of `--emit-dispatch`. A discovered
+constraint (re-encoded across N projects, deterministic) is authored by Opus into
+a candidate `library.Entry` (recipe artifact + `match`/`avoid`/`deploy_when`
+metadata), then gated by `library.GateEntry` (deterministic, no serve): the entry
+must SERVE on its realistic positives, ABSTAIN via the too-much guard where it
+should hold back, and NEVER serve on a standing benign-context set. A passing
+entry is PROPOSED to `.crystal-proposals/`, never auto-added.
+
+The gate is not ceremonial — on the first live run it rejected three *distinct*
+real authoring defects (description-positives the keyword matcher can't fire on;
+discovery evidence folded in as positives, embedding the remediation language an
+Avoid token guards on; generic-scope `avoid` tokens that suppress the entry's own
+positives) before passing. The gated, model-authored decision is the *triggering*;
+the recipe *body* is the fuzzy residual the serve-time abstain-over-wrong
+discipline bounds. See `docs/NEXT.md`.

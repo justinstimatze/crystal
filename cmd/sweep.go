@@ -42,6 +42,7 @@ type SweepCmd struct {
 	Model        string `help:"Authoring model (the expensive tier)." default:"claude-opus-4-8"`
 	EmitStull    bool   `help:"Constraints: (deferred) crystallize the top constraint as a provably-sound stull machine. The stull formal-proof backend is not yet public; this path explains the seam and points at --emit-dispatch. See docs/ROADMAP.md."`
 	EmitDispatch bool   `help:"Constraints: author + GATE a data-driven regex matcher for the top NEW constraint and emit a crystal dispatch-library rule (stateless block-every-time serve). The crystal-native complement to --emit-stull."`
+	EmitLibrary  bool   `help:"Constraints: author + GATE a serve-library ENTRY (recipe artifact + groupchat-style match/avoid/deploy-when metadata) for the top constraint and emit it as a proposal. Closes the watch->author half of the serve tier; the entry's triggering is gated behaviorally (serve on evidence, abstain-too-much where it should hold back, never serve on benign contexts)."`
 }
 
 // commandPrefix maps the user-Documents path prefix so a memory's encoded dir name
@@ -134,6 +135,17 @@ func (c *SweepCmd) Run() error {
 			}
 		}
 		return usageError{fmt.Errorf("every constraint ≥--min-projects is already covered by a registry matcher; nothing new to author")}
+	}
+
+	// --emit-library: author + gate a serve-library ENTRY for the top constraint,
+	// drawing evidence from every project's rule line for that signature.
+	if c.EmitLibrary {
+		if len(ranked) == 0 {
+			return usageError{fmt.Errorf("no constraint reached --min-projects=%d to emit", c.MinProjects)}
+		}
+		top := ranked[0]
+		evidence := evidenceFor(occ, top.signature)
+		return c.emitLibraryEntry(top.signature, top.example, evidence)
 	}
 
 	covered := librarySignatures()
@@ -295,6 +307,31 @@ func librarySignatures() map[string]bool {
 		}
 	}
 	return cov
+}
+
+// evidenceFor gathers up to a handful of distinct rule lines for one signature
+// (one per project where possible) — the cross-project evidence an authored
+// entry is minted from and gated against.
+func evidenceFor(occ []ruleOccurrence, signature string) []string {
+	seenProject := map[string]bool{}
+	seenLine := map[string]bool{}
+	var out []string
+	for _, o := range occ {
+		if o.signature != signature || seenProject[o.project] {
+			continue
+		}
+		line := strings.TrimSpace(o.example)
+		if line == "" || seenLine[line] {
+			continue
+		}
+		seenProject[o.project] = true
+		seenLine[line] = true
+		out = append(out, line)
+		if len(out) >= 6 {
+			break
+		}
+	}
+	return out
 }
 
 func projectFromEncoded(encoded string) string {
