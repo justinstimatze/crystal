@@ -1,0 +1,52 @@
+{
+  "entries": [
+    {
+      "name": "guard-git-add-all",
+      "rung": "code",
+      "deploy_when": "an indiscriminate git staging command (git add -A / . / --all)",
+      "too_much_if": "the user explicitly asked to stage everything this once",
+      "mechanism": "indiscriminate staging sweeps in secrets and junk; explicit paths are safer",
+      "key": "git add with -A / . / --all rather than named paths",
+      "match": ["git", "add", "-a", "--all"],
+      "avoid": ["explicit", "intentional"],
+      "artifact": "deny — stage explicit paths instead, e.g. `git add file1 file2`",
+      "min_conf": 0.5
+    },
+    {
+      "name": "entity-to-go-struct",
+      "rung": "code",
+      "deploy_when": "generate a Go struct type from an entity spec with named fields",
+      "too_much_if": "the entity needs methods or embedding the template can't express",
+      "mechanism": "the deterministic template renders the struct exactly; json tags when a field carries one",
+      "key": "entity + fields -> a Go `type X struct` declaration",
+      "match": ["entity", "struct", "field", "go", "type"],
+      "avoid": ["method", "interface", "embed"],
+      "artifact": "render `type <Name> struct { <Field> <Type> [json tag] ... }` via the template",
+      "min_conf": 0.4
+    },
+    {
+      "name": "categorize-bash-command",
+      "rung": "recipe",
+      "deploy_when": "classify a shell command into a category (git/build/search/...)",
+      "too_much_if": "the command is a novel class the rule table has never seen",
+      "mechanism": "a deterministic rule table covers the common classes; the residual goes to a model",
+      "key": "a single shell command needing a category label",
+      "match": ["classify", "categorize", "shell", "command", "category", "bash"],
+      "avoid": [],
+      "artifact": "apply the rule table per &&/;-segment; first real action beats a leading cd",
+      "min_conf": 0.4
+    },
+    {
+      "name": "verify-quote-against-source",
+      "rung": "recipe",
+      "deploy_when": "check that a quoted passage actually appears in its cited source",
+      "too_much_if": "the claim is a paraphrase, not a verbatim quote (no exact match to gate on)",
+      "mechanism": "fetch the source, byte-match the quote — the operational gate for source-backed facts",
+      "key": "a verbatim quote with a citable source to confirm",
+      "match": ["quote", "verify", "source", "citation", "verbatim", "fetch"],
+      "avoid": ["paraphrase", "summary"],
+      "artifact": "fetch source; normalize whitespace; assert the quote is a substring; else FLAG",
+      "min_conf": 0.4
+    }
+  ]
+}
