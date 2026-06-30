@@ -1,0 +1,17 @@
+{
+  "domain": "go-struct",
+  "units": [
+    { "name": "User",     "fields": [ {"name":"ID","type":"int"}, {"name":"Name","type":"string"} ] },
+    { "name": "Product",  "fields": [ {"name":"ID","type":"int"}, {"name":"Title","type":"string"}, {"name":"Price","type":"float64"} ] },
+    { "name": "Order",    "fields": [ {"name":"ID","type":"int"}, {"name":"Total","type":"float64"} ] },
+    { "name": "Customer", "fields": [ {"name":"ID","type":"int"}, {"name":"Email","type":"string"}, {"name":"Active","type":"bool"} ] },
+    { "name": "Invoice",  "fields": [ {"name":"ID","type":"int"}, {"name":"Amount","type":"float64"}, {"name":"Paid","type":"bool"} ] },
+    { "name": "Address",  "fields": [ {"name":"Street","type":"string"}, {"name":"City","type":"string"}, {"name":"Zip","type":"string"} ] },
+    { "name": "Category", "fields": [ {"name":"ID","type":"int"}, {"name":"Label","type":"string"} ] },
+    { "name": "Label",    "fields": [ {"name":"ID","type":"int"}, {"name":"Slug","type":"string"} ] },
+    { "name": "Session",  "drift": true, "fields": [ {"name":"ID","type":"int"}, {"name":"Token","type":"string","tag":"token"}, {"name":"UserID","type":"int","tag":"user_id"} ] },
+    { "name": "ApiKey",   "drift": true, "fields": [ {"name":"ID","type":"int"}, {"name":"Key","type":"string","tag":"key"}, {"name":"Scope","type":"string","tag":"scope"} ] },
+    { "name": "Region",   "fields": [ {"name":"ID","type":"int"}, {"name":"Code","type":"string"} ] },
+    { "name": "Currency", "fields": [ {"name":"Code","type":"string"}, {"name":"Symbol","type":"string"} ] }
+  ]
+}
