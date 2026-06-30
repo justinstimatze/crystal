@@ -42,3 +42,6 @@ RESUME.md
 .codex/
 .defn/
 .mcp.json
+
+# dogfood harness throwaway build tree
+.dogfood-scratch/
