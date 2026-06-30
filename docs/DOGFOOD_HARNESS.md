@@ -1,6 +1,22 @@
-# Dogfood harness — crystal crystallizes crystal's own boilerplate (spec)
+# Dogfood harness — crystal crystallizes crystal's own boilerplate
 
-Status: **spec, not built.** This is the next pudding after `DEMO_HARNESS.md`:
+Status: **BUILT** (`crystal dogfood`; `cmd/dogfood.go` + `internal/cmdspec` +
+`internal/cmdverify`). Runs live (Opus authors the generator) and `--offline`
+(deterministic stub); the build/register/contract verifier is real in both.
+
+**Measured result (31 commands in `cmd/`):** build+register are nearly *vacuous*
+on kong tags — they pass an enum-stripped scaffold cleanly; only the behavioral
+contract (an off-list value must be rejected) catches the dropped enum →
+demote → re-author → recover. So the verifier *had* to be behavioral, which is
+the framing's core claim, measured on real code. The enum drop is **fundamental**
+(a struct tag absent from every example — missed by both the crude stub and
+Opus); the slice "leak" is **generator-dependent** (the stub renders `[]string`
+as a scalar and slips past a presence contract — the measured `g<1` boundary;
+Opus renders `.Type` verbatim and closes it). The run also surfaced and fixed two
+bugs in the parser/verifier themselves (unexported `XCmd` helpers; a kong
+acronym-kebab mismatch). The original design follows.
+
+This is the next pudding after `DEMO_HARNESS.md`:
 take the apportionment-shift loop off the toy domain (12 synthetic struct units)
 and point it at a **real, non-trivial, recurring codegen chore in this repo**,
 run live, and report whether the verifier catches a **real** generalization
