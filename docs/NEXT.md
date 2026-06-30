@@ -9,11 +9,13 @@ README vision, not by ease. Items move; this file is meant to be rewritten.
    half of the serve tier. *(BUILT — `crystal sweep --emit-library`; see below.)*
    Was the top gap: the library was hand-seeded, which made the "ambient, no
    asking" claim hollow at the serve layer.
-2. **Give the crystallized artifact a real schema.** The `recipe`/`pseudocode`
-   rungs are prose strings today. Promote them to a declarative, inspectable,
-   diffable object (the dense/DNF thread) so a recipe is *portable across
-   executors* instead of a blob Opus emits and a weak model parses ad hoc. This
-   is what lets recipes be versioned, linted, and gated the way code is.
+2. **Give the crystallized artifact a real schema.** *(BUILT — `internal/recipe`
+   + `crystal recipe`; `docs/RECIPE_SCHEMA.md`.)* The rungs are now a typed,
+   diffable, lint-able object (rung × executor × verifier × narrow-waist
+   inputs/output + residual), with the rung↔executor coupling enforced and a
+   degrees-of-freedom metric. Designed against Odendahl's generalization-shaping
+   framing; cites his two essays. The same entity→struct task ships authored at
+   four rungs to show one chore descending the ladder.
 3. **Transfer harness on a real code-change chore, plancheck-gating the `plan`
    rung.** The measured `plan` rung scored *worse* than no recipe (43% vs 57%)
    because it was ungated. Test directly: does a plancheck-verified plan beat the

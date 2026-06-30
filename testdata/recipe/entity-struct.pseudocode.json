@@ -1,0 +1,14 @@
+{
+  "name": "entity-to-struct-pseudocode",
+  "rung": "pseudocode",
+  "intent": "entity spec → Go struct declaration",
+  "inputs": [
+    {"name": "name", "type": "string"},
+    {"name": "fields", "type": "list"}
+  ],
+  "output": {"name": "decl", "type": "string"},
+  "body": "emit('type '+name+' struct {')\nfor f in fields:\n  line = '\\t'+f.name+' '+f.type\n  if f.tag: line += ' `json:\"'+f.tag+'\"`'\n  emit(line)\nemit('}')\nreturn gofmt(buffer)",
+  "executor": "local-open",
+  "verifier": "gofmt",
+  "residual": "near-zero — a local open-weight model transcribes the pseudocode to its host language"
+}

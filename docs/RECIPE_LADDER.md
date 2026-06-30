@@ -25,6 +25,15 @@ pseudocode            ← near-mechanical; a very weak / local-open model
 real code             ← deterministic; NO model (the code tier)
 ```
 
+The rungs are now a typed object, not a prose label — see `docs/RECIPE_SCHEMA.md`
+(`internal/recipe`, `crystal recipe`). The ladder maps directly onto Odendahl's
+five rungs in [*Tool use and notation as shaping LLM generalization*](https://the.scapegoat.dev/tool-use-and-notation-as-generalization-shaping/):
+his Unshaped → Representation-shaping → Tool-decomposition → DSL-compression →
+Programmable-actuator is the same descent by *actuator expressivity*, and his
+"maximize actuator expressivity while minimizing model burden" is exactly the
+rung↔executor coupling the schema lint enforces. The transfer fraction below is
+the *measurement* of that descent.
+
 ## The load-bearing claim
 
 Recipe-specificity sets the EXECUTOR FLOOR. How specific Opus makes the artifact

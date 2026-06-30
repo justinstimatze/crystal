@@ -1,0 +1,14 @@
+{
+  "name": "entity-to-struct-code",
+  "rung": "code",
+  "intent": "entity spec → Go struct declaration",
+  "inputs": [
+    {"name": "name", "type": "string"},
+    {"name": "fields", "type": "list"}
+  ],
+  "output": {"name": "decl", "type": "string"},
+  "body": "func render(name string, fields []Field) string {\n\tvar b strings.Builder\n\tfmt.Fprintf(&b, \"type %s struct {\\n\", name)\n\tfor _, f := range fields {\n\t\tfmt.Fprintf(&b, \"\\t%s %s\", f.Name, f.Type)\n\t\tif f.Tag != \"\" {\n\t\t\tfmt.Fprintf(&b, \" `json:%q`\", f.Tag)\n\t\t}\n\t\tb.WriteByte('\\n')\n\t}\n\tb.WriteString(\"}\\n\")\n\treturn gofmt(b.String())\n}",
+  "executor": "none",
+  "verifier": "gofmt",
+  "residual": "none — deterministic; no model at run time"
+}

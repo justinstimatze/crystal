@@ -1,0 +1,14 @@
+{
+  "name": "entity-to-struct-plan",
+  "rung": "plan",
+  "intent": "entity spec → Go struct declaration",
+  "inputs": [
+    {"name": "name", "type": "string", "desc": "the struct's type name"},
+    {"name": "fields", "type": "list", "desc": "named fields with a Go type and optional json tag"}
+  ],
+  "output": {"name": "decl", "type": "string", "desc": "a `type X struct { ... }` declaration"},
+  "body": "Write an idiomatic Go struct for the entity. Name it after the entity; give each field its Go type; add a json tag when the field carries one. Keep it gofmt-clean.",
+  "executor": "opus",
+  "verifier": "plancheck",
+  "residual": "all of it — the model decides field types, ordering, tags, and naming from prose"
+}

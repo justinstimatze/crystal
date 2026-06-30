@@ -1,0 +1,13 @@
+{
+  "name": "broken-code-with-model-and-loose-input",
+  "rung": "code",
+  "intent": "demonstrate the lint biting: a code rung that still needs a model, gated by a judge, with a {query: any} interface",
+  "inputs": [
+    {"name": "query", "type": "any"}
+  ],
+  "output": {"name": "result", "type": "json"},
+  "body": "ask the model to figure it out",
+  "executor": "haiku",
+  "verifier": "judge",
+  "residual": "everything — which is why calling this a code rung is a lie the schema should catch"
+}

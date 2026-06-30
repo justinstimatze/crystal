@@ -1,0 +1,14 @@
+{
+  "name": "entity-to-struct-recipe",
+  "rung": "recipe",
+  "intent": "entity spec → Go struct declaration",
+  "inputs": [
+    {"name": "name", "type": "string"},
+    {"name": "fields", "type": "list"}
+  ],
+  "output": {"name": "decl", "type": "string"},
+  "body": "1. Emit `type <Name> struct {`. 2. For each field, emit `\\t<Field> <Type>` and, if the field has a tag, append ` `+\"`json:\\\"<tag>\\\"`\". 3. Emit `}`. 4. Run the result through gofmt.",
+  "executor": "haiku",
+  "verifier": "gofmt",
+  "residual": "transcribing each field's name/type/tag into the template slots — no design judgment left"
+}
