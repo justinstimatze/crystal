@@ -69,6 +69,45 @@ compiler can express; the judgment residual stays on the frontier. Wiring a
 real accreted DSL in place of the per-domain template (behind the same gate) is
 a deliberate later step, not part of the minimal cut.
 
+### Why this is the shape (the theoretical spine)
+
+Three older ideas say why a typed notation — not prose — is what moves cleanly
+up and down the staircase. They are the spine under the "schema for things that
+move across executor tiers" framing.
+
+1. **Isomorphism, not resemblance (the picture theory of meaning).** A
+   representation means the same thing across executors only if it shares the
+   *operative* structure of what it represents — formally, the notation→artifact
+   mapping is a structure-preserving function. The failure mode is cargo-cult
+   notation: something with the surface-shape of the domain that does not share
+   the structure that *computes*. This is the test for what belongs in the
+   schema versus what escapes to raw code (the `§` hatch): operative structure
+   goes in the notation; cosmetic structure is decoration.
+
+2. **Scale separation is what licenses the staircase at all.** You can treat
+   "what to build" (the schema) separately from "who builds it" (the executor)
+   only if the schema's meaning changes slowly relative to the executor binding
+   — i.e. only if the meaning does *not* depend on which tier reads it. Prose
+   fails this (each model reads it differently — the per-tier drift the grounding
+   hops measured); a typed notation buys the separation. Typing is not
+   decoration here; it is the precondition that makes the tiers swappable.
+
+3. **A structural match needs a valence guard.** Matching the schema's *shape*
+   is not enough — a cheaper executor can satisfy the signature and still
+   produce the wrong artifact (the signature-vs-contract gap). The verifier is
+   the valence guard: it certifies the *right* output, not merely a same-shaped
+   one. And it must be *operational*, not descriptive — a check two parties
+   would agree on (a gofmt golden, an exact comparator), never a prose judge
+   whose verdict drifts. This is the formal content of *no verifier, no
+   crystallization*: an unverifiable block is never silently swapped down.
+
+Read together: the unit is an isomorphism-bearing typed schema (1) whose typing
+buys executor-independent meaning (2), gated by an operational verifier (3).
+Everything expressible that way is the crystallizable fraction; everything that
+resists the typing is, by construction, the frontier residual — the design
+isolates the fuzzy edges rather than pretending the whole staircase is clean
+functions.
+
 ## The loop (state machine)
 
 Per unit, in order:
