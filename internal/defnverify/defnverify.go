@@ -17,20 +17,35 @@
 package defnverify
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"os/exec"
 	"strings"
 )
 
-// Impact is the parsed `defn impact <name>` result.
+// Impact is the parsed `defn impact --json <name>` result.
 type Impact struct {
-	Name    string
-	Module  string   // import path of the definition's package
-	Tests   []string // covering test names
-	Covered int      // len(Tests) — the Confidence signal
-	Callers int      // direct callers — the blast-radius signal (low = safer to swap)
+	Name        string
+	Module      string   // import path of the definition's package
+	SourceFile  string   // repo-relative file the definition lives in (defn knows it)
+	Tests       []string // covering test names
+	Covered     int      // len(Tests) — the Confidence signal
+	Callers     int      // direct callers — count
+	BlastRadius string   // low | medium | high — defn's categorical Selector signal
+}
+
+// impactJSON mirrors `defn impact --json` (the robust interface, vs scraping text).
+type impactJSON struct {
+	BlastRadius string `json:"blast_radius"`
+	Definition  struct {
+		Name       string `json:"name"`
+		SourceFile string `json:"source_file"`
+	} `json:"definition"`
+	DirectCallers []struct{} `json:"direct_callers"`
+	Module        string     `json:"module"`
+	Tests         []struct {
+		Name string `json:"name"`
+	} `json:"tests"`
 }
 
 // Verdict gates one definition.
@@ -118,42 +133,39 @@ func Untested() (count int, err error) {
 	return 0, nil
 }
 
-// ImpactOf runs `defn impact <name>` and parses coverage + covering tests.
+// ImpactOf runs `defn impact --json <name>` and parses the structured result.
+// The --json flag must precede the name.
 func ImpactOf(name string) (Impact, error) {
-	out, err := run("defn", "impact", name)
+	out, err := run("defn", "impact", "--json", name)
 	if err != nil {
 		return Impact{}, err
 	}
-	return parseImpact(name, out), nil
+	return parseImpactJSON(name, out)
 }
 
-// parseImpact extracts coverage + covering tests from `defn impact` output. Split
-// out from ImpactOf so the fragile shell-output parsing is CI-testable without
-// invoking defn.
-func parseImpact(name, out string) Impact {
-	imp := Impact{Name: name}
-	sc := bufio.NewScanner(strings.NewReader(out))
-	inTests := false
-	for sc.Scan() {
-		line := sc.Text()
-		t := strings.TrimSpace(line)
-		switch {
-		case strings.HasPrefix(t, "module:"):
-			imp.Module = strings.TrimSpace(strings.TrimPrefix(t, "module:"))
-		case strings.HasPrefix(t, "direct callers:"):
-			fmt.Sscanf(t, "direct callers: %d", &imp.Callers)
-		case strings.HasPrefix(t, "tests covering this:"):
-			fmt.Sscanf(t, "tests covering this: %d", &imp.Covered)
-			inTests = true
-		case inTests:
-			if t == "" || strings.HasPrefix(t, "(none") || !strings.HasPrefix(t, "Test") {
-				inTests = false
-				continue
-			}
-			imp.Tests = append(imp.Tests, t)
-		}
+// parseImpactJSON maps `defn impact --json` to an Impact. Split out so it is
+// CI-testable without invoking defn.
+func parseImpactJSON(name, out string) (Impact, error) {
+	i := strings.Index(out, "{") // skip the "defn: using embedded .defn/" preamble
+	if i < 0 {
+		return Impact{}, fmt.Errorf("no JSON in defn impact output for %q", name)
 	}
-	return imp
+	var j impactJSON
+	if err := json.Unmarshal([]byte(out[i:]), &j); err != nil {
+		return Impact{}, fmt.Errorf("decode defn impact JSON: %w", err)
+	}
+	imp := Impact{
+		Name:        name,
+		Module:      j.Module,
+		SourceFile:  j.Definition.SourceFile,
+		Callers:     len(j.DirectCallers),
+		BlastRadius: j.BlastRadius,
+	}
+	for _, t := range j.Tests {
+		imp.Tests = append(imp.Tests, t.Name)
+	}
+	imp.Covered = len(imp.Tests)
+	return imp, nil
 }
 
 // Verify gates a definition: Confidence = coverage; if verifiable, run the

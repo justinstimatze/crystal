@@ -28,11 +28,16 @@ func TestLazyWrong(t *testing.T) {
 	}
 }
 
-func TestRepoRel(t *testing.T) {
-	if got := repoRel("github.com/justinstimatze/crystal/internal/cmdspec"); got != "internal/cmdspec" {
-		t.Errorf("repoRel = %q", got)
+func TestLocate(t *testing.T) {
+	// Locate reads a single file directly (defn's source_file).
+	info, err := Locate("../cmdspec/cmdspec.go", "Kebab")
+	if err != nil {
+		t.Fatalf("locate Kebab: %v", err)
 	}
-	if got := repoRel("github.com/justinstimatze/crystal"); got != "." {
-		t.Errorf("root module repoRel = %q", got)
+	if info.Param0 != "s" || !info.RetParam0 {
+		t.Errorf("Kebab is string->string: Param0=%q RetParam0=%v", info.Param0, info.RetParam0)
+	}
+	if info.LazyWrong() != "func Kebab(s string) string { return s }" {
+		t.Errorf("LazyWrong = %q", info.LazyWrong())
 	}
 }

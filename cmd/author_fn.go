@@ -47,13 +47,13 @@ func (c *AuthorFnCmd) Run() error {
 
 	// ---- SELECT ----
 	fmt.Println("=== select (defn impact) ===")
-	fmt.Printf("  %s — module %s\n", c.Name, imp.Module)
-	fmt.Printf("  Confidence (covering tests): %d   blast radius (direct callers): %d\n", imp.Covered, imp.Callers)
+	fmt.Printf("  %s — module %s (%s)\n", c.Name, imp.Module, imp.SourceFile)
+	fmt.Printf("  Confidence (covering tests): %d   blast radius: %s (%d direct callers)\n", imp.Covered, imp.BlastRadius, imp.Callers)
 	if imp.Covered == 0 {
 		fmt.Printf("\nDecision: REFUSE — %s has no covering tests; UNVERIFIABLE. crystal does not crystallize what it cannot gate.\n", c.Name)
 		return nil
 	}
-	info, err := sediment.Locate(imp.Module, c.Name)
+	info, err := sediment.Locate(imp.SourceFile, c.Name)
 	if err != nil {
 		return usageError{fmt.Errorf("locate %q: %w", c.Name, err)}
 	}

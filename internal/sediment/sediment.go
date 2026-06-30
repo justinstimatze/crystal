@@ -14,12 +14,8 @@ import (
 	"go/token"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 )
-
-// modulePrefix is the repo's module path; defn reports import paths under it.
-const modulePrefix = "github.com/justinstimatze/crystal/"
 
 // FuncInfo locates a plain (non-method) function's source span in its file.
 type FuncInfo struct {
@@ -33,61 +29,43 @@ type FuncInfo struct {
 	end       int    // byte offset of decl end in File
 }
 
-// repoRel maps a defn module import path to a repo-relative directory.
-func repoRel(module string) string {
-	if strings.HasPrefix(module, modulePrefix) {
-		return strings.TrimPrefix(module, modulePrefix)
-	}
-	return "." // root module
-}
-
-// Locate finds a plain function by name in the module's package directory.
-func Locate(module, name string) (FuncInfo, error) {
-	dir := repoRel(module)
-	entries, err := os.ReadDir(dir)
+// Locate finds a plain function by name in the given source file (defn's
+// impact reports source_file, so no directory scan is needed).
+func Locate(file, name string) (FuncInfo, error) {
+	src, err := os.ReadFile(file)
 	if err != nil {
 		return FuncInfo{}, err
 	}
 	fset := token.NewFileSet()
-	for _, e := range entries {
-		if e.IsDir() || !strings.HasSuffix(e.Name(), ".go") || strings.HasSuffix(e.Name(), "_test.go") {
-			continue
-		}
-		path := filepath.Join(dir, e.Name())
-		src, err := os.ReadFile(path)
-		if err != nil {
-			return FuncInfo{}, err
-		}
-		f, err := parser.ParseFile(fset, path, src, 0)
-		if err != nil {
-			continue
-		}
-		for _, decl := range f.Decls {
-			fd, ok := decl.(*ast.FuncDecl)
-			if !ok || fd.Recv != nil || fd.Name.Name != name || fd.Body == nil {
-				continue // plain functions only (methods are a later step)
-			}
-			start := fset.Position(fd.Pos()).Offset
-			end := fset.Position(fd.End()).Offset
-			bodyStart := fset.Position(fd.Body.Pos()).Offset
-			info := FuncInfo{
-				File: path, Name: name,
-				DeclSrc: string(src[start:end]),
-				Sig:     string(src[start:bodyStart]),
-				start:   start, end: end,
-			}
-			if fd.Type.Params != nil && len(fd.Type.Params.List) > 0 && len(fd.Type.Params.List[0].Names) > 0 {
-				info.Param0 = fd.Type.Params.List[0].Names[0].Name
-				if fd.Type.Results != nil && len(fd.Type.Results.List) == 1 {
-					p0 := identStr(fd.Type.Params.List[0].Type)
-					rt := identStr(fd.Type.Results.List[0].Type)
-					info.RetParam0 = p0 != "" && p0 == rt
-				}
-			}
-			return info, nil
-		}
+	f, err := parser.ParseFile(fset, file, src, 0)
+	if err != nil {
+		return FuncInfo{}, err
 	}
-	return FuncInfo{}, fmt.Errorf("plain function %q not found in %s", name, dir)
+	for _, decl := range f.Decls {
+		fd, ok := decl.(*ast.FuncDecl)
+		if !ok || fd.Recv != nil || fd.Name.Name != name || fd.Body == nil {
+			continue // plain functions only (methods are a later step)
+		}
+		start := fset.Position(fd.Pos()).Offset
+		end := fset.Position(fd.End()).Offset
+		bodyStart := fset.Position(fd.Body.Pos()).Offset
+		info := FuncInfo{
+			File: file, Name: name,
+			DeclSrc: string(src[start:end]),
+			Sig:     string(src[start:bodyStart]),
+			start:   start, end: end,
+		}
+		if fd.Type.Params != nil && len(fd.Type.Params.List) > 0 && len(fd.Type.Params.List[0].Names) > 0 {
+			info.Param0 = fd.Type.Params.List[0].Names[0].Name
+			if fd.Type.Results != nil && len(fd.Type.Results.List) == 1 {
+				p0 := identStr(fd.Type.Params.List[0].Type)
+				rt := identStr(fd.Type.Results.List[0].Type)
+				info.RetParam0 = p0 != "" && p0 == rt
+			}
+		}
+		return info, nil
+	}
+	return FuncInfo{}, fmt.Errorf("plain function %q not found in %s", name, file)
 }
 
 func identStr(e ast.Expr) string {
