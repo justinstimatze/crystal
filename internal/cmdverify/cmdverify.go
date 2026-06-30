@@ -26,11 +26,14 @@ import (
 	"strings"
 )
 
-// Contract is the optional behavioral probe for a command's shape class.
+// Contract is the optional behavioral probe for a command's shape class. The
+// build-probe verifier uses EnumFlag/NeedFlag; the test verifier additionally
+// uses SliceField (the Go field name) to assert binding cardinality.
 type Contract struct {
 	EnumFlag   string // kebab CLI flag that must reject OffListVal (exit != 0)
 	OffListVal string
 	NeedFlag   string // kebab CLI flag that must be accepted (exit == 0)
+	SliceField string // Go field name of the repeatable flag (test verifier: must bind 2 values)
 }
 
 // Verdict is the layered outcome. Contract is meaningful only if HasContract.
@@ -113,6 +116,42 @@ func Verify(scratchRoot, structName, field, verb, structSrc string, c *Contract)
 		}
 	}
 	return v, nil
+}
+
+// TestContract is the defn-`test` SHAPE implemented with raw `go test`: it
+// writes the generated struct plus a kong.New().Parse() test harness that
+// asserts the contract as a TEST (enum off-list → parse error; a repeatable flag
+// → binds 2 values), and runs `go test`. It is strictly stronger than the
+// binary-probe contract — the slice repetition-binding assertion catches a
+// []string rendered as a scalar string, which a flag-presence probe cannot see.
+// Returns (passed, detail, err). A non-compiling or failing test is `passed=false`,
+// never an error (a wrong scaffold is a finding, not a harness failure).
+func TestContract(scratchRoot, structName, field, verb, structSrc string, c *Contract) (bool, string, error) {
+	dir := filepath.Join(scratchRoot, verb+"-test")
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		return false, "", err
+	}
+	gen := fmt.Sprintf("package g\n\n%s\n\ntype Root struct {\n\t%s %s `cmd:\"\" name:%q help:\"g\"`\n}\n", structSrc, field, structName, verb)
+	if err := os.WriteFile(filepath.Join(dir, "gen.go"), []byte(gen), 0o644); err != nil {
+		return false, "", err
+	}
+	var body strings.Builder
+	if c.EnumFlag != "" {
+		fmt.Fprintf(&body, "\t{\n\t\tvar r Root\n\t\tk, err := kong.New(&r)\n\t\tif err != nil {\n\t\t\tt.Fatalf(\"kong.New: %%v\", err)\n\t\t}\n\t\tif _, perr := k.Parse([]string{%q, \"--%s\", %q}); perr == nil {\n\t\t\tt.Fatal(\"enum off-list value accepted (constraint dropped)\")\n\t\t}\n\t}\n", verb, c.EnumFlag, c.OffListVal)
+	}
+	if c.NeedFlag != "" && c.SliceField != "" {
+		fmt.Fprintf(&body, "\t{\n\t\tvar r Root\n\t\tk, err := kong.New(&r)\n\t\tif err != nil {\n\t\t\tt.Fatalf(\"kong.New: %%v\", err)\n\t\t}\n\t\tif _, perr := k.Parse([]string{%q, \"--%s\", \"a\", \"--%s\", \"b\"}); perr != nil {\n\t\t\tt.Fatalf(\"repeatable flag rejected: %%v\", perr)\n\t\t}\n\t\tif len(r.%s.%s) != 2 {\n\t\t\tt.Fatalf(\"flag did not bind 2 values (got %%d) — rendered as scalar, not a slice\", len(r.%s.%s))\n\t\t}\n\t}\n", verb, c.NeedFlag, c.NeedFlag, field, c.SliceField, field, c.SliceField)
+	}
+	test := "package g\n\nimport (\n\t\"testing\"\n\n\t\"github.com/alecthomas/kong\"\n)\n\nfunc TestContract(t *testing.T) {\n" + body.String() + "}\n"
+	if err := os.WriteFile(filepath.Join(dir, "gen_test.go"), []byte(test), 0o644); err != nil {
+		return false, "", err
+	}
+	cmd := exec.Command("go", "test", ".")
+	cmd.Dir = dir
+	if out, err := cmd.CombinedOutput(); err != nil {
+		return false, tail(string(out)), nil
+	}
+	return true, "", nil
 }
 
 // run executes the built binary with args and returns its exit code.

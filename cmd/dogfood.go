@@ -49,6 +49,7 @@ type DogfoodCmd struct {
 	Offline   bool   `help:"Synthesize the generator deterministically (no model). Default is live (Opus authors it). The verifier is real in both regimes."`
 	CacheDir  string `help:"Disk cache dir for LLM calls (live mode)." default:".crystal-cache"`
 	Model     string `help:"Authoring model (the expensive tier), live mode." default:"claude-opus-4-8"`
+	Verifier  string `help:"Which Verifier instance to gate with: 'build' (go build + kong register + binary-probe contract) or 'test' (the defn-test shape: go test asserting the contract — catches the slice leak build misses). Same loop, swapped instance." default:"build" enum:"build,test"`
 	Scratch   string `help:"Throwaway dir for compiled scaffolds (gitignored; under the current module so kong resolves offline)." default:".dogfood-scratch"`
 	FlowOut   string `help:"Sankey flow record for the viz. Empty = don't write." default:".crystal-viz/dogfood-flow.json"`
 	Verbose   bool   `help:"Print each scaffold's verdict detail and the authored template."`
@@ -136,12 +137,13 @@ func (c *DogfoodCmd) Run() error {
 	}
 
 	// ---- SERVE: every remaining command through the verifier; demote-on-miss ----
-	fmt.Printf("=== serve %d commands through the generator (0 model calls each), verify, demote on a caught miss ===\n", len(serveSet))
+	vf := pickVerifier(c.Verifier)
+	fmt.Printf("=== serve %d commands through the generator (0 model calls each), verify [%s], demote on a caught miss ===\n", len(serveSet), c.Verifier)
 	var rows []dfRow
 	servedDet, reserved, deferred := 0, 0, 0
 	for _, spec := range serveSet {
 		src, _ := gen.render(spec)
-		v, verr := cmdverify.Verify(scratch, spec.Name, field(spec), spec.Verb(), src, contractFor(spec))
+		v, verr := vf.Verify(scratch, spec.Name, field(spec), spec.Verb(), src, contractFor(spec))
 		if verr != nil {
 			return usageError{fmt.Errorf("verify %s: %w", spec.Name, verr)}
 		}
@@ -168,7 +170,7 @@ func (c *DogfoodCmd) Run() error {
 			return usageError{fmt.Errorf("re-authoring after %s: %w", spec.Name, aerr)}
 		}
 		src2, _ := newGen.render(spec)
-		v2, _ := cmdverify.Verify(scratch, spec.Name, field(spec), spec.Verb(), src2, contractFor(spec))
+		v2, _ := vf.Verify(scratch, spec.Name, field(spec), spec.Verb(), src2, contractFor(spec))
 		if v2.Pass() {
 			gen = newGen
 			reserved++
@@ -291,10 +293,51 @@ func contractFor(spec cmdspec.CmdSpec) *cmdverify.Contract {
 	}
 	for _, f := range spec.Fields {
 		if f.Repeatable() {
-			return &cmdverify.Contract{NeedFlag: cmdspec.Kebab(f.Name)}
+			return &cmdverify.Contract{NeedFlag: cmdspec.Kebab(f.Name), SliceField: f.Name}
 		}
 	}
 	return nil
+}
+
+// unitVerifier is the swappable gate (the proof-of-one-swap): the loop depends
+// only on this interface, so the instance can change with no orchestrator edit.
+type unitVerifier interface {
+	Verify(scratch, structName, field, verb, structSrc string, c *cmdverify.Contract) (cmdverify.Verdict, error)
+}
+
+// buildVerifier — instance #1: go build + kong registration + binary-probe contract.
+type buildVerifier struct{}
+
+func (buildVerifier) Verify(scratch, structName, field, verb, structSrc string, c *cmdverify.Contract) (cmdverify.Verdict, error) {
+	return cmdverify.Verify(scratch, structName, field, verb, structSrc, c)
+}
+
+// testVerifier — the defn-`test` shape: reuse build+register, then assert the
+// contract as a `go test` (stronger — catches the slice-as-scalar leak).
+type testVerifier struct{}
+
+func (testVerifier) Verify(scratch, structName, field, verb, structSrc string, c *cmdverify.Contract) (cmdverify.Verdict, error) {
+	v, err := cmdverify.Verify(scratch, structName, field, verb, structSrc, nil) // build + register only
+	if err != nil || !v.Builds || !v.Registers || c == nil {
+		return v, err
+	}
+	pass, detail, terr := cmdverify.TestContract(scratch, structName, field, verb, structSrc, c)
+	if terr != nil {
+		return v, terr
+	}
+	v.HasContract = true
+	v.Contract = pass
+	if !pass {
+		v.Detail = "go-test contract failed: " + detail
+	}
+	return v, nil
+}
+
+func pickVerifier(name string) unitVerifier {
+	if name == "test" {
+		return testVerifier{}
+	}
+	return buildVerifier{}
 }
 
 // renderedWrong is the GROUND-TRUTH column (for measuring g<1), independent of
