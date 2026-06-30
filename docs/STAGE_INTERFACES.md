@@ -94,3 +94,47 @@ Same loop, same chore, one swapped instance: the test verifier closes the exact
 made concrete — and `go test` is defn-`test` minus blast-radius scoping, so the
 production step is wiring this instance to `defn` (the deferred dependency), not
 new design.
+
+## Siblings instantiate the stages — three reuse modes
+
+The stages above are satisfied by existing sibling projects (all the author's),
+in one of three modes. Pick by who has to change:
+
+- **Lift** — copy the logic into crystal. For small, self-contained, elegant
+  primitives crystal should *own* with no runtime dependency.
+- **Depend** — shell out / import and use as-is at runtime. For stable interfaces
+  the sibling already exposes. Worked example: `internal/defnverify` swapped its
+  fragile text-scraper for `defn impact --json` — "depend on the better interface
+  that already exists," no lift, no dispatch. It also handed over `blast_radius`
+  (a categorical Selector signal) and `source_file` (so `sediment.Locate` reads
+  one file, no dir scan).
+- **Dispatch** — message the sibling's live session for a feature/bug it lacks.
+  Only when the *sibling itself* must change (e.g. a `defn test <name>` CLI so the
+  Verifier is pure-defn). Use sparingly — it adds work to a project that may be
+  under its own deadline.
+
+Stage → sibling: discover = calque (code copies) / costean (transcript *moves* —
+but that's a personality mirror, wrong target) / **slimemold** (claim topology:
+load-bearing-but-unverified = the knowledge-work gate signal); select = adit
+(relocatable / blast-radius); parse+verify+apply = defn; **serve = groupchat**.
+
+## The serve tier is groupchat-modeled (the library)
+
+`internal/library` (`crystal library`) is the serve layer of the recipe ladder —
+lifted from groupchat's deployed meme system. A library of crystallized artifacts,
+each with metadata (`deploy_when` / `too_much_if` / `mechanism` / `key` /
+match-tokens / `min_conf`), is matched per-context behind a CONFIDENCE + COOLDOWN
+gate that ABSTAINS when uncertain. The serve decision is deterministic (no model)
+— that's what makes it the cheap tier. Cooldown raises the bar to re-fire the same
+entry within a window (a strong-enough match overrides it); demote-on-drift
+removes an entry until re-promoted.
+
+The deeper point: **groupchat is the existence proof that crystal's whole loop
+already works on fuzzy, non-code work.** slimemold (claim topology = the gate
+signal), crowdwork ("the material is already there" = discovery), groupchat
+(serve-from-library + confidence/cooldown + abstain-over-wrong) and lucida
+(passive minting) are all the same *watch → detect → serve* ambient loop the
+README cites. Every meme drop is a shift-left: a matched library artifact serves
+instead of the frontier generating fresh humor, gated by fit + cooldown. The
+metadata maps 1:1 to crystal's gate discipline; "wrong meme is worse than no meme"
+is "no verifier, no crystallization" at the serve layer.

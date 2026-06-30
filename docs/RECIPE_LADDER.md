@@ -67,3 +67,24 @@ transfer fraction at each. The frontier = the cheapest / most-local / most-open
 executor that still PASSES the gate at each rung. That is the apportionment-shift
 demo's TRUE x-axis: the fraction of execution a weaker model takes via a
 sharpening recipe — not "answers cached over a session."
+
+Measured first cut (`crystal transfer`, entity→struct, n=7, suggestive): none
+57% · plan 43% · recipe 71% · pseudocode 71% · code 100% · Opus-direct 86%.
+Non-monotonic — the vague `plan` rung scored WORSE than no recipe (a bad
+abstraction level misleads a weak model more than silence); the code rung beat
+Opus-direct (the generator is the golden by construction). Each rung needs its own
+verifier: code → `defn test`; plan → **plancheck** (the plan rung measured worst
+*because* it was ungated).
+
+## The serve layer (the library)
+
+A crystallized artifact does not serve itself — it is served from a library behind
+a gate. `internal/library` (`crystal library`) is that tier, modeled on
+groupchat's deployed meme system: entries carry `deploy_when` / `too_much_if` /
+`mechanism` / match-tokens / `min_conf`, are matched per-context behind a
+CONFIDENCE + COOLDOWN gate, and ABSTAIN when uncertain — a wrong artifact is worse
+than no artifact, which is "no verifier, no crystallization" at the serve layer.
+The serve decision is deterministic (no model), so the serve tier itself is cheap;
+the artifact it hands back is the recipe a weaker executor then runs. groupchat is
+the existence proof this works on fuzzy, non-code work (see
+`docs/STAGE_INTERFACES.md`).
