@@ -30,6 +30,7 @@ type Impact struct {
 	Module  string   // import path of the definition's package
 	Tests   []string // covering test names
 	Covered int      // len(Tests) — the Confidence signal
+	Callers int      // direct callers — the blast-radius signal (low = safer to swap)
 }
 
 // Verdict gates one definition.
@@ -139,6 +140,8 @@ func parseImpact(name, out string) Impact {
 		switch {
 		case strings.HasPrefix(t, "module:"):
 			imp.Module = strings.TrimSpace(strings.TrimPrefix(t, "module:"))
+		case strings.HasPrefix(t, "direct callers:"):
+			fmt.Sscanf(t, "direct callers: %d", &imp.Callers)
 		case strings.HasPrefix(t, "tests covering this:"):
 			fmt.Sscanf(t, "tests covering this: %d", &imp.Covered)
 			inTests = true
