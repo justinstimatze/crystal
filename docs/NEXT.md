@@ -1,9 +1,76 @@
 # Working priorities (rolling)
 
-Status: working note. Reranked 2026-06-30. Ordered by leverage against the
-README vision, not by ease. Items move; this file is meant to be rewritten.
+Status: working note. Reranked 2026-06-30 (second pass). Ordered by leverage
+against the README vision, not by ease. Items move; this file is meant to be
+rewritten.
 
-## The reranked list
+## The open frontier (reranked, second pass)
+
+The three that led the last rerank are all BUILT and committed (#1 `sweep
+--emit-library`, #2 `internal/recipe` + `crystal recipe`, #3 `crystal
+planshift`). They now drop below the fold as DONE. The live question is the
+*tail* they exposed, reordered by leverage:
+
+1. **Settle #3's plan-recovery question with a middle-band chore.** *(BUILT —
+   `planshift --chore-dir testdata/planshift-chores`. Outcome: no middle band
+   exists for this chore family, and the pursuit caught a 3rd instrument bug that
+   had manufactured a *false* one.)* Authored four graduated synthetic enum
+   commands (1→3 enums, 3→5 flags) as a dedicated chore corpus behind a new
+   `--chore-dir` flag (kept out of the real CLI; the Go toolchain ignores
+   `testdata/`). Real result after the fix below: **none 4/4, plan-ungated 4/4,
+   plan-gated 4/4.** The weak executor reconstructs every complete-spec enum
+   contract with or without a plan, so plan-gating has no downside to remove —
+   still ABOVE THE FLOOR, no discrimination.
+
+   The deeper, honest reasons it can't be settled *here*:
+   - **Structural confound.** `planshift` hands every arm the same complete
+     `choreSpec` (enum values included), so a plan can add emphasis but never
+     *information*. For a mechanical complete-spec chore, plans are *correctly*
+     inert — that is not a null, it is the right answer. The standing
+     43%-vs-57% result was on a *semantic* chore (`categorize`), where the value
+     the plan adds is exactly the information a spec can't pin down. A
+     code-scaffold harness with a complete spec cannot represent that band.
+   - **The 3rd instrument bug (the cautionary catch).** Before the fix, the run
+     showed a *seductive false result*: gated 0/4, pClean anti-correlated with
+     execution, reading "prescriptive plans mislead the weak model AND the gate
+     picks the worst one." Inspecting the raw produced source (a new
+     `--verbose` source dump on contract mismatch) showed the scaffolds were
+     contract-*correct* in kong's grouped tag dialect
+     (`kong:"enum='a,b',help='...'"`); `cmdspec` only read the discrete
+     `enum:"..."` form, so it reported `enums=[]` — a false negative. The
+     verifier — this project's "master variable" — was itself the bug, and a
+     subtle parser gap fabricated a compelling finding. Fixed `cmdspec` to read
+     both kong dialects (+ `TestParseKongGroup`, `TestGroupedDialectEnum`); this
+     silently affected the `dogfood` harness too.
+
+   Takeaway: the plan rung stays demoted for *mechanical* chores (plans are
+   inert when the spec is complete — correct, not a failure); its recovery
+   question lives on *semantic* chores and needs a harness whose spec is
+   deliberately incomplete. And: always read the produced artifact before
+   trusting a discriminating result — a narrow verifier invents them.
+2. **Make the local-open rung real (fill the deferred transfer cell).** The
+   openness axis is asserted end-to-end but only measured in pieces (A5:
+   qwen3.6:35b ties Haiku on categorize at N=250). Run a recipe rung through the
+   GPU-box 35B and report transfer fraction. Without this, "cheaper/opener/
+   localler" has a hole exactly where it is most contestable. Was old-#4;
+   unchanged in rank — it is the most *contestable* hole, just behind the
+   cheapest one.
+3. **Wire `library` serve into a live hook.** Serve is demoed over a canned
+   stream; make it fire on real PreToolUse events like `guard`/`dispatch` do.
+   This is what makes "ambient, no asking" true at the serve layer, and the
+   guard/dispatch pattern is already there to copy. Was old-#5.
+4. **defn `test <name>` dispatch** — keep deferred (sibling deadline); the
+   `--verifier test` raw-`go test` shim covers it for now. Was old-#6.
+5. **slimemold as the knowledge-work gate signal** — defer until the code-side
+   verifier swap is solid; it is the hard (semantic) end and should not be
+   load-bearing yet. Was old-#7.
+
+The reorder vs. last pass: the three BUILT items retire to the DONE archive
+below; the trailing "author a middle-band chore" note (from old-#3's finding)
+becomes the new #1 because it is the cheapest conversion of an asserted claim
+into a measured one. #4→#2 and #5→#3 keep their relative order.
+
+## DONE archive (last pass's top three)
 
 1. **Author library entries from observed recurrence** — close the watch→author
    half of the serve tier. *(BUILT — `crystal sweep --emit-library`; see below.)*
@@ -37,25 +104,9 @@ README vision, not by ease. Items move; this file is meant to be rewritten.
    harness self-diagnoses this (ABOVE-THE-FLOOR reading). Two real instrument bugs
    were found and fixed en route (double `package` clause; chat-style weak-model
    output needing first-code-block extraction), so the instrument is validated —
-   it's the substrate that lacks a discriminating chore. Next: author a
-   middle-band chore (a small synthetic enum command) or run the executor at a tier
-   between "floors" and "trivial".
-4. **Make the local-open rung real (fill the deferred transfer cell).** The
-   openness axis is asserted end-to-end but only measured in pieces (A5:
-   qwen3.6:35b ties Haiku on categorize). Run a recipe rung through the GPU-box
-   35B and report transfer fraction. Without this, "cheaper/opener/localler" has
-   a hole exactly where it is most contestable.
-5. **Wire `library` serve into a live hook.** Serve is demoed over a canned
-   stream; make it fire on real PreToolUse events like `guard`/`dispatch` do.
-6. **defn `test <name>` dispatch** — keep deferred (sibling deadline); the
-   `--verifier test` raw-`go test` shim covers it for now.
-7. **slimemold as the knowledge-work gate signal** — defer until the code-side
-   verifier swap is solid; it is the hard (semantic) end and should not be
-   load-bearing yet.
-
-The reorder vs. before: (1) and (2) jumped to the top (were latent), pushing the
-transfer-harness work down to #3 — close the loop before measuring more cells of
-it.
+   it's the substrate that lacks a discriminating chore. Its trailing finding —
+   author a middle-band chore (a small synthetic enum command) — is now the live
+   **#1** at the top of this file.
 
 ## Pointers worth folding in (artifact-shape critique)
 

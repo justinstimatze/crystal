@@ -41,7 +41,8 @@ import (
 // Reads off: does the gated arm beat the ungated arm, and does pClean separate the
 // plans whose execution passed from those that failed (the gate's own validity)?
 type PlanShiftCmd struct {
-	CmdDir     string  `help:"Directory of kong command structs (the chore corpus + goldens)." default:"cmd"`
+	CmdDir     string  `help:"Directory whose repo root anchors plancheck (co-mod history)." default:"cmd"`
+	ChoreDir   string  `help:"Directory of kong command structs to use as chores; defaults to CmdDir. Point at testdata/planshift-chores for the synthetic middle-band corpus."`
 	NumChores  int     `help:"How many irregular real commands to use as chores." default:"2"`
 	Candidates int     `help:"Plan styles authored + scored for the gated arm." default:"3"`
 	Bar        float64 `help:"Gate bar: minimum plancheck score (pClean − gap penalty) to execute a plan." default:"0.55"`
@@ -71,9 +72,13 @@ type planScore struct {
 }
 
 func (c *PlanShiftCmd) Run() error {
-	specs, err := cmdspec.ParseAll(c.CmdDir)
+	choreDir := c.ChoreDir
+	if choreDir == "" {
+		choreDir = c.CmdDir
+	}
+	specs, err := cmdspec.ParseAll(choreDir)
 	if err != nil {
-		return usageError{fmt.Errorf("parse %s: %w", c.CmdDir, err)}
+		return usageError{fmt.Errorf("parse %s: %w", choreDir, err)}
 	}
 	if _, err := exec.LookPath("plancheck"); err != nil {
 		return usageError{fmt.Errorf("plancheck binary not on PATH (needed for the gate): %w", err)}
@@ -104,7 +109,7 @@ func (c *PlanShiftCmd) Run() error {
 		chores = chores[:c.NumChores]
 	}
 	if len(chores) == 0 {
-		return usageError{fmt.Errorf("no irregular (enum/slice) commands found in %s to use as chores", c.CmdDir)}
+		return usageError{fmt.Errorf("no irregular (enum/slice) commands found in %s to use as chores", choreDir)}
 	}
 
 	client, err := llm.New(c.CacheDir)
@@ -381,6 +386,7 @@ func (c *PlanShiftCmd) verify(src, verb string, golden cmdspec.CmdSpec) bool {
 		fmt.Printf("      verify(%s): contract mismatch — got enums=%v slices=%v flags=%v; want enums=%v slices=%v flags⊇%v\n",
 			verb, keys(enumSet(*p)), keys(sliceSet(*p)), keys(flagSet(*p)),
 			keys(enumSet(golden)), keys(sliceSet(golden)), keys(flagSet(golden)))
+		fmt.Printf("      --- produced (normalized) ---\n%s\n      --- end ---\n", indentLines(truncate(file, 900), "      | "))
 	}
 	return ok
 }

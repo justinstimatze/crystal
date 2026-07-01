@@ -153,8 +153,64 @@ func fields(st *ast.StructType) []FlagSpec {
 			fs.Help = tag.Get("help")
 			fs.Default = tag.Get("default")
 			fs.Enum = tag.Get("enum")
+			// kong accepts two tag dialects: discrete (`enum:"a,b" help:"..."`)
+			// and a grouped form (`kong:"enum='a,b',help='...'"`). A scaffold
+			// that is contract-correct in the grouped dialect must not read as a
+			// dropped enum — parse the group and fill any field the discrete tags
+			// left empty.
+			if grp := tag.Get("kong"); grp != "" {
+				kv := parseKongGroup(grp)
+				if fs.Help == "" {
+					fs.Help = kv["help"]
+				}
+				if fs.Default == "" {
+					fs.Default = kv["default"]
+				}
+				if fs.Enum == "" {
+					fs.Enum = kv["enum"]
+				}
+			}
 		}
 		out = append(out, fs)
+	}
+	return out
+}
+
+// parseKongGroup splits a grouped kong tag (`enum='a,b',help='...',required`)
+// into key/value pairs. Values are single-quoted and may contain commas (enum
+// lists), so the comma split is quote-aware; bare directives (`required`) map to
+// an empty value.
+func parseKongGroup(grp string) map[string]string {
+	out := map[string]string{}
+	var parts []string
+	var cur strings.Builder
+	inQuote := false
+	for _, r := range grp {
+		switch {
+		case r == '\'':
+			inQuote = !inQuote
+			cur.WriteRune(r)
+		case r == ',' && !inQuote:
+			parts = append(parts, cur.String())
+			cur.Reset()
+		default:
+			cur.WriteRune(r)
+		}
+	}
+	if cur.Len() > 0 {
+		parts = append(parts, cur.String())
+	}
+	for _, p := range parts {
+		p = strings.TrimSpace(p)
+		if p == "" {
+			continue
+		}
+		key, val, ok := strings.Cut(p, "=")
+		if !ok {
+			out[key] = ""
+			continue
+		}
+		out[strings.TrimSpace(key)] = strings.Trim(strings.TrimSpace(val), "'")
 	}
 	return out
 }
