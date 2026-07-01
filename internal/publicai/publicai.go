@@ -86,21 +86,34 @@ func BaseURL() string {
 	return DefaultBaseURL
 }
 
-// New loads .env (best-effort) and constructs a client. Errors if no
-// PUBLICAI_API_KEY is available after loading. The cacheDir is shared with the
-// other tiers; keys are namespaced ("publicai-") so there is no collision.
+// New loads .env (best-effort) and constructs a client against the Public AI
+// Gateway (PUBLICAI_BASE_URL / PUBLICAI_API_KEY). Errors if no key is available
+// after loading. The cacheDir is shared with the other tiers; keys are
+// namespaced ("publicai-") so there is no collision.
 func New(cacheDir string) (*Client, error) {
 	_ = loadDotEnv(".env")
 	key := os.Getenv("PUBLICAI_API_KEY")
 	if key == "" {
 		return nil, fmt.Errorf("PUBLICAI_API_KEY not set (put it in .env or the environment)")
 	}
+	return NewAt(cacheDir, BaseURL(), key)
+}
+
+// NewAt constructs a client against an ARBITRARY OpenAI-compatible open-model
+// endpoint — the Public AI Gateway, or a self-hosted vLLM server (e.g. the
+// Modal-hosted open ~32B that fills crystal's local-open rung). Same cache,
+// retry, and latency discipline; the endpoint is just a different base URL and
+// bearer key. baseURL should include the /v1 suffix.
+func NewAt(cacheDir, baseURL, apiKey string) (*Client, error) {
+	if apiKey == "" {
+		return nil, fmt.Errorf("publicai: empty apiKey for %s", baseURL)
+	}
 	if err := os.MkdirAll(cacheDir, 0o755); err != nil {
 		return nil, err
 	}
 	return &Client{
-		baseURL:    BaseURL(),
-		apiKey:     key,
+		baseURL:    strings.TrimRight(baseURL, "/"),
+		apiKey:     apiKey,
 		cacheDir:   cacheDir,
 		http:       &http.Client{Timeout: 120 * time.Second},
 		maxRetries: maxRetries(),

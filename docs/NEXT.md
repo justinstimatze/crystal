@@ -48,13 +48,38 @@ planshift`). They now drop below the fold as DONE. The live question is the
    question lives on *semantic* chores and needs a harness whose spec is
    deliberately incomplete. And: always read the produced artifact before
    trusting a discriminating result — a narrow verifier invents them.
-2. **Make the local-open rung real (fill the deferred transfer cell).** The
-   openness axis is asserted end-to-end but only measured in pieces (A5:
-   qwen3.6:35b ties Haiku on categorize at N=250). Run a recipe rung through the
-   GPU-box 35B and report transfer fraction. Without this, "cheaper/opener/
-   localler" has a hole exactly where it is most contestable. Was old-#4;
-   unchanged in rank — it is the most *contestable* hole, just behind the
-   cheapest one.
+2. **Make the local-open rung real (fill the deferred transfer cell).** *(BUILT
+   — `transfer --open-model`, served by `modal/openmodel_server.py`.)* The
+   openness axis was asserted end-to-end but the transfer cell was deferred
+   ("away from the 3080"). Filled it with a Modal-hosted vLLM open model instead
+   of waking the house box (no VRAM-spill stall): an OpenAI-compatible endpoint
+   the same client that backs the PublicAI tier speaks to (`publicai.NewAt`), so
+   crystal's harness stays authoritative — Opus authors the recipes in Go,
+   golden-match (gofmt-canonical) in Go, disk-cache in Go; Modal is only the
+   open-model compute behind a URL.
+
+   **Measured (Qwen2.5-32B-Instruct, chore = entity→Go struct, n=7):**
+   none 43% → plan 57% → recipe 71% → pseudocode 71%. Two honest reads:
+   - **The open ~32B TIES the closed cheap tier's best rung** (Haiku 71% at
+     recipe/pseudocode). An open, self-hostable model reaches the paid-closed
+     cheap tier once given the specific recipe — the A5 "qwen3.6:35b ties Haiku"
+     claim, reproduced on the transfer chore. This is the cell that was most
+     contestable; it now reads *tie*, not gap.
+   - **The recipe ladder holds MORE cleanly on the open model.** Its transfer
+     rises monotonically with rung specificity (43→57→71→71), where Haiku *dips*
+     at the vague `plan` rung (57→43→71). The "right specificity, not more words"
+     shape is crisper on the open tier here.
+
+   Caveats, foregrounded: **n=7** — suggestive, not conclusive. A 7B smoke run
+   was *flat* at 71% across all rungs (above this chore's floor), and its
+   no-recipe score (71%) sitting above the 32B's (43%) is within 2-unit noise —
+   do NOT read "7B > 32B". The measurement is disk-cached (gitignored), so it
+   reruns free; the endpoint is a throwaway deploy (`modal app stop` after).
+   Two Modal infra bugs caught and fixed en route: vLLM 0.6.6's ZMQ IPC frontend
+   throws `ENOTSUP` under Modal (fixed with `--disable-frontend-multiprocessing`);
+   and the model id read from a module global inside the remote `serve()` fell
+   back to the 32B default and OOM'd a small GPU (fixed by baking `VLLM_MODEL`
+   into the image env and reading it inside `serve`). Was old-#4.
 3. **Wire `library` serve into a live hook.** Serve is demoed over a canned
    stream; make it fire on real PreToolUse events like `guard`/`dispatch` do.
    This is what makes "ambient, no asking" true at the serve layer, and the
