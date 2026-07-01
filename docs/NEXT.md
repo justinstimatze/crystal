@@ -17,10 +17,29 @@ README vision, not by ease. Items move; this file is meant to be rewritten.
    framing; cites his two essays. The same entity→struct task ships authored at
    four rungs to show one chore descending the ladder.
 3. **Transfer harness on a real code-change chore, plancheck-gating the `plan`
-   rung.** The measured `plan` rung scored *worse* than no recipe (43% vs 57%)
-   because it was ungated. Test directly: does a plancheck-verified plan beat the
-   ungated plan? Turns the non-monotonic dip into a fixed rung or a documented
-   floor.
+   rung.** *(BUILT — `crystal planshift`. Result: INCONCLUSIVE, honestly.)* Chore
+   = reconstruct a kong subcommand from its contract; plan rung gated by the real
+   `plancheck` binary (author K plan styles → `forecast.pClean` − co-mod-gap
+   penalty picks the best → abstain if below bar); verifier = the produced
+   scaffold's enum/slice/flag contract via `cmdspec` (AST-only, no scratch
+   builds). Three arms: none / plan-ungated / plan-gated.
+
+   **Finding:** the harness, gate, and verifier all work, but the measurement
+   doesn't discriminate. On big commands (7–9 flags) every arm fails (below the
+   weak executor's floor, 0/3); on small slice-contracts (2–4 flags) every arm
+   passes (above the floor — Haiku reconstructs them with *no* plan, 3/3/3). Plan-
+   gating can only help in the MIDDLE BAND (fail without a good plan, pass with
+   one), and neither chore family hits it. The band a kong scaffold needs is a
+   *small enum contract* (the canonical dropped-tag from dogfood) — crystal's enum
+   commands are all large, so this substrate can't produce it. `plancheck`'s
+   `pClean` was stable (~0.64–0.70) and correctly zeroed the unparseable
+   `test-first` plan, but did not predict exec success (everything passed). The
+   harness self-diagnoses this (ABOVE-THE-FLOOR reading). Two real instrument bugs
+   were found and fixed en route (double `package` clause; chat-style weak-model
+   output needing first-code-block extraction), so the instrument is validated —
+   it's the substrate that lacks a discriminating chore. Next: author a
+   middle-band chore (a small synthetic enum command) or run the executor at a tier
+   between "floors" and "trivial".
 4. **Make the local-open rung real (fill the deferred transfer cell).** The
    openness axis is asserted end-to-end but only measured in pieces (A5:
    qwen3.6:35b ties Haiku on categorize). Run a recipe rung through the GPU-box
