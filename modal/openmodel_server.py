@@ -18,6 +18,14 @@ scales down after the idle window):
     MODEL=Qwen/Qwen2.5-7B-Instruct GPU=L4 modal deploy \\
         modal/openmodel_server.py                             # cheap smoke test
 
+The MODEL env var is the only knob — this endpoint is model-agnostic, so it can
+push the local-open cell UP to a Sonnet-class open model (e.g. GLM-5.2, a strong
+open option; note its Chinese origin is a governance/sovereignty consideration
+for some users). A Sonnet-class MoE that large needs a multi-GPU deploy
+(GPU="H100:8" or similar) and is not cheap to hold — a deliberate run, not a
+smoke test — but the crystal-side harness needs no change: it is still just an
+OpenAI-compatible URL the transfer/serve tiers speak to.
+
 The printed URL is the OpenAI base (append /v1). Auth: Bearer of the
 VLLM_API_KEY in the `crystal-vllm` Modal secret (same value crystal reads from
 .env as MODAL_VLLM_KEY). Release the GPU when done:

@@ -80,10 +80,35 @@ planshift`). They now drop below the fold as DONE. The live question is the
    and the model id read from a module global inside the remote `serve()` fell
    back to the 32B default and OOM'd a small GPU (fixed by baking `VLLM_MODEL`
    into the image env and reading it inside `serve`). Was old-#4.
-3. **Wire `library` serve into a live hook.** Serve is demoed over a canned
-   stream; make it fire on real PreToolUse events like `guard`/`dispatch` do.
-   This is what makes "ambient, no asking" true at the serve layer, and the
-   guard/dispatch pattern is already there to copy. Was old-#5.
+3. **Wire `library` serve into a live hook.** *(BUILT — `crystal library-hook`
+   + `library-hookdemo`.)* The serve tier ran only over a canned in-process
+   stream; now it fires on REAL Claude Code hook events, injecting the matched
+   crystallized recipe as `additionalContext` (0 model calls) behind the same
+   confidence + cooldown + too-much gate, with the cooldown window and demotions
+   persisting across the fresh-process-per-event boundary via a state file
+   (`internal/library` gained `Snapshot`/`Restore`). The `library-hookdemo`
+   drives the real binary over separate processes and shows the repeated git-add
+   intent abstain on cooldown *across the process boundary* (the window exists
+   only because it round-tripped through disk), and a control-op `--demote` take
+   an entry out of service for every subsequent process. Fail-open throughout
+   (malformed event / unreadable library ⇒ silent allow, never blocks the host).
+
+   **The surface finding (why this is NOT a straight copy of guard/dispatch).**
+   guard/dispatch are PreToolUse hooks because they gate tool COMMANDS; the
+   serve library serves intent RECIPES, and its entries are keyed on INTENT
+   tokens (entity/struct/classify/quote) that live in the USER'S PROMPT, not in
+   a tool command. So the rich surface is **UserPromptSubmit** — the canned demo
+   stream literally *was* a stream of user prompts. PreToolUse still works, but
+   only entries whose triggers appear in a tool input can fire there — for the
+   shipped library that is just the git-add guard. The hook therefore
+   auto-detects the surface and serves from whichever text the event carries
+   (prompt prose or tool command), with the surface-appropriate output envelope
+   (UserPromptSubmit has no `permissionDecision`; PreToolUse carries
+   `allow`). Honest boundary: unlike the classifier hook's coverage-collapse
+   drift signal, a precision-first serve library has no auto-oracle for demotion
+   (abstaining is the normal case, so "went silent" is not drift) — demotion is
+   driven by the re-author loop / the `--demote` control op and *persists* live,
+   which is the real serve-layer contribution here. Was old-#5.
 4. **defn `test <name>` dispatch** — keep deferred (sibling deadline); the
    `--verifier test` raw-`go test` shim covers it for now. Was old-#6.
 5. **slimemold as the knowledge-work gate signal** — defer until the code-side

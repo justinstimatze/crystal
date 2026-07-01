@@ -51,6 +51,44 @@ func TestLowConfAbstain(t *testing.T) {
 	}
 }
 
+// TestSnapshotRestoreRoundTrip confirms the serve state (cooldown map +
+// demotions) survives a Snapshot→Restore onto a freshly-loaded library — the
+// disk round-trip a fresh-process-per-event hook depends on. After restore, a
+// cooled-down entry still abstains and a demoted entry still declines.
+func TestSnapshotRestoreRoundTrip(t *testing.T) {
+	l := testLib()
+	if d := l.Serve("git add stuff", 0); !d.Served() { // partial match serves once
+		t.Fatalf("setup: expected serve, got %s", d.Outcome)
+	}
+	l.Demote("b")
+	snap := l.Snapshot(1)
+	if snap.Step != 1 || snap.LastServed["a"] != 0 {
+		t.Fatalf("snapshot lost state: %+v", snap)
+	}
+	found := false
+	for _, n := range snap.Demoted {
+		if n == "b" {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("snapshot must carry the demotion, got %v", snap.Demoted)
+	}
+
+	// A fresh library (new process) restoring the snapshot inherits both.
+	l2 := New([]Entry{
+		{Name: "a", Rung: "code", Match: []string{"git", "add", "all"}, Avoid: []string{"explicit"}, MinConf: 0.6},
+		{Name: "b", Rung: "recipe", Match: []string{"struct", "field"}, MinConf: 0.5},
+	})
+	l2.Restore(snap)
+	if d := l2.Serve("git add stuff", snap.Step); d.Outcome != "abstain-cooldown" {
+		t.Errorf("restored cooldown must abstain, got %s", d.Outcome)
+	}
+	if d := l2.Serve("struct field here", snap.Step); d.Served() {
+		t.Errorf("restored demotion must keep entry b out of service, got %s", d.Outcome)
+	}
+}
+
 func TestDemotePromote(t *testing.T) {
 	l := testLib()
 	l.Demote("a")

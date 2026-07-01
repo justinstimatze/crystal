@@ -73,6 +73,44 @@ func (l *Library) Demote(name string) { l.demoted[name] = true }
 // Promote clears a demotion (the inverse, for the closed loop).
 func (l *Library) Promote(name string) { delete(l.demoted, name) }
 
+// ServeState is the cross-invocation serve state a LIVE hook persists so
+// cooldown and demotion survive the fresh-process-per-event boundary: each
+// Claude Code hook call is a separate process, so the cooldown window and the
+// demoted set only exist because they round-trip through a state file on disk —
+// that disk round-trip IS the "live" part (the same shape the classifier hook's
+// drift window uses). Step advances once per event and is carried here too.
+type ServeState struct {
+	Step       int            `json:"step"`
+	LastServed map[string]int `json:"last_served"`
+	Demoted    []string       `json:"demoted"`
+}
+
+// Snapshot captures the serve state (at the given step) for persistence.
+func (l *Library) Snapshot(step int) ServeState {
+	ls := make(map[string]int, len(l.lastServed))
+	for k, v := range l.lastServed {
+		ls[k] = v
+	}
+	dem := make([]string, 0, len(l.demoted))
+	for k := range l.demoted {
+		dem = append(dem, k)
+	}
+	sort.Strings(dem)
+	return ServeState{Step: step, LastServed: ls, Demoted: dem}
+}
+
+// Restore reinstates a persisted serve state (cooldown map + demotions) onto a
+// freshly-loaded library — how a new hook process picks up where the last left
+// off. Demotions are additive (never silently cleared by a restore).
+func (l *Library) Restore(s ServeState) {
+	if s.LastServed != nil {
+		l.lastServed = s.LastServed
+	}
+	for _, n := range s.Demoted {
+		l.demoted[n] = true
+	}
+}
+
 // Decision is the outcome of one serve attempt.
 type Decision struct {
 	Entry      *Entry  // the served entry, nil on abstain
