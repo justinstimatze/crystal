@@ -319,3 +319,47 @@ a **recurrence-in-the-wild trigger**, and a **verifier-gate + demote-on-drift** 
 trims; none of the cluster demotes on *live* drift). None combine introspection-driven recognition +
 multi-axis gravity + deterministic externalization + recurrence trigger + gated/demotable maintenance —
 that intersection is the seam (this doc's standing line: *novelty = integration, not invention*).
+
+## Dynamic workflows (Anthropic, June 2026) — a shipped echo of citations already logged, not new ground (added 2026-07-01)
+
+Source: "A harness for every task: dynamic workflows in Claude Code," Thariq Shihipar & Sid Bidasaria,
+Anthropic engineering blog, June 2, 2026 (full text user-supplied this pass, not independently
+re-fetched — treat as 🔶, not ✅, until re-fetched). Claude Code can now author its own JS control-flow
+script per task (`agent`/`pipeline`/`parallel`/`phase`/`log`) and save/share the result
+(`~/.claude/workflows`, or via a skill, explicitly framed as "a template instead of a script that needs
+to be run verbatim").
+
+**Net: no new citation.** Three lineages already in this doc get a shipped, mainstream data point — this
+sharpens gaps already noted, it doesn't open new ground:
+
+1. **Plan-template caching.** A saved workflow is the shipped, procedure-level instance of "cache/reuse
+   structured plan templates across similar tasks" (Agentic Plan Caching 2506.14852; Agent Workflow
+   Memory 2409.07429, both already logged above). The article describes no fidelity check against a
+   reference and no drift/demotion for a saved workflow — the exact gap those citations already flag,
+   now visible in a mainstream product rather than a paper.
+2. **Decompose, don't downshift — a weaker echo than it first looks.** A workflow script's control-flow
+   (`pipeline`/`parallel`/`phase`/token-budget tracking) is plain deterministic JS wrapping model
+   judgment at each `agent()` leaf — the same generic shape as AutoHarness (2603.03329, already logged),
+   *but* the disanalogy matters: AutoHarness's code-as-policy variant removes the LLM at inference
+   entirely, while a dynamic workflow always calls a model at every leaf. The shared shape (deterministic
+   scaffold + irreducible model residual) is closer to "most agentic harnesses, including crystal's own"
+   than to AutoHarness's specific tree-search/verified-removal mechanism — cite loosely, not as a match.
+3. **Judge-panel patterns.** Anthropic's "adversarial verification" (a separate agent checks each output
+   against a rubric) and "tournament" (N agents attempt the task, judged pairwise) name the same shallow
+   shape as the PoLL / Query-by-Committee / tri-training family already logged under Vein 2 above — and
+   PoLL already covers panel-style judging, not just label agreement, so the delta here is thin: fresh
+   vocabulary and a runnable script, not a new mechanism. (Informally, this panel-of-voices shape is what
+   prompted the "a bit like a **gemot**" comparison — Old English for a deliberative assembly; apt color,
+   not a citation.)
+
+**Where it argues against crystal's direction, not for it:** the article frames workflows as an
+orchestrator across model subagents — crystal's charter rules this out by name (`PROJECT_BRIEF.md`:
+*"NOT an orchestrator... No gastown/undercity-style work routing"*). Its cost framing also runs the
+opposite way from crystal's value prop: workflows are "best suited for complex, high value tasks" and
+"often use more tokens," with intelligence and isolation chosen *up* per task (Claude "decide[s] which
+models an agent uses and whether subagents are run in their own worktree") — spending more per task for
+peak quality, not shifting a recurring chore left behind a verifier. That's not a cost argument on
+crystal's side either — per this project's own hard rule, crystal's case for the deterministic tier is
+**latency, determinism, reliability, sovereignty**, not "less compute"; the point is only that the two
+pull in different directions on that axis, not that one is cheaper. **Cite for the plan-caching and
+judge-panel lineages already logged; don't reach for it as an architecture to imitate.**
