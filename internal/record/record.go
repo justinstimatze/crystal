@@ -26,6 +26,22 @@ type Record struct {
 	Result    Output         `json:"result"`   // typed toolUseResult
 	Followup  string         `json:"followup"` // next assistant text after the result
 	ToolUseID string         `json:"tool_use_id"`
+
+	// Seq is the record's 0-based position within its transcript, and Turn
+	// increments on every fresh user prompt. Together they let a consumer
+	// reconstruct STEPS — (result of call k) → (the model's call k+1) —
+	// without re-walking the transcript. A step only spans consecutive Seq
+	// within the same Turn: across a turn boundary the user, not the prior
+	// result, supplied the state.
+	Seq  int `json:"seq"`
+	Turn int `json:"turn"`
+
+	// UserPrompt is the most recent USER text before this call — the only
+	// prose that counts as input state when attributing a later move.
+	// Context/Followup hold the MODEL's own prose, which must not count:
+	// treating the model's stated intention as free input would make its
+	// own next move look mechanical by construction.
+	UserPrompt string `json:"user_prompt,omitempty"`
 }
 
 // Output is a typed view of a toolUseResult. Only the fields relevant to

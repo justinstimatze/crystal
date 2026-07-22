@@ -65,6 +65,7 @@ func Walk(r io.Reader) (recs []record.Record, dropped int, err error) {
 	pending := map[string]pendingUse{}
 	var awaiting []int // indices into recs whose Followup is not yet filled
 	var lastUserPrompt string
+	turn := 0
 
 	fillFollowup := func(text string) {
 		if text == "" || len(awaiting) == 0 {
@@ -97,6 +98,7 @@ func Walk(r io.Reader) (recs []record.Record, dropped int, err error) {
 			if isNewUserPrompt(m.Content) {
 				awaiting = awaiting[:0]
 				lastUserPrompt = extractUserString(m.Content)
+				turn++
 				continue
 			}
 			// Otherwise this is a tool-result turn. Pair each tool_result
@@ -112,15 +114,18 @@ func Walk(r io.Reader) (recs []record.Record, dropped int, err error) {
 				}
 				delete(pending, b.ToolUseID)
 				rec := record.Record{
-					SessionID: e.SessionID,
-					Repo:      e.CWD,
-					GitBranch: e.GitBranch,
-					Timestamp: e.Timestamp,
-					Context:   pu.context,
-					Tool:      pu.tool,
-					Args:      pu.args,
-					Result:    typeOutput(pu.tool, e.ToolUseResult, b.IsError),
-					ToolUseID: b.ToolUseID,
+					SessionID:  e.SessionID,
+					Repo:       e.CWD,
+					GitBranch:  e.GitBranch,
+					Timestamp:  e.Timestamp,
+					Context:    pu.context,
+					Tool:       pu.tool,
+					Args:       pu.args,
+					Result:     typeOutput(pu.tool, e.ToolUseResult, b.IsError),
+					ToolUseID:  b.ToolUseID,
+					Seq:        len(recs),
+					Turn:       turn,
+					UserPrompt: lastUserPrompt,
 				}
 				recs = append(recs, rec)
 				awaiting = append(awaiting, len(recs)-1)
@@ -162,6 +167,108 @@ func Walk(r io.Reader) (recs []record.Record, dropped int, err error) {
 		return recs, dropped, serr
 	}
 	return recs, dropped, nil
+}
+
+// StreamFile emits each reconstructed Record as soon as its pair completes,
+// never holding the whole transcript. Real transcripts reach multiple GB
+// (tool output dominates), so any consumer that only needs a bounded window
+// — like step attribution, which looks back exactly one record — must use
+// this rather than WalkFile.
+//
+// The one field StreamFile cannot fill is Followup: it is written
+// retroactively when the NEXT assistant turn arrives, which is precisely
+// what would force buffering. Consumers needing Followup use WalkFile.
+func StreamFile(path string, fn func(record.Record)) (dropped int, err error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return 0, err
+	}
+	defer f.Close()
+
+	sc := bufio.NewScanner(f)
+	sc.Buffer(make([]byte, 64*1024), 32*1024*1024)
+
+	pending := map[string]pendingUse{}
+	var lastUserPrompt string
+	turn, seq := 0, 0
+
+	for sc.Scan() {
+		var e rawEntry
+		if jerr := json.Unmarshal(sc.Bytes(), &e); jerr != nil {
+			dropped++
+			continue
+		}
+		if e.IsSidechain {
+			continue
+		}
+		var m rawMessage
+		if len(e.Message) > 0 {
+			_ = json.Unmarshal(e.Message, &m)
+		}
+
+		switch e.Type {
+		case "user":
+			if isNewUserPrompt(m.Content) {
+				lastUserPrompt = extractUserString(m.Content)
+				turn++
+				continue
+			}
+			for _, b := range blocks(m.Content) {
+				if b.Type != "tool_result" {
+					continue
+				}
+				pu, ok := pending[b.ToolUseID]
+				if !ok {
+					continue
+				}
+				delete(pending, b.ToolUseID)
+				fn(record.Record{
+					SessionID:  e.SessionID,
+					Repo:       e.CWD,
+					GitBranch:  e.GitBranch,
+					Timestamp:  e.Timestamp,
+					Context:    pu.context,
+					Tool:       pu.tool,
+					Args:       pu.args,
+					Result:     typeOutput(pu.tool, e.ToolUseResult, b.IsError),
+					ToolUseID:  b.ToolUseID,
+					Seq:        seq,
+					Turn:       turn,
+					UserPrompt: lastUserPrompt,
+				})
+				seq++
+			}
+
+		case "assistant":
+			var text strings.Builder
+			var uses []contentBlock
+			for _, b := range blocks(m.Content) {
+				switch b.Type {
+				case "text":
+					text.WriteString(b.Text)
+				case "tool_use":
+					uses = append(uses, b)
+				}
+			}
+			ctx := strings.TrimSpace(text.String())
+			if ctx == "" {
+				ctx = lastUserPrompt
+			}
+			for _, u := range uses {
+				if u.ID == "" {
+					continue
+				}
+				pending[u.ID] = pendingUse{tool: u.Name, args: decodeArgs(u.Input), context: ctx}
+			}
+		}
+	}
+	if serr := sc.Err(); serr != nil {
+		if errors.Is(serr, bufio.ErrTooLong) {
+			return dropped + 1, serr
+		}
+		return dropped, serr
+	}
+	return dropped, nil
 }
 
 // WalkFile is Walk over an opened path. A bufio.ErrTooLong is returned so
