@@ -3,7 +3,7 @@ module github.com/justinstimatze/crystal
 go 1.25.0
 
 require (
-	github.com/alecthomas/kong v1.15.0
+	github.com/alecthomas/kong v1.16.1
 	github.com/anthropics/anthropic-sdk-go v1.46.0
 )
 
