@@ -7,8 +7,11 @@
 **What it does.** crystal watches your Claude Code transcripts, finds recurring mechanical work, and
 migrates it off the expensive frontier model onto cheaper, more deterministic, more local tiers — but
 only behind a **verifier** that **demotes** the cheap tier the moment it stops reproducing the frontier's
-output. The win is determinism, latency, and sovereignty — *not* token cost. Today it ships the smallest
-grain: one deterministic hook. Whole-procedure and whole-codebase crystallization is the roadmap.
+output. The win is determinism, latency, and sovereignty — *not* token cost. Today it's discovered and
+shipped one rule end-to-end (`guard`); the serving mechanism itself — a confidence-gated rule library
+with a tested authoring pipeline (`dispatch`, `library`, `sweep --emit-library`) — is more built-out than
+that one rule suggests, it just hasn't discovered a second rule from real recurrence yet. Whole-procedure
+and whole-codebase crystallization is still the roadmap.
 *(It runs — there's a 30-second, no-key demo below.)*
 
 ## Why "crystal"
@@ -17,9 +20,12 @@ An expensive LLM session is a *supersaturated solution* — it holds more recurr
 it should. crystal lets that work **nucleate**, **crystallize**, and **precipitate** out: the stable,
 reusable part falls below the frontier into a cheaper, eventually-deterministic tier and stays there
 until it drifts. The ambition is for whole bodies of code and procedure to crystallize out of expensive
-sessions over time — not just one-off rules. Today's built grain is `guard` above (a rule found
-re-encoded in 4 of this author's projects); the reach is the **roadmap, not a claim**
-([`docs/ROADMAP.md`](docs/ROADMAP.md), [`docs/THESIS.md`](docs/THESIS.md)).
+sessions over time — not just one-off rules. Today's built *content* is `guard` above (a rule found
+re-encoded in 4 of this author's projects) — but the pipeline that would serve more already exists and is
+tested: `dispatch`'s rule-library engine, the confidence-gated `library`/`library-hook` serving layer, and
+a discover→author→gate→propose authoring loop (`sweep --emit-library`) that rejected three real defects on
+its first live run. One discovered rule, not one built mechanism. The reach beyond that is the
+**roadmap, not a claim** ([`docs/ROADMAP.md`](docs/ROADMAP.md), [`docs/THESIS.md`](docs/THESIS.md)).
 
 ## The menu, and which way it falls
 
@@ -144,9 +150,14 @@ the verifier-covered fraction, *detection + demotion* (not guaranteed reproducti
 
 Two knobs decide whether shift-left is safe: **g** — does a verifier catch the cheap tier's errors (which
 work is safe to migrate down) — and **λ** — does the supervisory signal survive relay (how deep
-supervision reaches before going blind). Four by-construction experiments grounded them; **only
-`ground-hop` runs on real transcript records**, the other three on one 14-item synthetic corpus, so the
-depth/content conclusions rest on the constructed side.
+supervision reaches before going blind). Four by-construction experiments grounded them; **`ground-hop`'s
+original g=1.00 run used real transcript records**, the other three ran on one 14-item synthetic corpus, so
+the depth/content conclusions rest on the constructed side. *Reproducibility caveat:* the corpus this repo ships (`testdata/corpus`) is synthetic by design
+(`go run . synth-corpus`; see `cmd/synthcorpus.go`'s own doc comment — invented, schema-faithful content,
+so the public repo doesn't leak real transcript data) and shares its default output path with the
+real-extraction command (`go run . extract --home ~`), so re-running `ground-hop` against the committed
+fixtures reproduces the synthetic case, not the original real-record measurement. Run `extract` on your
+own transcripts first to reproduce the real-record regime.
 
 | experiment | question | result |
 |---|---|---|
