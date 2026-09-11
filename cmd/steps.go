@@ -55,14 +55,26 @@ func (c *StepsCmd) Run() error {
 	samples := map[shape][]step.Step{}
 	var dropped, scanned, calls, nsteps int
 
+	// sessions holds each file's ordered step-Class sequence — nothing but
+	// the enum value, tens of bytes per step even at half a million steps —
+	// so ShuffleBaseline can permute a real session's own classes without
+	// re-reading the corpus. One file IS one session (same assumption the
+	// streaming loop below already relies on); a session's turns are
+	// concatenated into one sequence rather than kept separate, which is a
+	// deliberately coarser null than the real RunProfile (which never forms
+	// a step across a turn boundary at all) — noted here, not hidden.
+	var sessions [][]step.Class
+
 	for _, f := range files {
 		if c.Project != "" && !strings.Contains(filepath.Base(filepath.Dir(f)), c.Project) {
 			continue
 		}
+		var fileClasses []step.Class
 		st := step.NewStreamer(func(s step.Step) {
 			nsteps++
 			p.Add(s)
 			rp.Add(s)
+			fileClasses = append(fileClasses, s.Class)
 			sh := shape{s.Prev.Tool, s.Next.Tool}
 			sp := byShape[sh]
 			if sp == nil {
@@ -85,6 +97,9 @@ func (c *StepsCmd) Run() error {
 			continue
 		}
 		scanned++
+		if len(fileClasses) > 0 {
+			sessions = append(sessions, fileClasses)
+		}
 	}
 	if nsteps == 0 {
 		return usageError{fmt.Errorf("no steps built from %d transcripts", scanned)}
@@ -117,11 +132,20 @@ func (c *StepsCmd) Run() error {
 	fmt.Printf("\nEPISODE HYPOTHESIS (is a step too small a unit?)\n")
 	fmt.Printf("  isolated authored steps : %.1f%%  (fraction of authored RUNS that are length 1)\n", isolated*100)
 	if gapN > 0 {
-		fmt.Printf("  mean episode interior   : %.1f mechanical steps  (n=%d bounded gaps, %d steps total)\n",
+		fmt.Printf("  mean episode interior   : %.2f mechanical steps  (n=%d bounded gaps, %d steps total)\n",
 			rp.MeanGap(), gapN, gapSum)
 	} else {
 		fmt.Printf("  mean episode interior   : n/a (no gap bounded by two authored steps)\n")
 	}
+	// Null model: shuffle each session's own class sequence (same local
+	// authored rate, no temporal order) and see what these two numbers
+	// would be from rate heterogeneity ALONE, with zero real structure.
+	// If the real numbers land inside the shuffled range, there's no
+	// ordering effect here — steps are just independent draws at whatever
+	// rate their shape carries.
+	nullIsolated, nullGap := step.ShuffleBaseline(sessions, 20, 1)
+	fmt.Printf("  null model (20 shuffles): isolated %.1f%%, mean interior %.2f steps — real vs null %s\n",
+		nullIsolated*100, nullGap, episodeReading(isolated, nullIsolated, rp.MeanGap(), nullGap))
 
 	// Per-transition-shape breakdown, ranked by shiftable volume: the
 	// candidates worth building a verified substitution for are the ones
@@ -166,6 +190,21 @@ func (c *StepsCmd) Run() error {
 	fmt.Printf("confirmed any specific substitution. The authored column is the judgment residual that\n")
 	fmt.Printf("stays on the frontier tier no matter how good the harness gets.\n")
 	return nil
+}
+
+// episodeReading names a direction for the real-vs-null comparison. This is
+// a point-estimate comparison against one randomized baseline, not a
+// significance test — it says which way the numbers lean, not how sure to
+// be of it.
+func episodeReading(realIsolated, nullIsolated, realGap, nullGap float64) string {
+	switch {
+	case realGap < nullGap*0.8 && realIsolated < nullIsolated:
+		return "MORE clustered than chance (shorter gaps, fewer isolated decisions)"
+	case realGap > nullGap*1.2 && realIsolated > nullIsolated:
+		return "LESS clustered than chance (longer gaps, more isolated decisions)"
+	default:
+		return "close to chance — little ordering effect beyond per-shape rate"
+	}
 }
 
 func printSamples(ss []step.Step, n int) {

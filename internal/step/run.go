@@ -45,24 +45,35 @@ func (p *RunProfile) Add(s Step) {
 		p.prevNext.Turn == s.Prev.Turn &&
 		p.prevNext.Seq == s.Prev.Seq
 
-	if !adjacent {
-		p.closeRun()
-		p.gapLen, p.haveOpenGap = 0, false
-	}
-
-	if adjacent && s.Class == p.prevClass {
-		p.runLen++
-	} else {
-		p.closeRun()
-		p.prevClass, p.runLen = s.Class, 1
-	}
-
-	if s.Class == Authored {
-		if p.haveOpenGap {
-			p.Gaps[p.gapLen]++
+	newRun := !adjacent || s.Class != p.prevClass
+	if newRun {
+		if adjacent {
+			// The run that just ended is real -- close it, and if it was
+			// Authored, start counting the gap toward the next Authored
+			// run. Only doing this at the run boundary (not on every
+			// Authored step) is what keeps two adjacent same-run Authored
+			// steps from registering as a spurious zero-length gap.
+			p.closeRun()
+			if p.prevClass == Authored {
+				p.gapLen, p.haveOpenGap = 0, true
+			}
+		} else {
+			// A session/turn boundary: nothing open before it bounds
+			// anything real on this side, so drop it rather than count a
+			// gap or run across the seam.
+			p.closeRun()
+			p.gapLen, p.haveOpenGap = 0, false
 		}
-		p.gapLen, p.haveOpenGap = 0, true
-	} else if p.haveOpenGap {
+		if s.Class == Authored && p.haveOpenGap {
+			p.Gaps[p.gapLen]++
+			p.haveOpenGap = false
+		}
+		p.prevClass, p.runLen = s.Class, 1
+	} else {
+		p.runLen++
+	}
+
+	if s.Class != Authored && p.haveOpenGap {
 		p.gapLen++
 	}
 
