@@ -50,6 +50,7 @@ func (c *StepsCmd) Run() error {
 	// to walking the whole corpus at once — and holds one transcript in
 	// memory instead of every tool result across thousands of them.
 	var p step.Profile
+	rp := step.NewRunProfile()
 	byShape := map[shape]*step.Profile{}
 	samples := map[shape][]step.Step{}
 	var dropped, scanned, calls, nsteps int
@@ -61,6 +62,7 @@ func (c *StepsCmd) Run() error {
 		st := step.NewStreamer(func(s step.Step) {
 			nsteps++
 			p.Add(s)
+			rp.Add(s)
 			sh := shape{s.Prev.Tool, s.Next.Tool}
 			sp := byShape[sh]
 			if sp == nil {
@@ -87,6 +89,7 @@ func (c *StepsCmd) Run() error {
 	if nsteps == 0 {
 		return usageError{fmt.Errorf("no steps built from %d transcripts", scanned)}
 	}
+	rp.Flush()
 
 	fmt.Printf("crystal steps: %d transcripts → %d tool calls → %d steps (%d records dropped)\n",
 		scanned, calls, nsteps, dropped)
@@ -101,6 +104,24 @@ func (c *StepsCmd) Run() error {
 	fmt.Printf("  judgment residual : %.1f%%  (authored — the model supplied text found nowhere in prior state)\n",
 		pct(p.Counts[step.Authored], p.N))
 	fmt.Printf("  mean derived frac : %.2f\n", p.MeanFrac)
+
+	// A step is too small a unit to hand a cheap executor — nobody delegates
+	// "the next Read." The candidate unit above it is an EPISODE: a maximal
+	// mechanical run bounded by two Authored (judgment) steps. These two
+	// numbers test that hypothesis directly, deterministically, from the
+	// same classified steps: does judgment show up as one decision at a
+	// time (isolated), or in multi-step stretches an episode boundary would
+	// cut through?
+	isolated := rp.IsolatedFrac(step.Authored)
+	gapN, gapSum := rp.GapCount()
+	fmt.Printf("\nEPISODE HYPOTHESIS (is a step too small a unit?)\n")
+	fmt.Printf("  isolated authored steps : %.1f%%  (fraction of authored RUNS that are length 1)\n", isolated*100)
+	if gapN > 0 {
+		fmt.Printf("  mean episode interior   : %.1f mechanical steps  (n=%d bounded gaps, %d steps total)\n",
+			rp.MeanGap(), gapN, gapSum)
+	} else {
+		fmt.Printf("  mean episode interior   : n/a (no gap bounded by two authored steps)\n")
+	}
 
 	// Per-transition-shape breakdown, ranked by shiftable volume: the
 	// candidates worth building a verified substitution for are the ones
