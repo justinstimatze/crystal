@@ -114,7 +114,7 @@ func (c *DemoCmd) Run() error {
 	fmt.Printf("regime: %s\n\n", regime)
 
 	var fates []fate
-	var modelLat []int64 // real per-unit frontier produce latencies (live)
+	var modelLat []int64  // real per-unit frontier produce latencies (live)
 	var produced []string // the built artifact, in unit order
 
 	// ---- PHASE A: the frontier produces the first K worked examples ----

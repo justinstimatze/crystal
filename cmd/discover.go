@@ -19,9 +19,9 @@ import (
 // Bash constraints/procedures). The recurrence + coverage it reports is the
 // honest signal that a chore is worth crystallizing at all.
 type DiscoverCmd struct {
-	Corpus       string `help:"Directory of Go files to scan for a recurring command shape." default:"cmd"`
-	MinRecurrence int   `help:"Recurrence floor: a shape must recur at least this many times to be a crystallization candidate." default:"5"`
-	Verbose      bool   `help:"List the members of each discovered shape cluster."`
+	Corpus        string `help:"Directory of Go files to scan for a recurring command shape." default:"cmd"`
+	MinRecurrence int    `help:"Recurrence floor: a shape must recur at least this many times to be a crystallization candidate." default:"5"`
+	Verbose       bool   `help:"List the members of each discovered shape cluster."`
 }
 
 func (c *DiscoverCmd) Run() error {

@@ -27,13 +27,13 @@ func bare(name string, n int) cmdspec.CmdSpec {
 // "*Cmd" is included and a bare-field helper that IS named "*Cmd" is excluded.
 func TestDiscoversByStructureNotName(t *testing.T) {
 	all := []cmdspec.CmdSpec{
-		helped("Foo", 2),       // command-shaped, no "Cmd" suffix → must be found
-		helped("RunThing", 3),  // command-shaped, no suffix
-		helped("ProbeCmd", 2),  // command-shaped, has suffix
-		helped("ServeCmd", 2),  //
-		helped("ExtractCmd", 2),//
-		bare("LabeledCmd", 2),  // bare fields despite "Cmd" suffix → must be rejected
-		bare("ruleTable", 1),   // helper
+		helped("Foo", 2),        // command-shaped, no "Cmd" suffix → must be found
+		helped("RunThing", 3),   // command-shaped, no suffix
+		helped("ProbeCmd", 2),   // command-shaped, has suffix
+		helped("ServeCmd", 2),   //
+		helped("ExtractCmd", 2), //
+		bare("LabeledCmd", 2),   // bare fields despite "Cmd" suffix → must be rejected
+		bare("ruleTable", 1),    // helper
 	}
 	rep := Scan(all, 5)
 	if !rep.Candidate {

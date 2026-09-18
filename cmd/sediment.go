@@ -20,9 +20,9 @@ import (
 //
 // Requires the repo indexed: `defn ingest .` (writes a gitignored .defn/).
 type SedimentCmd struct {
-	Covered   string `help:"A test-covered definition to demo the gate PROMOTING (verifiable + green)." default:"Scan"`
-	Untested  string `help:"An untested definition to demo the gate REFUSING (unverifiable)." default:"Commandish"`
-	RunTests  bool   `help:"Actually run the covering tests for the --covered demo (slower; otherwise just report coverage)." default:"true"`
+	Covered  string `help:"A test-covered definition to demo the gate PROMOTING (verifiable + green)." default:"Scan"`
+	Untested string `help:"An untested definition to demo the gate REFUSING (unverifiable)." default:"Commandish"`
+	RunTests bool   `help:"Actually run the covering tests for the --covered demo (slower; otherwise just report coverage)." default:"true"`
 }
 
 func (c *SedimentCmd) Run() error {

@@ -43,16 +43,16 @@ import (
 // never edits its own cmd/ — passing scaffolds are written to a proposal dir for
 // a human to move in.
 type DogfoodCmd struct {
-	Corpus    string `help:"Directory of Go files holding the kong subcommand structs (the corpus)." default:"cmd"`
-	FirstK    int    `help:"How many regular (scalar-flag) commands the generator is authored from." default:"10"`
+	Corpus    string  `help:"Directory of Go files holding the kong subcommand structs (the corpus)." default:"cmd"`
+	FirstK    int     `help:"How many regular (scalar-flag) commands the generator is authored from." default:"10"`
 	Threshold float64 `help:"Promote gate: fraction of the holdout that must build+register." default:"0.95"`
-	Offline   bool   `help:"Synthesize the generator deterministically (no model). Default is live (Opus authors it). The verifier is real in both regimes."`
-	CacheDir  string `help:"Disk cache dir for LLM calls (live mode)." default:".crystal-cache"`
-	Model     string `help:"Authoring model (the expensive tier), live mode." default:"claude-opus-4-8"`
-	Verifier  string `help:"Which Verifier instance to gate with: 'build' (go build + kong register + binary-probe contract) or 'test' (the defn-test shape: go test asserting the contract — catches the slice leak build misses). Same loop, swapped instance." default:"build" enum:"build,test"`
-	Scratch   string `help:"Throwaway dir for compiled scaffolds (gitignored; under the current module so kong resolves offline)." default:".dogfood-scratch"`
-	FlowOut   string `help:"Sankey flow record for the viz. Empty = don't write." default:".crystal-viz/dogfood-flow.json"`
-	Verbose   bool   `help:"Print each scaffold's verdict detail and the authored template."`
+	Offline   bool    `help:"Synthesize the generator deterministically (no model). Default is live (Opus authors it). The verifier is real in both regimes."`
+	CacheDir  string  `help:"Disk cache dir for LLM calls (live mode)." default:".crystal-cache"`
+	Model     string  `help:"Authoring model (the expensive tier), live mode." default:"claude-opus-4-8"`
+	Verifier  string  `help:"Which Verifier instance to gate with: 'build' (go build + kong register + binary-probe contract) or 'test' (the defn-test shape: go test asserting the contract — catches the slice leak build misses). Same loop, swapped instance." default:"build" enum:"build,test"`
+	Scratch   string  `help:"Throwaway dir for compiled scaffolds (gitignored; under the current module so kong resolves offline)." default:".dogfood-scratch"`
+	FlowOut   string  `help:"Sankey flow record for the viz. Empty = don't write." default:".crystal-viz/dogfood-flow.json"`
+	Verbose   bool    `help:"Print each scaffold's verdict detail and the authored template."`
 }
 
 func (c *DogfoodCmd) Run() error {

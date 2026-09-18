@@ -5,12 +5,12 @@ import "testing"
 // a well-formed entry: specific trigger, a working avoid guard.
 func goodEntry() Entry {
 	return Entry{
-		Name:    "guard-git-add-all",
-		Rung:    "code",
-		Match:   []string{"git", "add", "-a", "--all"},
-		Avoid:   []string{"explicit", "intentional"},
+		Name:     "guard-git-add-all",
+		Rung:     "code",
+		Match:    []string{"git", "add", "-a", "--all"},
+		Avoid:    []string{"explicit", "intentional"},
 		Artifact: "deny — stage explicit paths instead",
-		MinConf: 0.5,
+		MinConf:  0.5,
 	}
 }
 

@@ -33,14 +33,14 @@ func (c *LibraryCmd) Run() error {
 
 	// A demo context stream (stands in for a live session's requests).
 	stream := []string{
-		"please git add -A and commit",                          // → guard fires
+		"please git add -A and commit",                           // → guard fires
 		"git add -A again right now",                             // → same entry on cooldown → abstain
-		"generate a Go struct type for this entity with fields", // → entity-to-struct
-		"classify this bash shell command into a category",      // → categorize
-		"git add explicit file main.go",                         // → guard matches but 'explicit' trips too-much
+		"generate a Go struct type for this entity with fields",  // → entity-to-struct
+		"classify this bash shell command into a category",       // → categorize
+		"git add explicit file main.go",                          // → guard matches but 'explicit' trips too-much
 		"verify this quote against its source citation verbatim", // → quote-verify
-		"just a paraphrase summary of the source",               // → quote-verify matches but 'paraphrase' trips too-much
-		"do some git add stuff",                                 // → weak guard match → abstain-low-conf
+		"just a paraphrase summary of the source",                // → quote-verify matches but 'paraphrase' trips too-much
+		"do some git add stuff",                                  // → weak guard match → abstain-low-conf
 	}
 
 	fmt.Println("=== serving the context stream ===")

@@ -11,18 +11,18 @@
 // the two axes he tracks separately:
 //
 //   - Rung      = actuator expressivity: how powerful is the notation the executor
-//                 targets (prose plan → stepwise recipe → pseudocode → code).
+//     targets (prose plan → stepwise recipe → pseudocode → code).
 //   - Executor  = the model-burden floor: the WEAKEST tier that can still run the
-//                 body. "The sweet spot ... is maximizing actuator expressivity
-//                 while minimizing model burden."
+//     body. "The sweet spot ... is maximizing actuator expressivity
+//     while minimizing model burden."
 //
 // and the two things that make an interface easy to target:
 //
 //   - Inputs/Output = a NARROW WAIST: typed in/out, few degrees of freedom. "The
-//                 model's search problem scales with the degrees of freedom at the
-//                 interface, so minimize them."
+//     model's search problem scales with the degrees of freedom at the
+//     interface, so minimize them."
 //   - Verifier  = the deterministic machinery that "carries correctness" off the
-//                 model, and Residual names what is deliberately LEFT to the model.
+//     model, and Residual names what is deliberately LEFT to the model.
 package recipe
 
 import (
