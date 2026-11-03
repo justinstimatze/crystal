@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -28,8 +29,9 @@ type ChatOpts struct {
 	// reasoning model (Qwen3.x) answers directly, the setting memdoor's bench
 	// ran in. omitempty keeps cache keys of earlier runs valid.
 	NoThink bool `json:",omitempty"`
-	// Effort is output_config.effort for Anthropic models (low..max); ignored
-	// by OpenAI-compatible endpoints. omitempty keeps earlier cache keys.
+	// Effort is output_config.effort for Anthropic models (low..max) and
+	// reasoning_effort on OpenAI-compatible endpoints that take it (Mistral
+	// Large 4 / Small 4 / Medium 3.5). omitempty keeps earlier cache keys.
 	Effort string `json:",omitempty"`
 }
 
@@ -51,6 +53,7 @@ type chatRequestOpts struct {
 	Temperature float64       `json:"temperature"`
 	TopP        float64       `json:"top_p,omitempty"`
 	MaxTokens   int64         `json:"max_tokens,omitempty"`
+	Reasoning   string        `json:"reasoning_effort,omitempty"`
 	Template    *struct {
 		EnableThinking bool `json:"enable_thinking"`
 	} `json:"chat_template_kwargs,omitempty"`
@@ -60,9 +63,9 @@ type chatResponseFull struct {
 	Choices []struct {
 		FinishReason string `json:"finish_reason"`
 		Message      struct {
-			Content          string `json:"content"`
-			ReasoningContent string `json:"reasoning_content"`
-			Reasoning        string `json:"reasoning"`
+			Content          json.RawMessage `json:"content"`
+			ReasoningContent string          `json:"reasoning_content"`
+			Reasoning        string          `json:"reasoning"`
 		} `json:"message"`
 	} `json:"choices"`
 	Usage struct {
@@ -108,7 +111,7 @@ func (c *Client) Chat(ctx context.Context, model, system, prompt string, o ChatO
 		msgs = append(msgs, chatMessage{Role: "system", Content: system})
 	}
 	msgs = append(msgs, chatMessage{Role: "user", Content: prompt})
-	reqo := chatRequestOpts{Model: model, Messages: msgs, Temperature: o.Temperature, TopP: o.TopP, MaxTokens: o.MaxTokens}
+	reqo := chatRequestOpts{Model: model, Messages: msgs, Temperature: o.Temperature, TopP: o.TopP, MaxTokens: o.MaxTokens, Reasoning: o.Effort}
 	if o.NoThink {
 		reqo.Template = &struct {
 			EnableThinking bool `json:"enable_thinking"`
@@ -173,12 +176,13 @@ func (c *Client) chatOnce(ctx context.Context, hc *http.Client, model string, bo
 		return ChatResult{}, true, fmt.Errorf("chat: no choices for model=%s", model)
 	}
 	ch := cr.Choices[0]
+	text, thought := splitContent(ch.Message.Content)
 	r := ChatResult{
-		Result:       Result{Text: ch.Message.Content, Model: model, InputTokens: cr.Usage.PromptTokens, OutputTokens: cr.Usage.CompletionTokens, LatencyMS: lat},
+		Result:       Result{Text: text, Model: model, InputTokens: cr.Usage.PromptTokens, OutputTokens: cr.Usage.CompletionTokens, LatencyMS: lat},
 		FinishReason: ch.FinishReason,
 	}
 	if r.Text == "" {
-		if rs := ch.Message.ReasoningContent + ch.Message.Reasoning; rs != "" {
+		if rs := ch.Message.ReasoningContent + ch.Message.Reasoning + thought; rs != "" {
 			r.Text, r.FromReasoning = rs, true
 		}
 	}
@@ -187,4 +191,44 @@ func (c *Client) chatOnce(ctx context.Context, hc *http.Client, model string, bo
 
 func (c *Client) cachePath(key string) string {
 	return c.cacheDir + string(os.PathSeparator) + key + ".json"
+}
+
+// splitContent reads an OpenAI-style content field that is either a string or
+// a list of typed blocks: Mistral's reasoning mode returns
+// [{"type":"thinking","thinking":[{"type":"text","text":...}]}, {"type":"text","text":...}].
+// It returns the answer text and the thinking text separately.
+func splitContent(raw json.RawMessage) (text, thinking string) {
+	var s string
+	if json.Unmarshal(raw, &s) == nil {
+		return s, ""
+	}
+	var blocks []struct {
+		Type     string          `json:"type"`
+		Text     string          `json:"text"`
+		Thinking json.RawMessage `json:"thinking"`
+	}
+	if json.Unmarshal(raw, &blocks) != nil {
+		return "", ""
+	}
+	var tb, th strings.Builder
+	for _, b := range blocks {
+		switch b.Type {
+		case "text":
+			tb.WriteString(b.Text)
+		case "thinking":
+			var inner []struct {
+				Text string `json:"text"`
+			}
+			if json.Unmarshal(b.Thinking, &inner) == nil {
+				for _, x := range inner {
+					th.WriteString(x.Text)
+				}
+			} else {
+				var str string
+				_ = json.Unmarshal(b.Thinking, &str)
+				th.WriteString(str)
+			}
+		}
+	}
+	return tb.String(), th.String()
 }
