@@ -59,6 +59,44 @@ calls, so their costs are notional.
    13 single calls; at 32,768 those runaways still solved nothing, so the cap was not hiding wins,
    but a capped single call should be reported as such.
 
+## The question memdoor's headline asks: a cheap team vs one expensive call
+
+memdoor: "Five Qwen3.8-27B agents beat Fable 5 on LiveCodeBench Hard." Its Fable 5 numbers are the
+GVS5H authors' files, not its own run. Those files (`runs/patched_verdicts.json`, five passes per
+arm, every problem) cover all 73 of our problems, so the claim can be checked per problem, and one
+frontier single call was run here for comparison.
+
+| on the same problems | first 10 (memdoor's set) | our 73 AtCoder | all 100 |
+|---|---|---|---|
+| Fable 5, one call, thinking on, 128K (authors, mean of 5) | 8.0 | 65.6 | 90.4 |
+| Qwen3.8-27B team, thinking on, 128K, up to 10 rounds (authors, mean of 5) | 9.6 | 66.0 | 92.4 |
+| paired over 5 passes: team-only / Fable-only, sign test | 10 / 2, p = 0.04 | 10 / 8, p = 0.81 | 21 / 11, p = 0.11 |
+| **Claude Opus 5.5, one call, effort high (here, 1 pass)** | | **64** | |
+
+Per problem on the 73: Fable 5 ~$0.75 (authors' mean 14.7K output tokens at $10/$50), the Qwen team
+~$0.48 (192K output tokens at $0.20/$2.50; memdoor measured a median $0.39 and 40 minutes a run),
+Opus 5.5 **$0.08** (3.8K output tokens, $5.85 for all 73, median ~30 s), regraded uncontended, no
+errors, no cut-offs.
+
+- **"Beat" holds on memdoor's 10 problems only.** On all 100 the team leads by 2 (p = 0.11); on the
+  73 AtCoder problems it is a tie. The first ten are the newest contests (least contamination risk),
+  so a team edge concentrated there would be interesting, but ten problems cannot establish it.
+  memdoor's own README body says "parity with their harness".
+- **One Opus 5.5 call lands within about two problems of both, at a sixth of the team's cost and a
+  tenth of Fable's, in minutes rather than most of an hour.** On this benchmark the cheaper frontier
+  model removes most of the cost argument for the cheap team. One pass; contamination not ruled out.
+- **Thinking, not the team, is most of the climb**, in the authors' data: Qwen single call ~25 of 73
+  thinking off (ours) → ~50 thinking on (authors) → 66 as a 10-round team.
+
+### A failed replication attempt, recorded so it is not repeated
+
+Qwen3.8-27B thinking on through the Hugging Face router, our one-round team: single 29, team 50 of
+the 70 problems finished before the run was stopped at the 2-hour limit. **Invalid as a
+replication**: the provider the router picked silently caps output at exactly 40,960 tokens
+whatever `max_tokens` says, and 47 of 72 single calls were cut there (the authors' mean single
+call is 107K tokens). Pin a provider with a long output limit (`model:provider` on the router) or
+self-host before comparing thinking-on numbers.
+
 ## Grading noise (fixed)
 
 Grading inside a live run shares 4 CPUs with every problem in flight. The same program passed
