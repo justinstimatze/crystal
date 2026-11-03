@@ -43,6 +43,7 @@ type Config struct {
 	MaxTokens int64
 	TopP      float64
 	NoThink   bool
+	Effort    string
 	Python    string
 	// Guard turns on the two fixes memdoor's NOTES name for the method's losses
 	// and never ran: skip the repair call when every sample already passed
@@ -102,7 +103,7 @@ func (r *run) call(role, prompt string) (string, error) {
 		return "", fmt.Errorf("no model for role %s", role)
 	}
 	cr, err := r.m.Chat(r.ctx, model, "", prompt, publicai.ChatOpts{
-		Temperature: tempFor(role), TopP: r.c.TopP, MaxTokens: r.c.MaxTokens, Sample: r.c.Sample, NoThink: r.c.NoThink,
+		Temperature: tempFor(role), TopP: r.c.TopP, MaxTokens: r.c.MaxTokens, Sample: r.c.Sample, NoThink: r.c.NoThink, Effort: r.c.Effort,
 	})
 	if err != nil {
 		return "", fmt.Errorf("%s: %w", role, err)

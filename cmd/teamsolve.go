@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/justinstimatze/crystal/internal/llm"
 	"github.com/justinstimatze/crystal/internal/publicai"
 	"github.com/justinstimatze/crystal/internal/teamsolve"
 )
@@ -32,23 +33,35 @@ type TeamSolveCmd struct {
 	MaxTokens    int64    `help:"Reply cap per call." default:"8192"`
 	TopP         float64  `help:"top_p (0 = provider default)." default:"0"`
 	StressRounds int      `help:"team-stress: repair rounds driven by samples then the brute-force diff." default:"2" name:"stress-rounds"`
+	Provider     string   `help:"openai: any OpenAI-compatible endpoint (--base-url); anthropic: the Anthropic API (ANTHROPIC_API_KEY)." default:"openai" enum:"openai,anthropic"`
+	Effort       string   `help:"Anthropic output_config.effort (low, medium, high, xhigh, max)." default:""`
 	NoThink      bool     `help:"Send chat_template_kwargs.enable_thinking=false (Qwen3.x hybrid models: thinking off, as memdoor's bench ran)." name:"no-think"`
 	BaseURL      string   `help:"OpenAI-compatible base URL." default:"https://router.huggingface.co/v1"`
 	KeyEnv       string   `help:"Env var holding the bearer key." default:"HF_TOKEN"`
-	Price        []string `help:"model=IN/OUT dollars per 1M tokens, for the cost column. Repeatable." default:"swiss-ai/Apertus-v1.5-70B=0.82/2.92,Qwen/Qwen3.8-27B=0.20/2.50,swiss-ai/Apertus-8B-Instruct-2509=0.10/0.20"`
+	Price        []string `help:"model=IN/OUT dollars per 1M tokens, for the cost column. Repeatable." default:"swiss-ai/Apertus-v1.5-70B=0.82/2.92,Qwen/Qwen3.8-27B=0.20/2.50,swiss-ai/Apertus-8B-Instruct-2509=0.10/0.20,claude-opus-5-5=4/20,claude-fable-5=10/50"`
 	Python       string   `help:"Interpreter for the programs." default:"python3"`
 	Out          string   `help:"Output dir: results.tsv plus every prompt, reply and program." default:"teamsolve-out"`
 	CacheDir     string   `help:"Disk cache dir." default:".crystal-cache"`
 }
 
 func (c *TeamSolveCmd) Run() error {
-	key := os.Getenv(c.KeyEnv)
-	if key == "" {
-		return usageError{fmt.Errorf("%s not set", c.KeyEnv)}
-	}
-	client, err := publicai.NewAt(c.CacheDir, c.BaseURL, key)
-	if err != nil {
-		return usageError{err}
+	var client teamsolve.Chatter
+	if c.Provider == "anthropic" {
+		ac, err := llm.New(c.CacheDir)
+		if err != nil {
+			return usageError{err}
+		}
+		client = ac
+	} else {
+		key := os.Getenv(c.KeyEnv)
+		if key == "" {
+			return usageError{fmt.Errorf("%s not set", c.KeyEnv)}
+		}
+		oc, err := publicai.NewAt(c.CacheDir, c.BaseURL, key)
+		if err != nil {
+			return usageError{err}
+		}
+		client = oc
 	}
 	probs, skipped, err := teamsolve.Load(c.Problems)
 	if err != nil {
@@ -109,7 +122,7 @@ func (c *TeamSolveCmd) Run() error {
 		go func() {
 			defer wg.Done()
 			for j := range jobs {
-				cfg := teamsolve.Config{Models: models, MaxTokens: c.MaxTokens, TopP: c.TopP, NoThink: c.NoThink, Python: c.Python,
+				cfg := teamsolve.Config{Models: models, MaxTokens: c.MaxTokens, TopP: c.TopP, NoThink: c.NoThink, Effort: c.Effort, Python: c.Python,
 					Sample: j.pass, PublicLimit: 10 * time.Second, HiddenLimit: 6 * time.Second,
 					TranscriptTo: filepath.Join(c.Out, fmt.Sprintf("pass%d", j.pass))}
 				for _, arm := range c.Arms {

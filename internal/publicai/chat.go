@@ -28,6 +28,9 @@ type ChatOpts struct {
 	// reasoning model (Qwen3.x) answers directly, the setting memdoor's bench
 	// ran in. omitempty keeps cache keys of earlier runs valid.
 	NoThink bool `json:",omitempty"`
+	// Effort is output_config.effort for Anthropic models (low..max); ignored
+	// by OpenAI-compatible endpoints. omitempty keeps earlier cache keys.
+	Effort string `json:",omitempty"`
 }
 
 // ChatResult is a Result plus why the reply ended. FinishReason "length" means
