@@ -80,6 +80,7 @@ type Result struct {
 	Calls   []Call
 	Seconds float64
 	Kept    string // which program was submitted: solve | repair | single
+	Stress  Stress // team-stress only
 	Err     string
 }
 
@@ -101,7 +102,7 @@ func (r *run) call(role, prompt string) (string, error) {
 		return "", fmt.Errorf("no model for role %s", role)
 	}
 	cr, err := r.m.Chat(r.ctx, model, "", prompt, publicai.ChatOpts{
-		Temperature: roleTemp[role], TopP: r.c.TopP, MaxTokens: r.c.MaxTokens, Sample: r.c.Sample, NoThink: r.c.NoThink,
+		Temperature: tempFor(role), TopP: r.c.TopP, MaxTokens: r.c.MaxTokens, Sample: r.c.Sample, NoThink: r.c.NoThink,
 	})
 	if err != nil {
 		return "", fmt.Errorf("%s: %w", role, err)
@@ -218,4 +219,15 @@ func writeProgram(c Config, id, arm, name, prog string) {
 	d := filepath.Join(c.TranscriptTo, id, arm)
 	_ = os.MkdirAll(d, 0o755)
 	_ = os.WriteFile(filepath.Join(d, name), []byte(prog), 0o644)
+}
+
+// tempFor maps a numbered role ("review-2") to its base role's temperature.
+func tempFor(role string) float64 {
+	if t, ok := roleTemp[role]; ok {
+		return t
+	}
+	if i := strings.LastIndex(role, "-"); i > 0 {
+		return roleTemp[role[:i]]
+	}
+	return 0.2
 }

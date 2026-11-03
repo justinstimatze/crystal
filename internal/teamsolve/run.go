@@ -22,8 +22,26 @@ type Outcome struct {
 	Duration time.Duration
 }
 
+// RunArgs runs code with argv and stdin, for generators.
+func RunArgs(ctx context.Context, python, code, stdin string, timeout time.Duration, args ...string) Outcome {
+	return runPy(ctx, python, code, stdin, timeout, args)
+}
+
 // RunCase runs code under python3 -I with the case's input on stdin.
 func RunCase(ctx context.Context, python, code string, c Case, timeout time.Duration) Outcome {
+	o := runPy(ctx, python, code, c.Input, timeout, nil)
+	if o.Kind == "" {
+		if Equal(o.Got, c.Output) {
+			o.Pass = true
+		} else {
+			o.Kind = "wrong answer"
+		}
+	}
+	return o
+}
+
+// runPy runs code; Kind is "" on a clean exit (the caller judges the output).
+func runPy(ctx context.Context, python, code, stdin string, timeout time.Duration, args []string) Outcome {
 	if strings.TrimSpace(code) == "" {
 		return Outcome{Kind: "no program"}
 	}
@@ -38,9 +56,9 @@ func RunCase(ctx context.Context, python, code string, c Case, timeout time.Dura
 	}
 	cctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
-	cmd := exec.CommandContext(cctx, python, "-I", src)
+	cmd := exec.CommandContext(cctx, python, append([]string{"-I", src}, args...)...)
 	cmd.Dir = dir
-	cmd.Stdin = strings.NewReader(c.Input)
+	cmd.Stdin = strings.NewReader(stdin)
 	var out, errb bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &out, &errb
 	start := time.Now()
@@ -51,10 +69,6 @@ func RunCase(ctx context.Context, python, code string, c Case, timeout time.Dura
 		o.Kind = "timeout"
 	case err != nil:
 		o.Kind = "runtime error"
-	case Equal(o.Got, c.Output):
-		o.Pass = true
-	default:
-		o.Kind = "wrong answer"
 	}
 	return o
 }

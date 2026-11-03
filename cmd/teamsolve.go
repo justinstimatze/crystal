@@ -20,24 +20,25 @@ import (
 // (the Hugging Face router by default, which serves Apertus 1.5 through Public
 // AI). The loop sees only the samples; the score is every hidden test.
 type TeamSolveCmd struct {
-	Problems    string   `help:"jsonl from bench/teamsolve/lcb_filter.py." required:""`
-	Model       string   `help:"Model for every role unless --role-model overrides." default:"swiss-ai/Apertus-v1.5-70B"`
-	RoleModel   []string `help:"role=model override (roles: single, plan, ideate-a, ideate-b, solve, review, repair). Repeatable." name:"role-model"`
-	Arms        []string `help:"Arms to run." default:"single,team,team-guard" enum:"single,team,team-guard"`
-	Only        []string `help:"Problem ids to run (default all)."`
-	Limit       int      `help:"First N problems after --only (0 = all)." default:"0"`
-	Passes      int      `help:"Independent passes per problem (each its own sample index, so no cache reuse)." default:"1"`
-	FirstPass   int      `help:"Sample index of the first pass (run pass 2 alone with --first-pass 2)." default:"1" name:"first-pass"`
-	Concurrency int      `help:"Problems in flight." default:"4"`
-	MaxTokens   int64    `help:"Reply cap per call." default:"8192"`
-	TopP        float64  `help:"top_p (0 = provider default)." default:"0"`
-	NoThink     bool     `help:"Send chat_template_kwargs.enable_thinking=false (Qwen3.x hybrid models: thinking off, as memdoor's bench ran)." name:"no-think"`
-	BaseURL     string   `help:"OpenAI-compatible base URL." default:"https://router.huggingface.co/v1"`
-	KeyEnv      string   `help:"Env var holding the bearer key." default:"HF_TOKEN"`
-	Price       []string `help:"model=IN/OUT dollars per 1M tokens, for the cost column. Repeatable." default:"swiss-ai/Apertus-v1.5-70B=0.82/2.92,Qwen/Qwen3.8-27B=0.20/2.50,swiss-ai/Apertus-8B-Instruct-2509=0.10/0.20"`
-	Python      string   `help:"Interpreter for the programs." default:"python3"`
-	Out         string   `help:"Output dir: results.tsv plus every prompt, reply and program." default:"teamsolve-out"`
-	CacheDir    string   `help:"Disk cache dir." default:".crystal-cache"`
+	Problems     string   `help:"jsonl from bench/teamsolve/lcb_filter.py." required:""`
+	Model        string   `help:"Model for every role unless --role-model overrides." default:"swiss-ai/Apertus-v1.5-70B"`
+	RoleModel    []string `help:"role=model override (roles: single, plan, ideate-a, ideate-b, solve, review, repair). Repeatable." name:"role-model"`
+	Arms         []string `help:"Arms to run." default:"single,team,team-guard" enum:"single,team,team-guard,team-stress"`
+	Only         []string `help:"Problem ids to run (default all)."`
+	Limit        int      `help:"First N problems after --only (0 = all)." default:"0"`
+	Passes       int      `help:"Independent passes per problem (each its own sample index, so no cache reuse)." default:"1"`
+	FirstPass    int      `help:"Sample index of the first pass (run pass 2 alone with --first-pass 2)." default:"1" name:"first-pass"`
+	Concurrency  int      `help:"Problems in flight." default:"4"`
+	MaxTokens    int64    `help:"Reply cap per call." default:"8192"`
+	TopP         float64  `help:"top_p (0 = provider default)." default:"0"`
+	StressRounds int      `help:"team-stress: repair rounds driven by samples then the brute-force diff." default:"2" name:"stress-rounds"`
+	NoThink      bool     `help:"Send chat_template_kwargs.enable_thinking=false (Qwen3.x hybrid models: thinking off, as memdoor's bench ran)." name:"no-think"`
+	BaseURL      string   `help:"OpenAI-compatible base URL." default:"https://router.huggingface.co/v1"`
+	KeyEnv       string   `help:"Env var holding the bearer key." default:"HF_TOKEN"`
+	Price        []string `help:"model=IN/OUT dollars per 1M tokens, for the cost column. Repeatable." default:"swiss-ai/Apertus-v1.5-70B=0.82/2.92,Qwen/Qwen3.8-27B=0.20/2.50,swiss-ai/Apertus-8B-Instruct-2509=0.10/0.20"`
+	Python       string   `help:"Interpreter for the programs." default:"python3"`
+	Out          string   `help:"Output dir: results.tsv plus every prompt, reply and program." default:"teamsolve-out"`
+	CacheDir     string   `help:"Disk cache dir." default:".crystal-cache"`
 }
 
 func (c *TeamSolveCmd) Run() error {
@@ -99,7 +100,7 @@ func (c *TeamSolveCmd) Run() error {
 		return err
 	}
 	defer tsv.Close()
-	fmt.Fprintln(tsv, "id\tpass\tarm\tsolved\tpublic\thidden\tkept\tcalls\tin_tok\tout_tok\tcutoffs\tcost_usd\tseconds\terr")
+	fmt.Fprintln(tsv, "id\tpass\tarm\tsolved\tpublic\thidden\tkept\tcalls\tin_tok\tout_tok\tcutoffs\tcost_usd\tseconds\terr\tstress")
 
 	ctx := context.Background()
 	var wg sync.WaitGroup
@@ -118,6 +119,10 @@ func (c *TeamSolveCmd) Run() error {
 						r = teamsolve.Single(ctx, client, cfg, j.p)
 					case "team":
 						r = teamsolve.Team(ctx, client, cfg, j.p, arm)
+					case "team-stress":
+						g := cfg
+						g.Guard = true
+						r = teamsolve.TeamStress(ctx, client, g, j.p, arm, c.StressRounds)
 					case "team-guard":
 						g := cfg
 						g.Guard = true
@@ -154,9 +159,16 @@ type teamRowT struct {
 
 func (w teamRowT) tsv() string {
 	e := strings.ReplaceAll(w.r.Err, "\t", " ")
-	return fmt.Sprintf("%s\t%d\t%s\t%v\t%d/%d\t%d/%d\t%s\t%d\t%d\t%d\t%d\t%.5f\t%.1f\t%s",
+	st := "-"
+	if w.r.Arm == "team-stress" {
+		st = "unavailable: " + w.r.Stress.Why
+		if w.r.Stress.Available {
+			st = fmt.Sprintf("%d/%d mismatch", w.r.Stress.Mismatches, w.r.Stress.Checked)
+		}
+	}
+	return fmt.Sprintf("%s\t%d\t%s\t%v\t%d/%d\t%d/%d\t%s\t%d\t%d\t%d\t%d\t%.5f\t%.1f\t%s\t%s",
 		w.r.ID, w.pass, w.r.Arm, w.r.Solved(), w.r.Public.Passed, w.r.Public.Total, w.r.Hidden.Passed, w.r.Hidden.Total,
-		w.r.Kept, len(w.r.Calls), w.in, w.out, w.cutoffs, w.cost, w.r.Seconds, e)
+		w.r.Kept, len(w.r.Calls), w.in, w.out, w.cutoffs, w.cost, w.r.Seconds, e, st)
 }
 
 func teamRow(r teamsolve.Result, pass int, prices map[string][2]float64) teamRowT {
@@ -219,7 +231,7 @@ func printTeamSummary(rows []teamRowT, arms []string) {
 		return
 	}
 	for _, a := range arms {
-		if a == "single" {
+		if a == "single" || by[a] == nil {
 			continue
 		}
 		var both, only, sonly int

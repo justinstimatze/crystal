@@ -27,6 +27,8 @@ func (s scripted) Chat(_ context.Context, model, _, prompt string, _ publicai.Ch
 		role = RoleReview
 	case strings.HasPrefix(prompt, "You are the repair"):
 		role = RoleRepair
+	case strings.HasPrefix(prompt, "You write test tooling"):
+		role = RoleBrute
 	default:
 		role = RoleSingle
 	}
@@ -111,5 +113,29 @@ func TestRunCaseTimeout(t *testing.T) {
 	o := RunCase(context.Background(), "python3", "while True: pass\n", Case{"", ""}, 300*time.Millisecond)
 	if o.Kind != "timeout" {
 		t.Fatalf("%+v", o)
+	}
+}
+
+const fitsSamplesOnly = "```python\nn=int(input())\nprint({1:2,5:10}.get(n,0))\n```"
+const kit = "```python\nprint(int(input())*2)\n```\n```python\nimport sys,random\nrandom.seed(int(sys.argv[1]))\nprint(random.randint(1,50))\n```"
+
+func TestTeamStressCatchesASampleFittingProgramAndRepairsIt(t *testing.T) {
+	m := scripted{RolePlan: "p", RoleIdeateA: "a", RoleIdeateB: "b", RoleSolve: fitsSamplesOnly, RoleBrute: kit, RoleReview: "it hardcodes", RoleRepair: doubleIt}
+	r := TeamStress(context.Background(), m, cfg(true), prob, "team-stress", 2)
+	if !r.Stress.Available || r.Kept != "repair-1" || !r.Solved() {
+		t.Fatalf("stress should catch the sample-fitting program and keep the repair: %+v", r)
+	}
+	g := Team(context.Background(), m, cfg(true), prob, "team-guard")
+	if g.Solved() || g.Kept != "solve" {
+		t.Fatalf("team-guard sees only the samples and should submit the sample-fitter: %+v", g)
+	}
+}
+
+func TestTeamStressDropsABruteForceThatFailsTheSamples(t *testing.T) {
+	badKit := "```python\nprint(0)\n```\n```python\nprint(3)\n```"
+	m := scripted{RolePlan: "p", RoleIdeateA: "a", RoleIdeateB: "b", RoleSolve: fitsSamplesOnly, RoleBrute: badKit}
+	r := TeamStress(context.Background(), m, cfg(true), prob, "team-stress", 2)
+	if r.Stress.Available || r.Kept != "solve" || len(r.Calls) != 5 {
+		t.Fatalf("a brute force failing the samples must not gate anything: %+v", r)
 	}
 }

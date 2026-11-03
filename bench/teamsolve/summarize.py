@@ -29,7 +29,7 @@ for (pid, p, arm), r in rows.items():
 for p in sorted(by_pass):
     arms = by_pass[p]
     print(f"pass {p}")
-    for arm in ("single", "team", "team-guard"):
+    for arm in ("single", "team", "team-guard", "team-stress"):
         if arm not in arms:
             continue
         rs = arms[arm].values()
@@ -39,7 +39,7 @@ for p in sorted(by_pass):
         cost = sum(float(r["cost_usd"]) for r in rs)
         print(f"  {arm:10s} {solved:3d}/{len(rs)}  errors {errs}  cut-off rows {cut}  cost ${cost:.2f}")
     if "single" in arms:
-        for arm in ("team", "team-guard"):
+        for arm in ("team", "team-guard", "team-stress"):
             if arm not in arms:
                 continue
             ids = sorted(set(arms[arm]) & set(arms["single"]))
