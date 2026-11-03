@@ -27,6 +27,7 @@ type TeamSolveCmd struct {
 	Only        []string `help:"Problem ids to run (default all)."`
 	Limit       int      `help:"First N problems after --only (0 = all)." default:"0"`
 	Passes      int      `help:"Independent passes per problem (each its own sample index, so no cache reuse)." default:"1"`
+	FirstPass   int      `help:"Sample index of the first pass (run pass 2 alone with --first-pass 2)." default:"1" name:"first-pass"`
 	Concurrency int      `help:"Problems in flight." default:"4"`
 	MaxTokens   int64    `help:"Reply cap per call." default:"8192"`
 	TopP        float64  `help:"top_p (0 = provider default)." default:"0"`
@@ -133,7 +134,7 @@ func (c *TeamSolveCmd) Run() error {
 			}
 		}()
 	}
-	for pass := 1; pass <= c.Passes; pass++ {
+	for pass := c.FirstPass; pass < c.FirstPass+c.Passes; pass++ {
 		for _, p := range probs {
 			jobs <- job{p, pass}
 		}
