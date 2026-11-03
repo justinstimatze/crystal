@@ -119,3 +119,23 @@ freshet `cmd/gatewrite`: asked to write the deterministic gate that freshet's ha
 Mistral Medium 3.5 and Apertus 1.5 70B write questions about distance and weather, the battery's
 own trap, and land at the bare model (47 and 40 of 65 vs the hand gate's 65 and 60). The same
 lesson as point 4: a verifier written by the model inherits the model's blind spot.
+
+## Pre-registered for stage B (written 2026-11-03, before any stage-B run)
+
+Two tracks, judged separately, so a slow win cannot pass as a cheap one.
+
+**Interactive track (the primary claim).** An open-only setup (EU models preferred: Mistral, Apertus)
+passes if, on fresh problems released after the models' training cutoffs, over 3 passes with paired
+tests:
+- accuracy ≥ Fable 5.1 single call (confidence-interval lower bound not below it), at ≤ 1/3 of its
+  cost per problem;
+- **and** wall-clock per problem p50 ≤ 2× and p90 ≤ 5× the frontier single call's on the same set.
+Fallback claim: the same bar met on most task categories, categories fixed before the run.
+Comparators: Fable 5.1 and Opus 5.5 single calls at high effort. Grading separate and uncontended;
+every slice reported; provider caps and errors logged.
+
+**Batch track (a separate path, not a fallback).** No latency bar; the bar is accuracy at cost,
+using batch pricing where it exists for every arm (frontier batch APIs included, so the comparison
+stays fair). Candidates for this track are work that can wait: overnight review, test writing,
+long-horizon reasoning like the weight-interpretation example (a local 27B taking about an hour a
+prompt). Reported on its own table, never merged into the interactive verdict.
