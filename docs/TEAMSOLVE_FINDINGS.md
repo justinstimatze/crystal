@@ -250,3 +250,29 @@ Roles for the externalized mixture of experts, borrowed from permaculture becaus
   upgrades as slower layers deliver. First test: replay recorded per-expert timings as an anytime
   mayor (time to first verified answer vs a frontier single call, false-pass rate, how often an
   upgrade fixes it), no new model calls.
+
+### Design notes: beyond breadth and meta, from neuroscience (2026-11-04)
+
+Breadth (uncorrelated knowledge) raises the ceiling; meta (checking, judging, framing, stopping)
+captures more of it, and framing can exceed any member alone (memdoor's same-model team gained 7-16
+problems with no new knowledge). Further mechanisms, each with a testable counterpart (classic papers
+cited from memory):
+1. **Correlated noise limits population information** (Averbeck, Latham & Pouget 2006): recruit the
+   expert least correlated with the team, not the strongest. Measured: DeepSeek/GLM failures phi +0.49;
+   GLM fails on 17 of the 19 problems DeepSeek fails.
+2. **Evidence accumulation to a threshold** (drift-diffusion, Ratcliff; Wald's SPRT): consult cheap
+   experts sequentially, accumulate check/length/agreement evidence, stop at a confidence threshold.
+3. **Predictive coding / prediction error** (Rao & Ballard; Friston): a fast model predicts what a good
+   answer looks like; only mismatches propagate up the laminar layers.
+4. **Conflict monitoring** (Botvinick et al. 2001): disagreement between experts triggers costly control.
+5. **Basal-ganglia action selection** (Redgrave, Prescott & Gurney 1999): experts bid with calibrated
+   confidence; a central selector releases one. Inhibition of return: a retry must change method family.
+6. **Adaptive gain, explore/exploit** (Aston-Jones & Cohen 2005): one team-wide uncertainty level sets how
+   diverse the next attempts are.
+7. **Global workspace** (Baars; Dehaene): broadcast the current best hypothesis to all specialists.
+8. **Complementary learning systems** (McClelland, McNaughton & O'Reilly 1995) and prioritized replay
+   (Mattar & Daw 2018): a fast case library plus slow offline fine-tuning on the most surprising cases;
+   incubation (Wagner et al. 2004): revisit unsolved problems later in the batch tier.
+9. **Degeneracy** (Edelman & Gally 2001): different structures for the same function give robustness
+   to host failures, drift and blind spots.
+10. **Pruning**: drop experts that never win or add no uncorrelated knowledge.

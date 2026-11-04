@@ -76,3 +76,54 @@ for k, v in sig.items():
 sp = [(e, i) for e, i in rows if R[e][i]["pub"]]
 fp = sum(1 for e, i in sp if not R[e][i]["solved"])
 print(f"\n  false passes: {fp} of {len(sp)} sample-passing programs fail the hidden tests ({100*fp/max(1,len(sp)):.0f}%)")
+
+# ---- correlated noise (Averbeck, Latham & Pouget 2006): information is limited by correlated errors ----
+import math
+print("\n  error correlation between experts (phi on 'failed'; P(B fails | A fails)):")
+fail = {e: [not R[e][i]["solved"] for i in ids] for e in experts}
+def phi(a, b):
+    n11 = sum(x and y for x, y in zip(a, b)); n00 = sum((not x) and (not y) for x, y in zip(a, b))
+    n10 = sum(x and not y for x, y in zip(a, b)); n01 = sum((not x) and y for x, y in zip(a, b))
+    d = math.sqrt((n11 + n10) * (n01 + n00) * (n11 + n01) * (n10 + n00))
+    return (n11 * n00 - n10 * n01) / d if d else float("nan")
+for a, b in itertools.combinations(experts, 2):
+    fa = sum(fail[a]); both = sum(x and y for x, y in zip(fail[a], fail[b]))
+    print(f"    {a:10s} {b:10s} phi {phi(fail[a], fail[b]):+.2f}   P({b} fails | {a} fails) = {both}/{fa}")
+if len(experts) >= 3:
+    base = max(experts, key=lambda e: sum(R[e][i]["solved"] for i in ids))
+    rest = [e for e in experts if e != base]
+    strongest = max(rest, key=lambda e: sum(R[e][i]["solved"] for i in ids))
+    leastcorr = min(rest, key=lambda e: phi(fail[base], fail[e]))
+    ceil = lambda team: sum(any(R[e][i]["solved"] for e in team) for i in ids)
+    print(f"    second expert for {base}: strongest = {strongest} (ceiling {ceil([base, strongest])}), "
+          f"least-correlated = {leastcorr} (ceiling {ceil([base, leastcorr])})")
+
+# ---- evidence accumulation to a threshold (drift-diffusion / SPRT style) ----
+med = {}
+for e in experts:
+    lens = sorted(R[e][i]["out"] for i in ids if R[e][i]["pub"])
+    med[e] = lens[len(lens) // 2] if lens else 0
+def adaptive(order):
+    s = c = 0
+    for i in ids:
+        passers = []
+        for j, e in enumerate(order):
+            c += R[e][i]["cost"]
+            if R[e][i]["pub"]:
+                passers.append(e)
+                if R[e][i]["out"] <= med[e]:  # strong evidence: passed AND a typical-or-short reply
+                    break
+        pick = min(passers, key=lambda e: R[e][i]["out"] / max(1, med[e])) if passers else order[-1]
+        s += R[pick][i]["solved"]
+    return s, c / len(ids)
+print("\n  evidence-threshold cascade vs plain cascade (same orders):")
+for k in range(2, len(experts) + 1):
+    for order in itertools.permutations(experts, k):
+        s2, c2 = adaptive(order)
+        s1 = c1 = 0
+        for i in ids:
+            for j, e in enumerate(order):
+                c1 += R[e][i]["cost"]
+                if R[e][i]["pub"] or j == len(order) - 1:
+                    s1 += R[e][i]["solved"]; break
+        print(f"    {' > '.join(order):38s} plain {s1:3d} ${c1/len(ids):.4f}   threshold {s2:3d} ${c2:.4f}")
