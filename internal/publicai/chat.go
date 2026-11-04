@@ -1,6 +1,7 @@
 package publicai
 
 import (
+	"bufio"
 	"bytes"
 	"context"
 	"crypto/sha256"
@@ -54,7 +55,11 @@ type chatRequestOpts struct {
 	TopP        float64       `json:"top_p,omitempty"`
 	MaxTokens   int64         `json:"max_tokens,omitempty"`
 	Reasoning   string        `json:"reasoning_effort,omitempty"`
-	Template    *struct {
+	Stream      bool          `json:"stream,omitempty"`
+	StreamOpts  *struct {
+		IncludeUsage bool `json:"include_usage"`
+	} `json:"stream_options,omitempty"`
+	Template *struct {
 		EnableThinking bool `json:"enable_thinking"`
 	} `json:"chat_template_kwargs,omitempty"`
 }
@@ -112,6 +117,12 @@ func (c *Client) Chat(ctx context.Context, model, system, prompt string, o ChatO
 	}
 	msgs = append(msgs, chatMessage{Role: "user", Content: prompt})
 	reqo := chatRequestOpts{Model: model, Messages: msgs, Temperature: o.Temperature, TopP: o.TopP, MaxTokens: o.MaxTokens, Reasoning: o.Effort}
+	if streamEnabled() {
+		reqo.Stream = true
+		reqo.StreamOpts = &struct {
+			IncludeUsage bool `json:"include_usage"`
+		}{true}
+	}
 	if o.NoThink {
 		reqo.Template = &struct {
 			EnableThinking bool `json:"enable_thinking"`
@@ -159,6 +170,9 @@ func (c *Client) chatOnce(ctx context.Context, hc *http.Client, model string, bo
 		return ChatResult{}, true, fmt.Errorf("chat transport: %w", err)
 	}
 	defer resp.Body.Close()
+	if resp.StatusCode < 300 && strings.HasPrefix(resp.Header.Get("Content-Type"), "text/event-stream") {
+		return readStream(resp.Body, model, start)
+	}
 	raw, _ := io.ReadAll(resp.Body)
 	lat := time.Since(start).Milliseconds()
 	if resp.StatusCode >= 300 {
@@ -231,4 +245,86 @@ func splitContent(raw json.RawMessage) (text, thinking string) {
 		}
 	}
 	return tb.String(), th.String()
+}
+
+// streamEnabled: streaming is on unless PUBLICAI_STREAM=0. Long reasoning calls that send nothing for
+// many minutes get closed by gateways (HTTP 504 on the Hugging Face router, resets through proxies);
+// a streamed reply keeps the connection busy. The cache key does not include it: the reply is the same.
+func streamEnabled() bool { return os.Getenv("PUBLICAI_STREAM") != "0" }
+
+// readStream assembles an OpenAI-style SSE stream: content and reasoning deltas, the last
+// finish_reason, and the usage chunk (stream_options.include_usage). Mistral's reasoning mode sends
+// content deltas as lists of typed blocks, which splitContent reads.
+func readStream(body io.Reader, model string, start time.Time) (ChatResult, bool, error) {
+	var text, thought strings.Builder
+	var finish string
+	var usage struct {
+		PromptTokens     int64 `json:"prompt_tokens"`
+		CompletionTokens int64 `json:"completion_tokens"`
+	}
+	sc := bufio.NewScanner(body)
+	sc.Buffer(make([]byte, 1<<20), 1<<26)
+	gotData := false
+	for sc.Scan() {
+		line := strings.TrimSpace(sc.Text())
+		if !strings.HasPrefix(line, "data:") {
+			continue
+		}
+		data := strings.TrimSpace(strings.TrimPrefix(line, "data:"))
+		if data == "[DONE]" {
+			break
+		}
+		var ev struct {
+			Choices []struct {
+				FinishReason *string `json:"finish_reason"`
+				Delta        struct {
+					Content          json.RawMessage `json:"content"`
+					Reasoning        string          `json:"reasoning"`
+					ReasoningContent string          `json:"reasoning_content"`
+				} `json:"delta"`
+			} `json:"choices"`
+			Usage *struct {
+				PromptTokens     int64 `json:"prompt_tokens"`
+				CompletionTokens int64 `json:"completion_tokens"`
+			} `json:"usage"`
+			Error *struct {
+				Message string `json:"message"`
+			} `json:"error"`
+		}
+		if json.Unmarshal([]byte(data), &ev) != nil {
+			continue
+		}
+		gotData = true
+		if ev.Error != nil {
+			return ChatResult{}, true, fmt.Errorf("chat stream error: %s", ev.Error.Message)
+		}
+		if ev.Usage != nil {
+			usage.PromptTokens, usage.CompletionTokens = ev.Usage.PromptTokens, ev.Usage.CompletionTokens
+		}
+		for _, ch := range ev.Choices {
+			if len(ch.Delta.Content) > 0 && string(ch.Delta.Content) != "null" {
+				t, th := splitContent(ch.Delta.Content)
+				text.WriteString(t)
+				thought.WriteString(th)
+			}
+			thought.WriteString(ch.Delta.Reasoning + ch.Delta.ReasoningContent)
+			if ch.FinishReason != nil && *ch.FinishReason != "" {
+				finish = *ch.FinishReason
+			}
+		}
+	}
+	if err := sc.Err(); err != nil {
+		return ChatResult{}, true, fmt.Errorf("chat stream read: %w", err)
+	}
+	if !gotData || finish == "" {
+		return ChatResult{}, true, fmt.Errorf("chat stream ended without a finish_reason for model=%s", model)
+	}
+	r := ChatResult{
+		Result:       Result{Text: text.String(), Model: model, InputTokens: usage.PromptTokens, OutputTokens: usage.CompletionTokens, LatencyMS: time.Since(start).Milliseconds()},
+		FinishReason: finish,
+	}
+	if r.Text == "" && thought.Len() > 0 {
+		r.Text, r.FromReasoning = thought.String(), true
+	}
+	return r, false, nil
 }

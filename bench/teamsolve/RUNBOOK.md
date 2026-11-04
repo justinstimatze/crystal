@@ -22,6 +22,12 @@ Learned the hard way on 2026-11-03/04. Each line is something that cost time or 
 - **The HF router's providers trip circuit breakers at ~12 concurrent requests** (nscale and novita
   both did: gateway time-outs, then "currently failing ... paused by the circuit breaker"). Use ≤4 per
   provider. Mistral's API took 10-14 fine.
+- **Stream long calls, or gateways drop them.** Non-streaming reasoning calls that sit silent for
+  minutes got HTTP 504 from the Hugging Face router and resets through the proxy, and the failures
+  concentrated on hard problems (42-63 of 78 hard calls per model vs 1-16 of 40 medium), which biased
+  every "problems all models completed" subset toward easy ones. `publicai.Chat` streams by default
+  since 2026-11-04 (`PUBLICAI_STREAM=0` turns it off); two calls that had timed out completed in 4-5
+  minutes streamed. Always break results down by difficulty before trusting a completed-subset analysis.
 - **The proxy drops very long requests** ("connection reset", "unexpected EOF") on 20-40 minute
   reasoning calls; retries help, and a stalled host is better swapped than hammered.
 
