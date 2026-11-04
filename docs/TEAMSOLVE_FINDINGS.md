@@ -235,3 +235,18 @@ Roles for the externalized mixture of experts, borrowed from permaculture becaus
 - **Bed layout**: a decomposer into typed subtasks, each with its own check, so experts can take different parts. Guarded, because the decomposition step is where a model's bias enters (freshet gatewrite): a plan is rejected unless every subtask has a check, interfaces type-check, and the planner accepts it. Try first where decomposition plainly applies (multi-step data work, SQL), not contest code.
 - **Compost**: escalations and failures become DPO pairs and new specialist adapters (the Apertus tool-calling recipe).
 - **Observe before intervening**: per-expert, per-task-type calibration logs; drift demotes an expert.
+- **Hosts are part of the garden.** Operators are (model, host), each with its own cost, latency
+  distribution, reliability, jurisdiction and quirks (HF's silent 40,960-token cap; nscale rejecting
+  `reasoning_effort: high`). "Small" for hosting means small *total* parameters (dense 8-27B), not
+  small active parameters: an MoE like Small 4 still needs 60-120 GB. Checks make untrusted hosts
+  usable (a tampered or wrong answer fails the check like any other), which opens volunteer and
+  low-cost compute (the aipotluck local-client work). Spreading across hosts buys capacity and tail
+  latency (hedged requests).
+- **Laminar layers for agentic work.** Layers at different timescales that exchange typed records,
+  never chat: a mayor (interactive, seconds), the work layer (experts, guilds, subtasks), a bloom layer
+  (batch, many cheap samples), compost and calibration (days). The mayor reads state (planner queue,
+  check outcomes, calibration logs, metacognition signals), not transcripts, and never grades its own
+  work. The interactive promise becomes a fast, honest answer that improves: verified-so-far now,
+  upgrades as slower layers deliver. First test: replay recorded per-expert timings as an anytime
+  mayor (time to first verified answer vs a frontier single call, false-pass rate, how often an
+  upgrade fixes it), no new model calls.
