@@ -157,3 +157,43 @@ Single call, `reasoning_effort: high`, same 73 problems, regraded uncontended.
 - Interactive bar: Large 4 through the API is ~14× Opus 5.5's median time; it can only compete on
   the batch track. Cost: its single call (~$0.25) already costs about a third of Fable 5's, so a
   Large 4 team undercuts Fable only when self-hosted at high utilisation.
+
+## Fresh problems, pass 1 (2026-11-04)
+
+34 AtCoder ABC problems from Sep-Oct 2026 contests (after the models' training cutoffs), hidden tests
+built from judge-trusted editorial references in an isolated Modal container (`bench/teamsolve/fresh/`).
+Regraded uncontended. One pass, so small-N; the Large 4 run stopped at the 2-hour limit with 16 of 17
+hard problems complete in both arms.
+
+**Hard track, ABC D-G (16 problems both Large 4 arms finished):**
+
+| setup | solved | $ / problem | median / p90 time |
+|---|---|---|---|
+| Opus 5.5, one call, effort high | 16 | 0.053 | 25 s / 34 s |
+| Fable 5.1, one call, effort high | 15 | 0.187 | 30 s / 44 s |
+| Mistral Large 4, one call, reasoning high | 12 | 0.227 | 5.5 min / 13 min |
+| Mistral Large 4 team (team-guard) | 15 | 0.549 | 15.5 min / 29 min |
+
+**Default track, ABC A-D (22 problems):**
+
+| setup | solved | $ / problem | median / p90 time |
+|---|---|---|---|
+| Opus 5.5, effort low | 22 | 0.010 | 4 s / 9 s |
+| Mistral Small 4 (Apache 2.0), reasoning high | 21 | 0.004 | 18 s / 80 s |
+| Mistral Small 4, reasoning off | 17 | <0.001 | 2 s / 4 s |
+
+- **Ceiling.** ABC D-G is routine for frontier models now (Opus 16/16), so this set cannot show an
+  open setup beating the frontier; at best a tie. The EU team does tie Fable 5.1 (15 vs 15) but at
+  about 3x its price and 30x its time, against neither bar.
+- **Default tier: Small 4 with reasoning is close to Opus on everyday-difficulty problems (21 vs 22)**
+  at under half the API price, open-weight and Apache-licensed, but 4-9x slower at p50/p90.
+  Self-hosting changes the price side, not yet measured.
+
+## LiveCodeBench-Plus hard split: where Opus 5.5 still misses
+
+BenchEvolver's LiveCodeBench-Plus (`BenchEvolver/livecodebench-plus` on Hugging Face, MIT, June 2026),
+hard split, 69 problems: Opus 5.5 one call, effort high, **57/69** ($11.68, median 36 s): **41/44 on
+the evolved problems, 16/25 on the original hardest AtCoder problems.** The evolved variants are no
+longer hard for current frontier models; the remaining headroom is the hardest original 2025 AtCoder
+problems, which carry contamination risk. Fresh problems at that level (Sep-Oct 2026 ARC/AGC) had no
+editorial code to build tests from.
