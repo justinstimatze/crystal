@@ -197,3 +197,29 @@ the evolved problems, 16/25 on the original hardest AtCoder problems.** The evol
 longer hard for current frontier models; the remaining headroom is the hardest original 2025 AtCoder
 problems, which carry contamination risk. Fresh problems at that level (Sep-Oct 2026 ARC/AGC) had no
 editorial code to build tests from.
+
+## Goal beyond these problems (noted 2026-11-04)
+
+The competitive-programming runs are a testbed, not the target. If the method holds, the target is an
+**externalized, fine-tuned mixture of experts over a heterogeneous roster of models**: the experts are
+frozen, black-box models from any family (general models, specialists, LoRA adapters on a shared
+base); the gating network is a separate, small, fine-tuned model that decides which expert to call,
+whether to accept its answer, and when to escalate, trained on measured outcomes rather than on the
+experts' own claims. Teamwork is externalized into the router and the checks; the experts never need
+to know they are on a team.
+
+What generalizing requires, so the code testbed does not quietly bake in assumptions:
+- **Signals that exist in every domain.** A router trained on problem-text features of AtCoder
+  statements will not transfer. Train it on domain-agnostic signals (did the expert's output pass the
+  domain's check, do two experts agree, the expert's own stated confidence, cost and latency so far)
+  plus a task-type label, and keep problem-text features as one input among several.
+- **A check per domain, chosen before the experts.** Code: hidden or generated tests. Math with exact
+  answers: the answer. Lean: the proof checker. SQL: results against a test database. Tool use: the
+  deterministic scorers of the Apertus tool-calling work (`web/evals/apertus-toolcall/`). Domains with
+  no check get a calibrated judge and are reported separately.
+- **Held-out domains, not only held-out problems.** Train the router on some domains and test it on
+  one it never saw; that is the evidence it learned teamwork rather than AtCoder.
+- **Roster changes as a first-class event.** Adding or retiring an expert should need only a short
+  calibration run of that expert, not retraining the router from scratch.
+- **The same discipline as here:** pre-registered bars, the best single model at matched cost and
+  latency as the comparator, every slice reported, grading separate from generation.
