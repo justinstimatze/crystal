@@ -1,0 +1,8 @@
+Write gen.py for this competitive programming problem: a Python 3 program that takes a seed as sys.argv[1] and a size mode as sys.argv[2] ("small" or "large"), seeds random with the seed, and prints exactly ONE valid test input to stdout in the exact input format.
+- Every input it prints must satisfy EVERY constraint in the statement, including guarantees such as connectivity, distinctness, sortedness, or "a solution exists". If a guarantee is hard to sample, construct inputs that satisfy it by construction.
+- small: sizes about 1-8 and small values, so edge cases are likely.
+- large: sizes and values near the maximum allowed by the constraints, but print at most about 2 MB.
+- Use only the standard library. Print nothing else.
+Answer with only one ```python block.
+
+PROBLEM:
