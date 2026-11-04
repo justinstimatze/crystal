@@ -139,3 +139,21 @@ using batch pricing where it exists for every arm (frontier batch APIs included,
 stays fair). Candidates for this track are work that can wait: overnight review, test writing,
 long-horizon reasoning like the weight-interpretation example (a local 27B taking about an hour a
 prompt). Reported on its own table, never merged into the interactive verdict.
+
+## Stage A screen: EU open models with reasoning on (2026-11-04)
+
+Single call, `reasoning_effort: high`, same 73 problems, regraded uncontended.
+
+| model | solved | Opus 5.5 same set | spend | median / max time per problem |
+|---|---|---|---|---|
+| Mistral Large 4 (1T, ~52B active), 128K cap | 52 (5 calls lost to dropped connections) | 64 | ~$18.50 | ~7 min / 40 min |
+| Mistral Small 4 (119B, Apache 2.0), 64K cap | 31 | 64 | $1.28 | 2.3 min / ~9 min |
+
+- **Correction to every earlier Mistral number:** Mistral's API reasons only when `reasoning_effort`
+  is set; the earlier runs sent none and got 0 reasoning tokens. Medium 3.5's 10-17 was its
+  thinking-off score.
+- At a 64K cap, 21 of 71 Large 4 calls were cut off (40 solved); a 128K cap recovered 12.
+- Gate (within ~10 of Opus 5.5): Large 4 borderline on accuracy, Small 4 fails.
+- Interactive bar: Large 4 through the API is ~14× Opus 5.5's median time; it can only compete on
+  the batch track. Cost: its single call (~$0.25) already costs about a third of Fable 5's, so a
+  Large 4 team undercuts Fable only when self-hosted at high utilisation.
