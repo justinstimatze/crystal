@@ -223,3 +223,15 @@ What generalizing requires, so the code testbed does not quietly bake in assumpt
   calibration run of that expert, not retraining the router from scratch.
 - **The same discipline as here:** pre-registered bars, the best single model at matched cost and
   latency as the comparator, every slice reported, grading separate from generation.
+
+### Design notes: the model garden (2026-11-04)
+
+Roles for the externalized mixture of experts, borrowed from permaculture because each idea fills a different one:
+- **Polyculture**: a heterogeneous roster with uncorrelated failures; diversity is measured (perfect-routing ceiling, error overlap), not assumed.
+- **Succession**: cheap, fast experts first; expensive ones only where a check fails (the cascade).
+- **Guilds**: each expert paired with its check and its fallback (Small 4 + samples + DeepSeek; Leanstral + Lean).
+- **The gardener's eye**: a Jev-style typed decision model as the gate: which expert / accept / escalate, calibrated probabilities, no free text. Start non-LLM (boosted trees or logistic over check results, agreement, task type); a fine-tuned small LLM gate only if reading the task measurably helps.
+- **Garden design**: a non-LLM formal planner. Experts are operators with cost, latency and calibrated success probability per task type; the planner picks the call sequence maximizing P(verified answer) under a budget. First test: compute the optimal escalation policy offline from recorded outcomes (dynamic programming), compare with the cascade and the input router.
+- **Bed layout**: a decomposer into typed subtasks, each with its own check, so experts can take different parts. Guarded, because the decomposition step is where a model's bias enters (freshet gatewrite): a plan is rejected unless every subtask has a check, interfaces type-check, and the planner accepts it. Try first where decomposition plainly applies (multi-step data work, SQL), not contest code.
+- **Compost**: escalations and failures become DPO pairs and new specialist adapters (the Apertus tool-calling recipe).
+- **Observe before intervening**: per-expert, per-task-type calibration logs; drift demotes an expert.
