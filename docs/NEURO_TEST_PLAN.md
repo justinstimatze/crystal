@@ -86,3 +86,13 @@ Total ~$40, well inside the remaining budget. Each step reports before the next 
 passes (T3) is worth exactly the cascade's gap to Opus. Against the combined bar (Opus's score at ≤1/3 of
 its cost, i.e. 110 at ≤ $0.0176): even a perfect T3 lands near 55-60% of the cost; the cost half needs
 cheap rescues (T1/T2) to replace Opus calls. Bar unchanged.
+
+**T3 (2026-11-05): conflict-triggered control on false passes: fails the bar.** 105 DeepSeek
+sample-passing programs (6 false passes); every expert's program run on 3,147 Opus-written generated
+inputs in an isolated Modal container. Disagreement with GLM: catches 2/6 false passes, flags 11% of
+correct programs (AUROC 0.61); GLM + gpt-oss: 3/6 at 14% (0.67); Opus: 5/6 at 17% (0.79). Bar was ≥3/6
+at ≤10%. As a cascade trigger, conflict with GLM reaches 107/118 (vs 106 samples-only) at $0.047/problem
+(89% of Opus) because the checker's call is paid on every problem. Causes: cheap checkers share the
+mistake (correlated errors); generated inputs that miss constraints make correct programs disagree
+(no input validator yet). Best practical policy unchanged: DeepSeek, then Opus on sample failure, 106
+at 55% of Opus's cost. Scripts: `bench/teamsolve/route/modal_t3.py`, `t3_score.py`.
