@@ -44,7 +44,9 @@ type Config struct {
 	TopP      float64
 	NoThink   bool
 	Effort    string
-	Python    string
+	// SingleTemp overrides the single call's temperature (0 = the role default, 0.2).
+	SingleTemp float64
+	Python     string
 	// Guard turns on the two fixes memdoor's NOTES name for the method's losses
 	// and never ran: skip the repair call when every sample already passed
 	// (memdoor's loop still asks the model to re-echo the program, which can
@@ -103,7 +105,7 @@ func (r *run) call(role, prompt string) (string, error) {
 		return "", fmt.Errorf("no model for role %s", role)
 	}
 	cr, err := r.m.Chat(r.ctx, model, "", prompt, publicai.ChatOpts{
-		Temperature: tempFor(role), TopP: r.c.TopP, MaxTokens: r.c.MaxTokens, Sample: r.c.Sample, NoThink: r.c.NoThink, Effort: r.c.Effort,
+		Temperature: r.temp(role), TopP: r.c.TopP, MaxTokens: r.c.MaxTokens, Sample: r.c.Sample, NoThink: r.c.NoThink, Effort: r.c.Effort,
 	})
 	if err != nil {
 		return "", fmt.Errorf("%s: %w", role, err)
@@ -231,4 +233,11 @@ func tempFor(role string) float64 {
 		return roleTemp[role[:i]]
 	}
 	return 0.2
+}
+
+func (r *run) temp(role string) float64 {
+	if role == RoleSingle && r.c.SingleTemp > 0 {
+		return r.c.SingleTemp
+	}
+	return tempFor(role)
 }
