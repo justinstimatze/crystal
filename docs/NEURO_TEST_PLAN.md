@@ -96,3 +96,14 @@ at ≤10%. As a cascade trigger, conflict with GLM reaches 107/118 (vs 106 sampl
 mistake (correlated errors); generated inputs that miss constraints make correct programs disagree
 (no input validator yet). Best practical policy unchanged: DeepSeek, then Opus on sample failure, 106
 at 55% of Opus's cost. Scripts: `bench/teamsolve/route/modal_t3.py`, `t3_score.py`.
+
+**T1 (2026-11-05): recruit by rescue rate: the rescue bar is met only above the cost bar; breadth is
+exhausted for the cascade.** One call per candidate on DeepSeek's 19 failures + 20 guard problems
+(regraded). Rescues of 19 (of the 13 sample-failing ones a cascade knows to retry / of the 6 false
+passes), guard, $/call: Opus 5.5 11 (7/4), 20/20, $0.053; Kimi K2.7-Code 4 (3/1), 20/20, $0.062; Mistral
+Large 4 5 (4/1), 17/20, $0.25; GLM-5.3 1, 14/20, $0.17; Mistral Small 4 1, 10/20, $0.021; DeepSeek V4-Pro
+1 of 8 done. Bar (≥3/19 at ≤2× DeepSeek's $0.011): Kimi and Large 4 rescue enough but cost 5.6× and 23×.
+Cascades on the 118: DeepSeek > Opus 106 at 55% of Opus's cost; DeepSeek > Kimi-Code > Opus **104** at
+58%; DeepSeek > Large 4 > Opus 107 at 113%; DeepSeek > Kimi-Code 102 at 40%. **A middle rung can
+hurt**: its own false passes stop escalation before the frontier model. A middle rung needs a check
+stronger than the samples. Qwen and MiniMax were not run (2-hour limit).
