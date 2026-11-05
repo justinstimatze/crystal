@@ -76,3 +76,13 @@ policy and/or the best T1 recruit; escalate to Opus only for the remainder. Pre-
 ## Budget and order
 R0 ~$8 → T1 ~$10 → T2 ~$3 → T3 ~$1 + Modal → T4 ~$2 → T5 $0 → combined ~$5 → confirmation ~$10.
 Total ~$40, well inside the remaining budget. Each step reports before the next starts.
+
+## Results log
+
+**R0 (2026-11-05): Opus 5.5 on the 118, effort high: 110/118, $0.053/problem, median 17 s, p90 55 s**
+(regraded, no verdicts changed). Cascade DeepSeek > Opus (escalate when samples fail): 106 at $0.029
+(55% of Opus's cost). Opus solves 11 of DeepSeek's 19 failures; 4 of those 11 are DeepSeek false passes
+(passed samples, failed hidden tests), which a samples-only cascade never escalates. So catching false
+passes (T3) is worth exactly the cascade's gap to Opus. Against the combined bar (Opus's score at ≤1/3 of
+its cost, i.e. 110 at ≤ $0.0176): even a perfect T3 lands near 55-60% of the cost; the cost half needs
+cheap rescues (T1/T2) to replace Opus calls. Bar unchanged.
