@@ -114,3 +114,27 @@ sample.** DeepSeek on its 19 failures, 2 samples per policy (regraded; 13 proble
 method family" + the wrong program shown 5 (7/26); same at temperature 0.9: 3 (4/26). Bar (≥2 more than
 plain) not met. Small practical gain: DeepSeek > up to 2 DeepSeek resamples > Opus keeps 106/118 and cuts
 Opus calls 13 → 8 (52% of Opus's cost vs 55%).
+
+**T4 (2026-11-05): fast memory (retrieved similar solved problems + accepted programs in the prompt):
+not supported.** One DeepSeek sample on the 19 failures, regraded: 4 rescued (3 sample-failing, 1 false
+pass). That meets the written threshold (≥3), but a plain resample rescues at the same rate (6 of 26
+single samples in T2, ~23%, vs 21% here), so retrieval adds nothing measurable; and the guard set was not
+run. The plan should have named plain resampling as T4's control; it is the control from here on.
+Retrieval was weak (TF-IDF similarity 0.09-0.24 over a 99-problem library).
+
+## Conclusion of this round (2026-11-05)
+
+On 118 hard and medium competitive-programming problems, with cheap open experts and Opus 5.5 as the
+frontier: **the best team is two rungs: DeepSeek V4.1-Flash, then Opus 5.5 when the samples fail
+(106/118 at 55% of Opus's cost; 52% with up to two DeepSeek resamples first).** Every neuroscience-
+inspired addition tested failed its bar or matched its control:
+- correlated noise is the governing fact: cheap experts fail together (GLM fails 17 of DeepSeek's 19,
+  gpt-oss 19 of 19), so recruiting (T1), cheap checking (T3) and diverse retries (T2) all hit the same
+  wall;
+- a middle rung can hurt: its own false passes stop escalation before the frontier model (T1);
+- the check is the bottleneck: the remaining gap to Opus (4 problems) is false passes, which nothing
+  cheap catches (T3).
+Untested here and still open: the evidence-threshold rule with better evidence (T5, depends on a cheap
+check that does not exist yet); the parked designs; and any domain where the check is perfect (Lean,
+SQL against a test database), where the correlated-noise wall matters less because a perfect check
+lets a team keep trying cheaply.
