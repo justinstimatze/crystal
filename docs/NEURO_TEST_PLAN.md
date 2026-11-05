@@ -107,3 +107,10 @@ Cascades on the 118: DeepSeek > Opus 106 at 55% of Opus's cost; DeepSeek > Kimi-
 58%; DeepSeek > Large 4 > Opus 107 at 113%; DeepSeek > Kimi-Code 102 at 40%. **A middle rung can
 hurt**: its own false passes stop escalation before the frontier model. A middle rung needs a check
 stronger than the samples. Qwen and MiniMax were not run (2-hour limit).
+
+**T2 (2026-11-05): inhibition of return / adaptive exploration: fails the bar; a retry is another
+sample.** DeepSeek on its 19 failures, 2 samples per policy (regraded; 13 problems complete in all arms:
+9 sample-failing, 4 false passes). Rescued by best of 2: plain resample 4 (per-sample 6/26); "different
+method family" + the wrong program shown 5 (7/26); same at temperature 0.9: 3 (4/26). Bar (≥2 more than
+plain) not met. Small practical gain: DeepSeek > up to 2 DeepSeek resamples > Opus keeps 106/118 and cuts
+Opus calls 13 → 8 (52% of Opus's cost vs 55%).
